@@ -84,6 +84,7 @@ jobs:
         env:
           AGENCY_SITE_DIR: site
           AGENCY_PASSPHRASE: ${{ secrets.AGENCY_PASSPHRASE }}
+          AGENCY_PUBLIC: ${{ vars.AGENCY_PUBLIC }}        # "1" publishes the office without the lock (demo cafés only)
           # the AI: whichever key you added as a secret (agency/llm.py). Gemini and OpenRouter are free.
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}

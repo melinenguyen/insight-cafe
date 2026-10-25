@@ -68,6 +68,7 @@ def main() -> int:
         if slot == "none":
             return 0
     passphrase = config.env("AGENCY_PASSPHRASE")  # set on GitHub: the office is published, so it's encrypted
+    public = config.env("AGENCY_PUBLIC").lower() in ("1", "true", "yes")  # a demo café: published without the lock
     memory = state.load()
     error = None
     if slot != "rebuild":
@@ -101,10 +102,11 @@ def main() -> int:
             log.warning("pictures: %s", e)
         state.save(memory)
 
-    page = build.build(memory, passphrase=passphrase, now=now)
+    page = build.build(memory, passphrase=passphrase, now=now, public=public)
+    online = (passphrase or public) and config.SITE_URL
     print(f"\n{'⚠ The report failed: ' + error[:200] if error else '✓ Your office is ready'}: "
-          f"{config.SITE_URL if passphrase and config.SITE_URL else page}")
-    if not (args.no_open or passphrase):
+          f"{config.SITE_URL if online else page}")
+    if not (args.no_open or passphrase or public):
         webbrowser.open(page.resolve().as_uri())
     return 1 if error else 0
 

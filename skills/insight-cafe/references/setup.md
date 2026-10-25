@@ -64,6 +64,8 @@ real time: the clocks, day and night outside the windows, and decor for the occa
 
    To choose between several keys or swap the model, add *variables* (the tab next to Secrets) named
    `AGENCY_AI` or `AGENCY_MODEL`.
+   A demo café for a made-up brand can skip the lock: a variable `AGENCY_PUBLIC` = `1` publishes the office
+   without the passphrase. Never for a real brand's office.
 
 4. **First run.** Actions → your café → Run workflow → slot `morning`. A few minutes later the office is live at
    `https://<owner>.github.io/<site-repo>/`. From then on the workflow checks the clock every hour and brews each

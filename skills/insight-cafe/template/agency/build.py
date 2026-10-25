@@ -205,24 +205,26 @@ def payload(memory: dict, site: Path, now: datetime, cloud: bool = False) -> dic
     }
 
 
-def build(memory: dict, *, passphrase: str = "", site: Path | None = None, now: datetime | None = None) -> Path:
-    """With a passphrase: the encrypted page GitHub Pages serves. Without one: a plain page for this computer."""
+def build(memory: dict, *, passphrase: str = "", site: Path | None = None, now: datetime | None = None,
+          public: bool = False) -> Path:
+    """With a passphrase: the encrypted page GitHub Pages serves. Without one: a plain page for this computer.
+    public=True: a plain page that still runs as the 24/7 office (a demo café anyone may open)."""
     now = now or datetime.now(timezone.utc)
     site = site or config.SITE
     site.mkdir(parents=True, exist_ok=True)
-    data = payload(memory, site, now, cloud=bool(passphrase))
+    data = payload(memory, site, now, cloud=bool(passphrase) or public)
     tpl = (config.ROOT / "web" / "office.html").read_text(encoding="utf-8")
     for k, v in (("__AGENCY__", config.AGENCY["name"]), ("__TAGLINE__", config.AGENCY["tagline"]),
                  ("__CITY__", config.AGENCY["city"])):
         tpl = tpl.replace(k, html.escape(v))
-    if passphrase:
+    if passphrase and not public:
         page = tpl.replace("/*__VAULT__*/", encrypt(data, passphrase))
         (site / ".nojekyll").write_text("", encoding="utf-8")
     else:  # "</" inside the JSON would close the script tag early
         page = tpl.replace("/*__DATA__*/null", json.dumps(data, ensure_ascii=False).replace("</", "<\\/"))
     (site / "index.html").write_text(page, encoding="utf-8")
     log.info("built %s (%d KB, %d plays, %d trends, %s)", site / "index.html", len(page) // 1024,
-             len(data["plays"]), len(data["trends"]), "encrypted" if passphrase else "plain")
+             len(data["plays"]), len(data["trends"]), "encrypted" if passphrase and not public else "plain")
     return site / "index.html"
 
 
