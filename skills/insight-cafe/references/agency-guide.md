@@ -13,13 +13,15 @@ Insight Café. Their rooms are in the office, locked.
 
 | Command | What it does | Cost |
 |---|---|---|
-| `python -m agency.run` | scouts → desks → office: a full report, then opens `site/index.html` | about $1 of Claude, a few minutes |
+| `python -m agency.run` | scouts → desks → office: a full report, then opens `site/index.html` | free on Gemini or OpenRouter, about $1 on Claude; a few minutes |
 | `python -m agency.run --rebuild` | redraws the office from the last report | free |
 | `python -m agency.run --scouts` | prints what the scouts find right now | free |
-| `.github/workflows/agency.yml` | on GitHub, every hour: `--slot auto` runs whichever report is due (`schedule.py`), builds the office encrypted with `AGENCY_PASSPHRASE`, commits the memory and publishes the page to the site repo | about $1 per report |
+| `.github/workflows/agency.yml` | on GitHub, every hour: `--slot auto` runs whichever report is due (`schedule.py`), builds the office encrypted with `AGENCY_PASSPHRASE`, commits the memory and publishes the page to the site repo | same as a report |
 
-On your computer the Anthropic API key lives in `agency/.env` (`ANTHROPIC_API_KEY=…`); on GitHub, in the repo's
-Actions secrets with `AGENCY_PASSPHRASE` and `PUBLISH_TOKEN`. A report is due once its time has passed and none has
+The AI is your choice (`agency/llm.py`): `GEMINI_API_KEY` or `OPENROUTER_API_KEY` (free tiers), `ANTHROPIC_API_KEY`
+(Claude), or `AGENCY_AI=ollama` for a model on your own computer. On your computer the key lives in `agency/.env`;
+on GitHub, in the repo's Actions secrets with `AGENCY_PASSPHRASE` and `PUBLISH_TOKEN`. Free models are looser with
+structure, so every answer is checked against its desk's JSON shape, repaired, or asked for again. A report is due once its time has passed and none has
 finished since, so a late or skipped tick is caught by the next one; a failed report is retried up to twice a day.
 
 ## The crew

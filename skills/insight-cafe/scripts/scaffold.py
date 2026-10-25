@@ -5,7 +5,7 @@ Turn a brand profile into your café, ready to run on your computer, or on GitHu
     python3 scaffold.py --profile profile.json --out ~/Desktop/acme-cafe [--force]
 
 It validates the profile, copies the office (agency code, page and the GitHub workflow), writes the profile and
-the standing brief into it, leaves an .env file for your Anthropic API key, and prints the next steps: three to
+the standing brief into it, leaves an .env file for your AI key, and prints the next steps: three to
 run a report on your computer, and, when the profile names its GitHub repos, the four to open 24/7.
 """
 
@@ -29,8 +29,19 @@ agency/.env
 agency/.cache/
 # the café's memory IS agency/data/*.json: keep it committed
 """
-ENV = """# Your Anthropic API key (https://console.anthropic.com/settings/keys). This file never leaves your computer.
+ENV = """# The AI that writes your reports. Fill in ONE line. This file never leaves your computer.
+
+# Free: Google's Gemini (free tier, no card). Get a key at https://aistudio.google.com/apikey
+GEMINI_API_KEY=
+
+# Free: open-source models through OpenRouter (no card). Get a key at https://openrouter.ai/keys
+OPENROUTER_API_KEY=
+
+# Claude: the sharpest reports, about $1 each. Get a key at https://console.anthropic.com/settings/keys
 ANTHROPIC_API_KEY=
+
+# Holding more than one key? Choose here: gemini, openrouter, claude, or ollama (a free model on this computer).
+AGENCY_AI=
 """
 
 
@@ -78,15 +89,16 @@ def main() -> int:
 
     print(f"\n✓ {p['agency']['name']} for {p['brand']['name']} is ready in {out}\n")
     print("Three steps to your first report:")
-    print(f"  1. Paste your Anthropic API key into {out / 'agency' / '.env'}")
+    print(f"  1. Paste one AI key into {out / 'agency' / '.env'} (Gemini and OpenRouter are free)")
     print(f"  2. cd {out} && python3 -m pip install -r agency/requirements.txt")
     print("  3. python3 -m agency.run      (a few minutes; the office opens in your browser)")
     if site_repo:
         print("\nOpen 24/7 on GitHub (free; see references/setup.md):")
         print(f"  1. Create a PRIVATE repo {brain or 'you/your-cafe-brain'} and push this folder to it.")
         print(f"  2. Create a PUBLIC repo {site_repo}; Settings → Pages → deploy from main, root.")
-        print("  3. In the private repo → Settings → Secrets and variables → Actions, add ANTHROPIC_API_KEY,")
-        print("     AGENCY_PASSPHRASE (the office's lock) and PUBLISH_TOKEN (a token that can push to the public repo).")
+        print("  3. In the private repo → Settings → Secrets and variables → Actions, add your AI key (GEMINI_API_KEY,")
+        print("     OPENROUTER_API_KEY or ANTHROPIC_API_KEY), AGENCY_PASSPHRASE (the office's lock) and PUBLISH_TOKEN")
+        print("     (a token that can push to the public repo).")
         print(f"  4. Actions → Run workflow (slot: morning). Your office opens at {site_url}")
     else:
         print("\nWant it open 24/7? Add your two GitHub repos in the dashboard (Schedule & delivery), export, and scaffold again.")

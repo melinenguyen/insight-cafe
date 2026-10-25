@@ -5,7 +5,7 @@
 <p align="center">
   <a href="#-order-in-two-lines"><img alt="Free trial: now open" src="https://img.shields.io/badge/free%20trial-now%20open%20%E2%98%95-2448D8?style=for-the-badge"></a>
   <img alt="Claude Code plugin" src="https://img.shields.io/badge/Claude%20Code-plugin-4A2F20?style=for-the-badge">
-  <img alt="About $1 a report" src="https://img.shields.io/badge/about-%241%20a%20report-B9814F?style=for-the-badge">
+  <img alt="Runs on free AI" src="https://img.shields.io/badge/runs%20on-free%20AI-B9814F?style=for-the-badge">
 </p>
 
 <h3 align="center">Less searching. More time to sip your coffee.</h3>
@@ -71,8 +71,16 @@ Then just say: **"Set up my Insight Café."**
 
 Claude hands you a little form about your brand, sets up your café and pours your first report. Love it? Say
 **"Open my café 24/7"** and Claude walks you through putting it on GitHub. It takes about fifteen
-minutes to set up (a little longer if you love filling forms), and each report costs about $1 of Claude on your own
-[Anthropic API key](https://console.anthropic.com/settings/keys).
+minutes to set up (a little longer if you love filling forms).
+
+**You pick who's behind the counter:**
+
+| | Cost | Good to know |
+|---|---|---|
+| ✨ **Gemini** by Google | free, no card | The easy start. Grab a key at [Google AI Studio](https://aistudio.google.com/apikey). |
+| 🌱 **Open-source models** via OpenRouter | free, no card | Community-built AI (NVIDIA, Google, Qwen…). Key at [openrouter.ai](https://openrouter.ai/keys). |
+| ☕ **Claude** by Anthropic | about $1 a report | The sharpest reports. Key at [console.anthropic.com](https://console.anthropic.com/settings/keys). |
+| 🏠 **Ollama** on your laptop | free | Open-source AI that never leaves your computer. Needs a strong laptop and a little patience. |
 
 <img src="docs/steps.png" width="100%" alt="1. Tell it about your brand. 2. Your café opens. 3. Sip and read.">
 
@@ -80,7 +88,7 @@ minutes to set up (a little longer if you love filling forms), and each report c
 <summary><b>No Claude Code? Brew it by hand ☕</b></summary>
 <br>
 
-You'll need Python 3.10+ and an [Anthropic API key](https://console.anthropic.com/settings/keys).
+You'll need Python 3.10+ and one AI key (see the table above; Gemini and OpenRouter are free).
 
 1. [Download this repo](https://github.com/melinenguyen/insight-cafe/archive/refs/heads/main.zip) and unzip it.
 2. Open `skills/insight-cafe/dashboard/index.html` in your browser. Fill in your brand (or press **Load the example**)
@@ -90,7 +98,7 @@ You'll need Python 3.10+ and an [Anthropic API key](https://console.anthropic.co
    cd skills/insight-cafe
    python3 scripts/scaffold.py --profile profile.json --out ~/Desktop/my-insight-cafe
    ```
-4. Paste your API key into `~/Desktop/my-insight-cafe/agency/.env`.
+4. Paste your AI key into `~/Desktop/my-insight-cafe/agency/.env` (the file shows which line is which).
 5. Brew your first report:
    ```bash
    cd ~/Desktop/my-insight-cafe
@@ -107,9 +115,9 @@ found without spending anything; `--rebuild` redraws the office.)
    café's brain) and one public (the office page). Export and set up your café again.
 2. Push the café folder to the **private** repo. Create the **public** one and switch on GitHub Pages
    (Settings → Pages → deploy from `main`, root).
-3. In the private repo → Settings → Secrets and variables → Actions, add `ANTHROPIC_API_KEY`, `AGENCY_PASSPHRASE`
-   (the office's lock, for your team) and `PUBLISH_TOKEN` (a fine-grained token with *Contents: read and write* on
-   the public repo).
+3. In the private repo → Settings → Secrets and variables → Actions, add your AI key under the same name as in
+   `.env` (`GEMINI_API_KEY`, `OPENROUTER_API_KEY` or `ANTHROPIC_API_KEY`), `AGENCY_PASSPHRASE` (the office's lock,
+   for your team) and `PUBLISH_TOKEN` (a fine-grained token with *Contents: read and write* on the public repo).
 4. Actions → Run workflow → slot `morning`. A few minutes later your office is live, and it reports on its own
    every day after that.
 
@@ -138,8 +146,14 @@ Want a seat on opening day? Follow me on TikTok [@himeline](https://www.tiktok.c
 Nope. If you can copy and paste two lines, you can run a café.
 
 **What does it cost?**
-The café is free. Claude charges about $1 per report, billed to your own Anthropic account, so one report a day is
-about $30 a month. No subscription, no surprise bill from me.
+Nothing, if you like. The café is free, and so are Gemini's free tier and OpenRouter's free open-source models:
+one or two reports a day fit inside their daily limits, no card needed. Want the sharpest writing? Claude costs about
+$1 a report on your own Anthropic account (about $30 a month for one a day). No subscription, no surprise bill from me.
+
+**Free AI or Claude?**
+Start free and see if you love it. Free tiers come with daily limits, the free models change from time to time, and
+the provider may learn from what you send (the café only sends public news and your brand profile, so keep secrets
+out of it). Claude writes noticeably sharper reports. Ollama keeps everything on your own laptop.
 
 **Does it really work while I sleep?**
 Yep. On GitHub the café checks the clock every hour and brews your report at your time. That fits inside GitHub's
@@ -147,7 +161,7 @@ free plan, and nobody's computer needs to be on.
 
 **Is my brand info safe?**
 On your laptop, everything stays on your computer. On GitHub, your brand profile and the café's memory live in your
-**private** repo, your API key sits in its encrypted secrets, and the office page is encrypted: only people with
+**private** repo, your AI key sits in its encrypted secrets, and the office page is encrypted: only people with
 your passphrase can open it.
 
 **Will it post or DM anyone for me?**
@@ -161,7 +175,7 @@ speaks.
 
 The Insight Café là một AI-powered agency marketing, mô phỏng một văn phòng với 7 nhân viên mang tên đồ uống. Công việc của các bạn là theo dõi thị trường, đối thủ cùng ngành/cùng ngách và tìm ra những cơ hội mới cho thương hiệu. Mỗi ngày chỉ cần mở văn phòng là nắm được: có gì đang trending, đối thủ đang làm gì, việc gì đáng ưu tiên cho brand và next steps cho team là gì.
 
-Bản dùng thử miễn phí có 4 bạn đi làm (Espresso, Chai, Matcha, Coca). Văn phòng mở cửa 24/7 trên GitHub (miễn phí) và hoạt động theo lịch thật: sáng tối, giờ giấc, đến Halloween, Christmas hay Tết là tự biết thay đồ. Các bác cũng có thể chạy ngay trên máy nếu thích nha. Form thiết lập có tiếng Việt để các bác setup context và những data cần thiết cho AI learn trước khi văn phòng khai trương.
+Bản dùng thử miễn phí có 4 bạn đi làm (Espresso, Chai, Matcha, Coca). Văn phòng mở cửa 24/7 trên GitHub (miễn phí) và hoạt động theo lịch thật: sáng tối, giờ giấc, đến Halloween, Christmas hay Tết là tự biết thay đồ. Các bác cũng có thể chạy ngay trên máy nếu thích nha. AI thì khỏi tốn tiền: dùng key Gemini miễn phí (Google AI Studio) hoặc các model mã nguồn mở miễn phí qua OpenRouter, không cần thẻ. Form thiết lập có tiếng Việt để các bác setup context và những data cần thiết cho AI learn trước khi văn phòng khai trương.
 
 Chúc các bác ít tab hơn, nhiều cà phê hơn. ☕
 

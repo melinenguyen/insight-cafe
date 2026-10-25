@@ -2,15 +2,16 @@
 One run of the café, end to end.
 
 On your computer:
-    python -m agency.run              # a report now: scouts → desks → office (a few minutes, about $1 of Claude)
-    python -m agency.run --rebuild    # just redraw the office from the last report (free, no Claude)
-    python -m agency.run --scouts     # see what the scouts find right now (free, no Claude)
+    python -m agency.run              # a report now: scouts → desks → office (a few minutes)
+    python -m agency.run --rebuild    # just redraw the office from the last report (no AI)
+    python -m agency.run --scouts     # see what the scouts find right now (no AI)
 
 On GitHub (the workflow, every hour):
     python -m agency.run --slot auto      # whichever report is due (schedule.py), or nothing
     python -m agency.run --slot morning   # that report now
 
-Put your Anthropic API key in agency/.env (ANTHROPIC_API_KEY=sk-ant-…) or export it. With AGENCY_PASSPHRASE set,
+Put one AI key in agency/.env: GEMINI_API_KEY or OPENROUTER_API_KEY (both free), or ANTHROPIC_API_KEY (Claude,
+about $1 a report). llm.py has the details. With AGENCY_PASSPHRASE set,
 the office is built encrypted for GitHub Pages; without it, a plain page opens from site/index.html. If the brain
 fails, the office is still drawn from the last good report.
 """
@@ -25,7 +26,7 @@ import sys
 import webbrowser
 from datetime import datetime, timedelta, timezone
 
-from . import build, config, schedule, sources, state, visual
+from . import build, config, llm, schedule, sources, state, visual
 
 log = logging.getLogger("agency")
 
@@ -45,8 +46,8 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=f"{config.AGENCY['name']} (trial)")
     ap.add_argument("--slot", default="report", choices=["auto", "report", "morning", "evening", "rebuild"],
                     help="report = one now (default); auto = whatever the schedule says is due")
-    ap.add_argument("--rebuild", action="store_true", help="redraw the office from the last report, no Claude")
-    ap.add_argument("--scouts", action="store_true", help="print what the scouts find, no Claude")
+    ap.add_argument("--rebuild", action="store_true", help="redraw the office from the last report, no AI")
+    ap.add_argument("--scouts", action="store_true", help="print what the scouts find, no AI")
     ap.add_argument("--no-open", action="store_true", help="don't open the office in the browser")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(levelname)s %(message)s")
@@ -70,9 +71,8 @@ def main() -> int:
     memory = state.load()
     error = None
     if slot != "rebuild":
-        if not (config.env("ANTHROPIC_API_KEY") or config.env("ANTHROPIC_AUTH_TOKEN")):
-            print("✕ No Anthropic API key. Add ANTHROPIC_API_KEY=… to agency/.env, or export it, then run again.\n"
-                  "  Get a key at https://console.anthropic.com/settings/keys")
+        if not llm.pick():
+            print(llm.missing_key_help())
             return 1
         from . import brain
         sweep = sources.sweep()
@@ -84,7 +84,7 @@ def main() -> int:
             state.merge(memory, office, sweep, slot, usage, now)
             memory.pop("last_error", None)
             memory.setdefault("reports", {})[slot] = now.isoformat()
-            log.info("report done: $%s of Claude", usage["usd"])
+            log.info("report done: %s", "free" if usage.get("free") else f"${usage['usd']} of Claude")
         except Exception as e:  # noqa: BLE001 — draw the last good report, then say what broke
             log.exception("brain failed")
             error = f"{type(e).__name__}: {e}"

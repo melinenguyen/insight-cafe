@@ -1,5 +1,5 @@
 """
-The agency's brain — the trial office's desks, one Claude call each.
+The agency's brain — the trial office's desks, one AI call each (llm.py picks Claude, Gemini or an open model).
 
 0. Beside it, one job each: Espresso's culture radar and occasion pulse, and Chai's brand watch
    (desks.py) — their answers feed the strategy desk.
@@ -17,7 +17,6 @@ because a single long studio call ran past the SDK's 10-minute request timeout.
 
 from __future__ import annotations
 
-import json
 import logging
 import re
 from datetime import date, datetime, timedelta, timezone
@@ -35,7 +34,6 @@ PERSONAS = config.PERSONAS + ["None"]
 VERDICTS = ["Act today", "This week", "Watch", "Skip"]
 FUNNEL = ["Awareness", "Consideration", "Conversion"]
 FORMATS = config.FORMATS
-PRICE_USD = {"input": 4.0, "output": 20.0, "cache_read": 0.20, "cache_write": 5.0}  # Opus 5.5 per 1M tokens
 
 
 def _obj(props: dict) -> dict:
@@ -339,28 +337,8 @@ def studio_prompt(sweep: dict, memory: dict, board: dict, order: dict, pool: lis
 # The calls
 # ---------------------------------------------------------------------------
 def _call(client, system: str, user: str, schema: dict, effort: str) -> tuple[dict, dict]:
-    with client.beta.messages.stream(
-        model=config.MODEL,
-        max_tokens=64000,
-        betas=["server-side-fallback-2026-07-01"],
-        # the system prompt is identical across both desks, so later calls can read it from cache
-        system=[{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}],
-        messages=[{"role": "user", "content": user}],
-        output_config={"effort": effort, "format": {"type": "json_schema", "schema": schema}},
-        extra_body={"fallbacks": "default"},
-    ) as stream:
-        msg = stream.get_final_message()
-    if msg.stop_reason == "refusal":
-        raise RuntimeError(f"model declined: {getattr(msg, 'stop_details', None)}")
-    if msg.stop_reason == "max_tokens":
-        raise RuntimeError("output hit max_tokens — the JSON is incomplete")
-    u = msg.usage
-    cr, cw = getattr(u, "cache_read_input_tokens", 0) or 0, getattr(u, "cache_creation_input_tokens", 0) or 0
-    usd = (u.input_tokens * PRICE_USD["input"] + u.output_tokens * PRICE_USD["output"]
-           + cr * PRICE_USD["cache_read"] + cw * PRICE_USD["cache_write"]) / 1e6
-    usage = {"model": msg.model, "effort": effort, "input": u.input_tokens, "output": u.output_tokens,
-             "cache_read": cr, "cache_write": cw, "usd": round(usd, 3)}
-    return json.loads(next(b.text for b in msg.content if b.type == "text")), usage
+    """One desk's answer. `client` is an llm.Client: Claude, Gemini, OpenRouter, Ollama or your own (llm.py)."""
+    return client.ask(system, user, schema, effort)
 
 
 def think(sweep: dict, memory: dict, slot: str = "report", now: datetime | None = None,
@@ -370,16 +348,15 @@ def think(sweep: dict, memory: dict, slot: str = "report", now: datetime | None 
 
     Order: the culture radar, the brand watch and the occasion pulse side by side → the strategy desk → the
     studio writes the top commissioned play (config.TRIAL_PLAYS); the rest are kept as titles, locked."""
-    import anthropic
     from concurrent.futures import ThreadPoolExecutor
 
-    from . import desks, sources
+    from . import desks, llm, sources
     fetch_pins = fetch_pins or sources.pinterest
     now = now or datetime.now(timezone.utc)
-    # long structured outputs with thinking can run past the SDK's 10-minute default
-    client = anthropic.Anthropic(api_key=config.env("ANTHROPIC_API_KEY") or None, max_retries=2, timeout=1800.0)
+    client = llm.Client()
+    log.info("brain: %s", client.describe())
     system = system_prompt(memory)
-    usage = {"usd": 0.0}
+    usage = {"usd": 0.0, "provider": client.name, "free": client.free}
     mem = dict(memory)
 
     def desk(name, fn, *args):
@@ -390,7 +367,7 @@ def think(sweep: dict, memory: dict, slot: str = "report", now: datetime | None 
             usage[f"{name}_failed"] = str(e)[:200]
             return None, None
 
-    with ThreadPoolExecutor(max_workers=3) as ex:
+    with ThreadPoolExecutor(max_workers=client.parallel) as ex:
         fut_radar = ex.submit(desk, "radar", desks.radar, _prune(sweep["signals"]), memory, now)
         fut_brands = ex.submit(desk, "brands", desks.brands, desks.brand_signals(sweep["signals"]), memory, now)
         fut_occ = ex.submit(desk, "occasions", desks.occasions, sources.upcoming_occasions(), sweep["signals"], now)

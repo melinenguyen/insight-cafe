@@ -8,7 +8,7 @@ on:
     - cron: '17 * * * *'
   push:
     branches: [main]
-    paths:                  # office or brief edits: redraw the page, no Claude
+    paths:                  # office or brief edits: redraw the page, no AI
       - 'agency/web/**'
       - 'agency/standing_brief.md'
   workflow_dispatch:
@@ -84,7 +84,15 @@ jobs:
         env:
           AGENCY_SITE_DIR: site
           AGENCY_PASSPHRASE: ${{ secrets.AGENCY_PASSPHRASE }}
+          # the AI: whichever key you added as a secret (agency/llm.py). Gemini and OpenRouter are free.
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          AGENCY_AI: ${{ vars.AGENCY_AI }}
+          AGENCY_MODEL: ${{ vars.AGENCY_MODEL }}
+          LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
+          LLM_MODEL: ${{ vars.LLM_MODEL }}
         run: python -m agency.run --slot "${{ steps.slot.outputs.slot }}" --no-open
 
       - name: Save the café's memory
