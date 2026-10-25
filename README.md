@@ -27,7 +27,7 @@ proof right beside it, and who should do what next. This is the **free trial**, 
 <p align="center">
   <img src="docs/preview.gif" width="100%" alt="A peek inside The Insight Café">
   <br>
-  <sub>🎬 <a href="https://github.com/melinenguyen/insight-cafe/releases/download/v0.1.0/the-insight-cafe-film.mp4">Watch the full one-minute film, with sound</a></sub>
+  <sub>🎬 <a href="https://github.com/melinenguyen/insight-cafe/releases/download/v0.3.2/the-insight-cafe-film.mp4">Watch the one-minute intro film, with sound</a> · it shows all seven specialists; this free trial has four</sub>
 </p>
 
 ## 🎪 Look around before you install
