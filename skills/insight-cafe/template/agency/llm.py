@@ -241,7 +241,7 @@ class Client:
                                                                      r"structured|json", said, re.I):
                 raise FormatRejected(said)
             if r.status_code >= 500 and attempt < 3:
-                time.sleep(10 * (attempt + 1))
+                time.sleep(20 * (attempt + 1))  # "overloaded" passes in a minute or two
                 continue
             raise RuntimeError(f"HTTP {r.status_code}: {said}")
         raise RuntimeError("no answer")
