@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://melinenguyen.github.io/insight-cafe-demo/"><img alt="Live demo: walk in" src="https://img.shields.io/badge/live%20demo-walk%20in%20%E2%86%92-2F7A55?style=for-the-badge"></a>
+  <a href="https://melinenguyen.github.io/insight-cafe-demo/"><img alt="Full demo: walk in" src="https://img.shields.io/badge/full%20demo-walk%20in%20%E2%86%92-2F7A55?style=for-the-badge"></a>
   <a href="#-order-in-two-lines"><img alt="Free trial: now open" src="https://img.shields.io/badge/free%20trial-now%20open%20%E2%98%95-2448D8?style=for-the-badge"></a>
   <img alt="Claude Code plugin" src="https://img.shields.io/badge/Claude%20Code-plugin-4A2F20?style=for-the-badge">
   <img alt="Runs on free AI" src="https://img.shields.io/badge/runs%20on-free%20AI-B9814F?style=for-the-badge">
@@ -30,15 +30,18 @@ proof right beside it, and who should do what next. This is the **free trial**, 
   <sub>🎬 <a href="https://github.com/melinenguyen/insight-cafe/releases/download/v0.1.0/the-insight-cafe-film.mp4">Watch the full one-minute film, with sound</a></sub>
 </p>
 
-## 🎪 Walk into a café that's already open
+## 🎪 Look around before you install
 
-<a href="https://melinenguyen.github.io/insight-cafe-demo/"><img src="docs/demo.png" width="100%" alt="The live demo: a guided tour, then the full office for a made-up cookie shop"></a>
+<a href="https://melinenguyen.github.io/insight-cafe-demo/"><img src="docs/demo.png" width="100%" alt="The full demo: a guided setup tour, then the full café for a made-up cookie shop"></a>
 
-**[Open the live demo →](https://melinenguyen.github.io/insight-cafe-demo/)** A three-minute tour of the setup (the brand, the keys, the clock), then the
-**full** office for Sunday Cookie Co., a made-up Brooklyn cookie shop: all seven specialists, every room, sample data.
+**[🍪 Full demo · sample data →](https://melinenguyen.github.io/insight-cafe-demo/)**
+A three-minute tour of the setup (the brand, the keys, the clock), then the full café for Sunday Cookie Co., a made-up
+Brooklyn cookie shop: all seven specialists, every room. The brand, its rivals, their ads and reviews are made up to
+show what the full version does.
 
-Want proof it really runs? The [live trial café](https://melinenguyen.github.io/insight-cafe-demo/live/) for the same shop reads real news, search and the
-calendar, with a fresh report every morning at 7.
+**[☕ Live trial café · real data, 4 of 7 specialists →](https://melinenguyen.github.io/insight-cafe-demo/live/)**
+Exactly what you get from this repo, running on its own on GitHub with free AI: it reads real news, search and the
+calendar, and a fresh report lands every morning around 7 (Ho Chi Minh City time).
 
 ## 🥐 Meet the crew
 
@@ -154,7 +157,7 @@ Want a seat on opening day? Follow me on TikTok [@himeline](https://www.tiktok.c
 ## 🍵 Little FAQ
 
 **Can I look around before I install anything?**
-Please do: [the live demo](https://melinenguyen.github.io/insight-cafe-demo/) walks you through the setup and lets you open every room.
+Please do. The [full demo · sample data](https://melinenguyen.github.io/insight-cafe-demo/) walks you through the setup and opens every room; the [live trial café · real data](https://melinenguyen.github.io/insight-cafe-demo/live/) is the free trial itself, running on its own.
 
 **Do I need to code?**
 Nope. If you can copy and paste two lines, you can run a café.
@@ -189,7 +192,7 @@ speaks.
 
 The Insight Café là một AI-powered agency marketing, mô phỏng một văn phòng với 7 nhân viên mang tên đồ uống. Công việc của các bạn là theo dõi thị trường, đối thủ cùng ngành/cùng ngách và tìm ra những cơ hội mới cho thương hiệu. Mỗi ngày chỉ cần mở văn phòng là nắm được: có gì đang trending, đối thủ đang làm gì, việc gì đáng ưu tiên cho brand và next steps cho team là gì.
 
-Bản dùng thử miễn phí có 4 bạn đi làm (Espresso, Chai, Matcha, Coca). Văn phòng mở cửa 24/7 trên GitHub (miễn phí) và hoạt động theo lịch thật: sáng tối, giờ giấc, đến Halloween, Christmas hay Tết là tự biết thay đồ. Các bác cũng có thể chạy ngay trên máy nếu thích nha. AI thì khỏi tốn tiền: dùng key Gemini miễn phí (Google AI Studio) hoặc các model mã nguồn mở miễn phí qua OpenRouter, không cần thẻ. Xem trước văn phòng mẫu ở [bản demo](https://melinenguyen.github.io/insight-cafe-demo/) nha. Form thiết lập có tiếng Việt để các bác setup context và những data cần thiết cho AI learn trước khi văn phòng khai trương.
+Bản dùng thử miễn phí có 4 bạn đi làm (Espresso, Chai, Matcha, Coca). Văn phòng mở cửa 24/7 trên GitHub (miễn phí) và hoạt động theo lịch thật: sáng tối, giờ giấc, đến Halloween, Christmas hay Tết là tự biết thay đồ. Các bác cũng có thể chạy ngay trên máy nếu thích nha. AI thì khỏi tốn tiền: dùng key Gemini miễn phí (Google AI Studio) hoặc các model mã nguồn mở miễn phí qua OpenRouter, không cần thẻ. Xem trước ở [full demo · dữ liệu mẫu](https://melinenguyen.github.io/insight-cafe-demo/) hoặc [live trial café · dữ liệu thật](https://melinenguyen.github.io/insight-cafe-demo/live/) nha. Form thiết lập có tiếng Việt để các bác setup context và những data cần thiết cho AI learn trước khi văn phòng khai trương.
 
 Chúc các bác ít tab hơn, nhiều cà phê hơn. ☕
 
