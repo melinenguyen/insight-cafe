@@ -39,7 +39,7 @@ The other rooms are in the office too, locked:
 | Sources | News, Google Trends, the calendar, Pinterest | Plus Instagram, TikTok, YouTube, Reddit and the competitor ad spy |
 | Runs | When you run it, on your computer | 24/7 in the cloud, two reports a day, a private office page your whole team opens |
 
-Follow the build on TikTok: [@himeline](https://www.tiktok.com/@himeline)
+Follow me on TikTok: [@himeline](https://www.tiktok.com/@himeline)
 
 ## Quick start
 
