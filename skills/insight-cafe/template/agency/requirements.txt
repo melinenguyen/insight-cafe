@@ -1,0 +1,5 @@
+anthropic>=2.3
+requests>=2.31
+feedparser>=6.0.11
+Pillow>=10.0
+holidays>=0.50

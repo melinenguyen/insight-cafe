@@ -1,0 +1,216 @@
+{
+ "schema": 1,
+ "agency": {
+  "name": "The Insight Café",
+  "tagline": "Agency nghiên cứu AI của bạn",
+  "office_city": "Ho Chi Minh City",
+  "office_neighbourhood": "Quận 1",
+  "office_tz": "Asia/Ho_Chi_Minh",
+  "scene": "city",
+  "report_language": "Tiếng Việt",
+  "crew": []
+ },
+ "brand": {
+  "name": "Sương Sớm Skincare (example)",
+  "short": "Sương Sớm",
+  "website": "https://example.com",
+  "category": "Mỹ phẩm thuần chay chăm sóc da",
+  "one_liner": "An example Vietnamese vegan skincare brand used to test the skill — replace with your own.",
+  "benefit": "Da khoẻ từ nguyên liệu Việt.",
+  "signature": "Morning light on natural Vietnamese ingredients.",
+  "price_position": "Mid-premium (199k–499k VND)",
+  "voice": {
+   "tone": "Gần gũi, chân thành, rõ ràng.",
+   "banned_words": [
+    "thần kỳ",
+    "trị dứt điểm"
+   ],
+   "no_exclamation_marks": false
+  },
+  "look": "Soft morning daylight, real Vietnamese ingredients (rice, green tea, lotus), real skin, clean bathroom shelves, little text.",
+  "look_avoid": "Heavy filters, before/after medical claims, cluttered discount banners."
+ },
+ "business": {
+  "model": "DTC website + Shopee + TikTok Shop",
+  "channels": [
+   "Website",
+   "Shopee",
+   "TikTok Shop"
+  ],
+  "season_focus": "11.11 and 12.12 mega sales",
+  "goals": "Win 11.11 on Shopee and TikTok Shop without deep discounts.",
+  "kpis": [
+   "GMV",
+   "ROAS",
+   "Followers"
+  ]
+ },
+ "market": {
+  "country": "VN",
+  "language": "vi-VN",
+  "currency": "VND",
+  "bing_mkt": "vi-VN",
+  "trends_geo": "VN",
+  "youtube_region": "VN",
+  "calendar": "VN",
+  "global_moments": [
+   "valentines",
+   "womens_day",
+   "singles_day",
+   "double_12",
+   "christmas",
+   "new_year",
+   "lunar_new_year",
+   "mid_autumn",
+   "halloween"
+  ]
+ },
+ "audience": {
+  "personas": [
+   {
+    "name": "Gen Z skincare beginner",
+    "description": "18–24, learns routines on TikTok, buys on Shopee during sales."
+   },
+   {
+    "name": "Busy office worker",
+    "description": "25–34, wants a 3-step routine and gift sets for colleagues."
+   }
+  ]
+ },
+ "products": [
+  {
+   "name": "Rice & Green Tea Cleanser",
+   "price": 199000
+  },
+  {
+   "name": "Lotus Barrier Serum",
+   "price": 399000,
+   "hero": true
+  },
+  {
+   "name": "Morning Ritual Gift Set",
+   "price": 499000,
+   "hero": true
+  }
+ ],
+ "catalog": {
+  "shopify_domain": ""
+ },
+ "offers": {
+  "rules": "Only platform vouchers during 11.11 and 12.12; no brand discount above 15%.",
+  "never": [
+   "No 'cheapest price' claims"
+  ]
+ },
+ "claims_never": [
+  "Treats acne",
+  "Whitening",
+  "Medical claims"
+ ],
+ "competitors": {
+  "peers": [
+   {
+    "name": "Cocoon",
+    "domain": "cocoonvietnam.com"
+   }
+  ],
+  "performance": [],
+  "instagram_watch": [],
+  "also_watch": [
+   "Cocoon"
+  ]
+ },
+ "content": {
+  "pillars": [
+   "Routine",
+   "Ingredient story",
+   "Gifting",
+   "Sale moment"
+  ],
+  "instagram_hashtags": [],
+  "tiktok_hashtags": [],
+  "radar_sections": [
+   "Skincare & beauty"
+  ]
+ },
+ "creative": {},
+ "sources": {
+  "news_feeds": {},
+  "news_queries": [
+   "mỹ phẩm thuần chay",
+   "xu hướng làm đẹp",
+   "skincare Việt Nam",
+   "Shopee 11.11"
+  ],
+  "youtube_searches": [
+   "review skincare",
+   "skincare routine"
+  ],
+  "voice_queries": [
+   "review sữa rửa mặt"
+  ],
+  "voice_peer_queries": {},
+  "reviews": {},
+  "listen_plan": {
+   "youtube": [],
+   "instagram": []
+  }
+ },
+ "calendar": {
+  "occasions": [
+   {
+    "date": "2026-11-11",
+    "name": "11.11 Singles' Day sale",
+    "note": "Vouchers only, lead with the gift set"
+   }
+  ]
+ },
+ "team": {
+  "lead": {
+   "name": "Linh",
+   "role": "Brand lead",
+   "slack_id": ""
+  },
+  "members": [
+   {
+    "name": "An",
+    "slack_id": "",
+    "owns": "Content and TikTok",
+    "lanes": [
+     "TikTok content",
+     "Social media",
+     "Ads creative (in-house)"
+    ]
+   },
+   {
+    "name": "Bảo",
+    "slack_id": "",
+    "owns": "KOC, Shopee and livestream",
+    "lanes": [
+     "KOC & affiliates",
+     "Shopee listings",
+     "Livestream"
+    ]
+   }
+  ]
+ },
+ "schedule": {
+  "team_tz": "Asia/Ho_Chi_Minh",
+  "team_city": "Sài Gòn",
+  "reports": [
+   "07:00",
+   "19:00"
+  ],
+  "adspy_every_min": 110,
+  "quiet_hours": [
+   22,
+   7
+  ]
+ },
+ "delivery": {
+  "brain_repo": "your-org/brand-brain",
+  "site_repo": "your-org/brand-office",
+  "dispatch_mode": "preview"
+ },
+ "standing_brief": "# Standing brief — Sương Sớm (example)\n\nThis is an example profile for testing the skill. Replace everything with your own brand.\n"
+}

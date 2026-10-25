@@ -1,0 +1,2053 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Insight Café · trial setup</title>
+<meta name="description" content="Fill in a brand profile for the brand opportunity agency. Everything stays in this browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sen:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#F8F7F2; --ink:#252525; --green:#2C332F; --sand:#B6A188; --clay:#9A4A3A; --line:#E3DFD6;
+  --muted:#67625A; --paper:#FFFFFF; --soft:#F0EDE5; --soft2:#FBFAF6; --hh:65px;
+  --font:Sen, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--font);overflow-wrap:break-word}
+button,input,select,textarea{font:inherit;color:inherit;border-radius:0}
+button{cursor:pointer}
+a{color:var(--green)}
+h1,h2,h3{font-weight:600;letter-spacing:-.005em}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+[hidden]{display:none!important}
+svg{flex:none}
+
+/* ---------- header ---------- */
+.top{position:sticky;top:0;z-index:40;background:var(--bg);border-bottom:1px solid var(--line)}
+.top-in{display:flex;align-items:center;gap:24px;height:64px;padding:0 24px}
+.id{display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto}
+.mark{width:30px;height:30px;background:var(--green);flex:none;position:relative}
+.mark::before{content:"";position:absolute;left:7px;top:7px;width:7px;height:7px;background:var(--bg);box-shadow:9px 0 0 var(--bg),0 9px 0 var(--sand),9px 9px 0 var(--bg)}
+.id-t{min-width:0}
+.eyebrow{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bname{font-weight:600;font-size:17px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prog{width:220px;flex:none}
+.bar{height:4px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--green);transition:width .3s ease}
+.prog-t{font-size:12px;color:var(--muted);margin-top:6px;white-space:nowrap}
+.acts{display:flex;align-items:center;gap:8px;flex:none}
+.saved{font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:6px;min-width:64px;transition:opacity .3s}
+.saved::before{content:"";width:6px;height:6px;background:var(--green);flex:none}
+.saved.off{color:var(--clay)} .saved.off::before{background:var(--clay)}
+.saved.pulse::before{animation:pulse .6s ease-out}
+@keyframes pulse{0%{transform:scale(2)}100%{transform:scale(1)}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 14px;border:1px solid var(--ink);background:transparent;font-weight:500;font-size:14px;white-space:nowrap;text-decoration:none;color:var(--ink)}
+.btn:hover{background:var(--soft)}
+.btn.primary{background:var(--green);border-color:var(--green);color:var(--bg)}
+.btn.primary:hover{background:#1E2320}
+.btn.ghost{border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--ink)}
+.btn.danger{background:var(--clay);border-color:var(--clay);color:var(--bg)}
+.btn.small{height:30px;padding:0 10px;font-size:13px}
+.seg{display:inline-flex;border:1px solid var(--line)}
+.seg button{height:34px;width:38px;border:0;background:transparent;font-size:13px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.menu-wrap{position:relative}
+.menu{position:absolute;right:0;top:calc(100% + 6px);min-width:270px;background:var(--soft2);border:1px solid var(--line);box-shadow:0 10px 30px rgba(37,37,37,.10);padding:6px;z-index:50}
+.menu button{display:block;width:100%;text-align:left;padding:10px 12px;background:none;border:0;font-size:14px}
+.menu button:hover{background:var(--soft)}
+.menu hr{border:0;border-top:1px solid var(--line);margin:6px 0}
+.menu .sub{display:block;font-size:12px;color:var(--muted)}
+.miss-md{display:none}
+.stepbar,.mbar{display:none}
+
+/* ---------- layout ---------- */
+.app{display:grid;grid-template-columns:264px minmax(0,1fr) 312px;min-height:calc(100vh - var(--hh))}
+.side{position:sticky;top:var(--hh);align-self:start;height:calc(100vh - var(--hh));overflow:auto;border-right:1px solid var(--line);padding:18px 12px 20px;display:flex;flex-direction:column;gap:8px}
+.side-h{font-size:12px;color:var(--muted);padding:0 10px 4px}
+.steps{display:flex;flex-direction:column}
+.step{display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:center;gap:8px;width:100%;text-align:left;padding:9px 10px;border:0;border-left:2px solid transparent;background:none;font-size:14px;line-height:1.35}
+.step:hover{background:var(--soft)}
+.step .num{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.step .cnt{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;display:inline-flex;align-items:center;gap:5px}
+.step .cnt .some{width:6px;height:6px;background:var(--sand);display:inline-block}
+.step.cur{background:var(--soft);border-left-color:var(--green);font-weight:600}
+.step.done .cnt{color:var(--green)}
+.side-f{margin-top:auto;padding:16px 10px 0;border-top:1px solid var(--line)}
+.link{background:none;border:0;padding:0;font-size:14px;text-decoration:underline;text-underline-offset:3px;color:var(--ink)}
+.link.danger{color:var(--clay)}
+.tiny{font-size:12px;color:var(--muted);margin:8px 0 0;line-height:1.45}
+main{padding:40px 56px 96px;min-width:0}
+.wrap{max-width:760px}
+.miss{position:sticky;top:var(--hh);align-self:start;height:calc(100vh - var(--hh));overflow:auto;border-left:1px solid var(--line);padding:22px 18px 28px}
+.scrim{display:none}
+
+/* ---------- section ---------- */
+.sec-head{margin-bottom:28px}
+.sec-head .eyebrow{font-size:13px}
+.sec-head h1{font-size:30px;line-height:1.2;margin:6px 0 10px}
+.intro{margin:0;color:var(--ink);max-width:62ch}
+.sec-status{margin:12px 0 0;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.sec-status .bar{width:120px;height:3px}
+.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:24px 16px}
+.field{grid-column:span 6;display:flex;flex-direction:column;min-width:0}
+.w3{grid-column:span 3}.w2{grid-column:span 2}.w4{grid-column:span 4}
+.field>.ctl{margin-top:auto}
+.lab{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 8px;font-weight:600;font-size:14px;line-height:1.35;margin:0 0 3px}
+.req{font-weight:500;font-size:11px;line-height:1.6;padding:0 6px;background:rgba(182,161,136,.24);color:#57493A}
+.help{margin:0 0 8px;font-size:13px;color:var(--muted);line-height:1.45}
+.ctl .help{margin:6px 0 0}
+input[type=text],input[type=url],input[type=number],input[type=date],input[type=time],select,textarea{width:100%;background:var(--paper);border:1px solid var(--line);padding:9px 11px;font-size:15px;min-height:42px;line-height:1.4}
+select{padding-right:30px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%23252525' stroke-width='1.4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+textarea{resize:vertical;display:block}
+textarea.mono{font:13.5px/1.6 var(--mono)}
+input:hover,select:hover,textarea:hover{border-color:#CFC9BC}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 1px var(--green)}
+::placeholder{color:#A39E91;opacity:1}
+input[readonly]{background:var(--soft2);color:var(--muted)}
+.note{font-size:13px;color:var(--ink);background:var(--soft);border-left:2px solid var(--sand);padding:8px 12px;margin:10px 0 0}
+.check{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:14px}
+.check input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--green);flex:none}
+.empty{margin:0;font-size:13px;color:var(--muted);padding:12px 14px;border:1px dashed var(--line)}
+.flash{animation:flash 1.8s ease-out}
+@keyframes flash{0%{box-shadow:0 0 0 4px rgba(182,161,136,.95)}100%{box-shadow:0 0 0 4px rgba(182,161,136,0)}}
+
+/* tags */
+.tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:var(--paper);border:1px solid var(--line);padding:6px;min-height:44px;cursor:text}
+.tags:focus-within{border-color:var(--green);box-shadow:0 0 0 1px var(--green)}
+.chip{display:inline-flex;align-items:center;gap:0;background:var(--soft);border:1px solid var(--line);padding:1px 0 1px 9px;font-size:13.5px;line-height:1.4;max-width:100%;min-width:0}
+.chip>span{overflow-wrap:anywhere}
+.chip-x{border:0;background:none;width:26px;height:26px;display:inline-grid;place-items:center;color:var(--muted);flex:none}
+.chip-x:hover{color:var(--clay)}
+.tag-in{flex:1 1 160px;min-width:110px;border:0!important;box-shadow:none!important;padding:4px 6px!important;min-height:30px!important;background:transparent!important;font-size:15px}
+.count{font-size:12px;color:var(--muted);margin:6px 0 0}
+.count.over{color:var(--clay);font-weight:600}
+
+/* moments */
+.moments{display:flex;flex-wrap:wrap;gap:8px}
+.mo{border:1px solid var(--line);background:var(--paper);padding:7px 12px;font-size:13.5px;line-height:1.3}
+.mo:hover{border-color:var(--ink)}
+.mo[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--bg)}
+
+/* rows */
+.rows{display:grid;gap:12px}
+.card{border:1px solid var(--line);background:var(--soft2);padding:14px 16px 18px;min-width:0}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;min-width:0}
+.card-t{display:flex;align-items:center;gap:10px;min-width:0;font-weight:600;font-size:14px}
+.card-t .nm{font-weight:500;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card-n{white-space:nowrap}
+.tools{display:flex;gap:4px;flex:none}
+.ib{width:32px;height:32px;border:1px solid var(--line);background:var(--paper);display:inline-grid;place-items:center;padding:0;color:var(--ink)}
+.ib:hover:not(:disabled){border-color:var(--ink)}
+.ib:disabled{opacity:.35;cursor:default}
+.ib.x:hover:not(:disabled){border-color:var(--clay);color:var(--clay)}
+.add{justify-self:start;display:inline-flex;align-items:center;gap:8px;border:1px dashed var(--sand);background:transparent;padding:9px 14px;font-weight:500;font-size:14px}
+.add:hover{border-style:solid;background:var(--soft)}
+.g-tight{gap:16px 12px}
+.av{width:44px;height:44px;flex:none;display:block;border:1px solid var(--line);background:#EEE9DE}
+.av svg{display:block;width:100%;height:100%}
+.look-row{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:flex-end}
+.look-row>label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);min-width:0}
+.look-row select{min-width:130px}
+.sw{position:relative}
+.sw .swrow{display:flex;align-items:center;gap:4px}
+input[type=color]{width:46px;height:42px;padding:3px;border:1px solid var(--line);background:var(--paper);cursor:pointer}
+input[type=color]::-webkit-color-swatch-wrapper{padding:0}
+input[type=color]::-webkit-color-swatch{border:0;border-radius:0}
+.sw .unset{position:absolute;inset:auto 0 0 auto;font-size:10px}
+
+/* pairs */
+.pairs{display:grid;gap:8px}
+.pair-h,.pair{display:grid;grid-template-columns:92px minmax(0,1fr) auto;gap:8px;align-items:center}
+.pairs.wide .pair-h,.pairs.wide .pair{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) auto}
+.pair-h{font-size:12px;color:var(--muted);padding-right:112px}
+.pair .pk{font-family:var(--mono);font-size:13.5px}
+.pairs.wide .pair .pk{font-family:inherit;font-size:15px}
+.pairs .add{margin-top:4px}
+
+/* times, quiet, radios */
+.times{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.time{display:inline-flex;gap:4px;align-items:center}
+.time input{width:92px;font-variant-numeric:tabular-nums}
+.quiet{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.quiet select{width:112px}
+.quiet span{font-size:14px;color:var(--muted)}
+.radios{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.radio{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);background:var(--paper);padding:12px 14px;cursor:pointer}
+.radio.on{border-color:var(--green);box-shadow:0 0 0 1px var(--green)}
+.radio input{accent-color:var(--green);margin:4px 0 0;flex:none}
+.radio b{display:block;font-weight:600;font-size:14px}
+.radio .help{margin:2px 0 0}
+.seg2{display:flex;flex-wrap:wrap;gap:8px 20px;margin:0 0 10px}
+.seg2 label{display:inline-flex;align-items:center;gap:8px;font-size:14px;cursor:pointer}
+.seg2 input{accent-color:var(--green)}
+.inline-act{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+.extra{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+
+/* brief */
+.brief-tools{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.brief-uses{font-size:12.5px;color:var(--muted);margin:0 0 12px}
+
+/* nav */
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:44px;padding-top:20px;border-top:1px solid var(--line)}
+.nav .btn{height:auto;min-height:40px;padding:8px 14px;white-space:normal;text-align:left}
+.nav .btn .sub{display:block;font-size:12px;opacity:.75;font-weight:400}
+.nav .next{margin-left:auto;text-align:right}
+
+/* missing panel */
+.miss-h{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.miss h2{font-size:16px;margin:0}
+.badge{font-size:12px;font-weight:600;min-width:24px;height:22px;padding:0 7px;display:inline-grid;place-items:center;background:var(--clay);color:var(--bg)}
+.badge.ok{background:var(--green)}
+.miss h3{font-size:12px;font-weight:600;color:var(--muted);margin:18px 0 4px}
+.miss ul{list-style:none;margin:0;padding:0}
+.mi{display:grid;grid-template-columns:8px minmax(0,1fr);gap:10px;width:100%;text-align:left;background:none;border:0;padding:7px 6px;font-size:13.5px;line-height:1.4}
+.mi:hover{background:var(--soft)}
+.mi .dot{width:8px;height:8px;margin-top:6px;background:var(--sand)}
+.mi.err .dot{background:var(--clay)}
+.mi.warn .dot{background:transparent;border:1.5px solid var(--clay)}
+.mi .sec{display:block;font-size:11.5px;color:var(--muted)}
+.all-good{font-size:14px;margin:8px 0 0;padding:12px 14px;background:var(--soft);border-left:2px solid var(--green)}
+.miss-close{margin-left:auto}
+
+/* launch */
+.launch{display:grid;gap:16px}
+.ls{border:1px solid var(--line);background:var(--soft2);padding:18px 18px 20px;min-width:0}
+.ls-h{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.ls-n{width:28px;height:28px;flex:none;display:grid;place-items:center;background:var(--ink);color:var(--bg);font-size:13px;font-weight:600}
+.ls.is-done .ls-n{background:var(--green)}
+.ls h2{font-size:17px;margin:0;flex:1;min-width:0}
+.ls-done{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;flex:none}
+.ls-done input{accent-color:var(--green);width:16px;height:16px;margin:0}
+.ls p{margin:0 0 10px}
+.ls ul.ll{margin:0 0 12px;padding-left:18px}
+.ls ul.ll li{margin:4px 0}
+.status-line{display:flex;align-items:center;gap:8px;font-weight:600}
+.status-line .dot{width:10px;height:10px;background:var(--clay);flex:none}
+.status-line.ok .dot{background:var(--green)}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.code{display:flex;align-items:flex-start;gap:8px;background:var(--ink);color:var(--bg);padding:10px 10px 10px 14px;margin:8px 0 0;min-width:0}
+.code pre{margin:0;flex:1;min-width:0;overflow-x:auto;font:13px/1.6 var(--mono);white-space:pre-wrap;padding:2px 0}
+.code .tk{white-space:nowrap}
+.code .btn{border-color:#5B5752;color:var(--bg);height:28px;font-size:12px;padding:0 10px;flex:none}
+.code .btn:hover{background:#3A3836}
+.secrets{display:grid;gap:8px;margin:4px 0 4px}
+.secret{display:grid;grid-template-columns:22px minmax(0,1fr);gap:4px 10px;padding:10px 12px;border:1px solid var(--line);background:var(--paper)}
+.secret .tick{width:20px;height:20px;display:grid;place-items:center;border:1px solid var(--line);color:var(--bg);margin-top:1px}
+.secret.on .tick{background:var(--green);border-color:var(--green)}
+.secret .s-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.secret code{font:600 13px/1.4 var(--mono);overflow-wrap:anywhere}
+.s-tag{font-size:11.5px;padding:0 6px;line-height:1.7;background:var(--soft);color:var(--muted)}
+.secret.on .s-tag{background:rgba(44,51,47,.10);color:var(--green)}
+.s-tag.req{background:var(--green);color:var(--bg)}
+.secret p{grid-column:2;margin:0;font-size:13.5px}
+.secret .why{color:var(--muted);font-size:12.5px}
+
+/* toast + modal */
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--ink);color:var(--bg);padding:11px 16px;font-size:14px;display:flex;gap:14px;align-items:center;z-index:90;transition:all .2s ease;max-width:calc(100vw - 32px)}
+#toast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+#toast button{background:none;border:0;color:var(--bg);text-decoration:underline;text-underline-offset:3px;font-weight:600;padding:0}
+.modal{position:fixed;inset:0;z-index:95;display:grid;place-items:center;padding:16px}
+.modal .scrim2{position:absolute;inset:0;background:rgba(37,37,37,.38)}
+.dlg{position:relative;background:var(--bg);border:1px solid var(--line);width:min(520px,100%);max-height:calc(100vh - 32px);overflow:auto;padding:22px 22px 18px;box-shadow:0 20px 50px rgba(0,0,0,.18)}
+.dlg.wide{width:min(720px,100%)}
+.dlg h2{font-size:19px;margin:0 0 10px}
+.dlg p{margin:0 0 10px}
+.dlg textarea{min-height:240px;font:13px/1.5 var(--mono)}
+.dlg-f{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.dlg .err{color:var(--clay);font-size:13px;margin:8px 0 0}
+
+/* ---------- medium: missing panel becomes a drawer ---------- */
+@media (max-width:1279px){
+  .app{grid-template-columns:248px minmax(0,1fr)}
+  main{padding:36px 40px 96px}
+  .miss{position:fixed;top:0;right:0;bottom:0;height:auto;align-self:normal;width:min(380px,92vw);z-index:70;background:var(--bg);border-left:1px solid var(--line);transform:translateX(102%);transition:transform .22s ease;box-shadow:-12px 0 40px rgba(0,0,0,.08)}
+  body.miss-open .miss{transform:none}
+  body.miss-open .scrim{display:block;position:fixed;inset:0;background:rgba(37,37,37,.25);z-index:65}
+  .miss-md{display:inline-flex}
+}
+@media (min-width:1280px){.miss-close{display:none}}
+
+/* ---------- phone ---------- */
+@media (max-width:860px){
+  .top-in{height:54px;padding:0 16px;gap:10px}
+  .eyebrow,.prog,.saved-t,.miss-md{display:none}
+  .mark{width:24px;height:24px}
+  .mark::before{left:5px;top:5px;width:6px;height:6px;box-shadow:8px 0 0 var(--bg),0 8px 0 var(--sand),8px 8px 0 var(--bg)}
+  .bname{font-size:16px}
+  .saved{min-width:0}
+  .acts{gap:6px}
+  .acts .btn{height:34px;padding:0 10px;font-size:13px}
+  .acts .btn svg{display:none}
+  .seg button{width:32px;height:32px;font-size:12px}
+  .menu{right:-4px;min-width:250px;max-width:calc(100vw - 24px)}
+  .stepbar{display:flex;gap:8px;padding:0 16px 10px}
+  .stepbtn{flex:1;min-width:0;display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border:1px solid var(--line);background:var(--paper);text-align:left;font-size:14px}
+  .stepbtn .t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+  .stepbtn .c{font-size:12px;color:var(--muted)}
+  .missbtn{height:40px;padding:0 12px;font-size:13px}
+  .mbar{display:block;height:3px;background:var(--line)}
+  .mbar i{display:block;height:100%;width:0;background:var(--green);transition:width .3s}
+  .app{display:block}
+  .side{position:fixed;top:var(--hh);left:0;right:0;height:auto;max-height:calc(100vh - var(--hh));border:0;border-bottom:1px solid var(--line);background:var(--bg);z-index:60;display:none;box-shadow:0 18px 40px rgba(0,0,0,.10)}
+  body.steps-open .side{display:flex}
+  body.steps-open .scrim{display:block;position:fixed;inset:var(--hh) 0 0 0;background:rgba(37,37,37,.25);z-index:55}
+  main{padding:24px 16px 72px}
+  .sec-head h1{font-size:25px}
+  .grid{gap:20px 12px}
+  .w2,.w3,.w4{grid-column:span 6}
+  input[type=text],input[type=url],input[type=number],input[type=date],input[type=time],select,textarea,.tag-in{font-size:16px}
+  .radios{grid-template-columns:1fr}
+  .pair-h{display:none}
+  .pair,.pairs.wide .pair{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"k t" "v v"}
+  .pair .pk{grid-area:k}.pair .pv{grid-area:v}.pair .tools{grid-area:t}
+  .pairs .pair{padding-bottom:10px;border-bottom:1px solid var(--line)}
+  .card{padding:12px 12px 16px}
+  .card-t .ci{display:none}
+  .nav .btn .sub{display:none}
+  .ls{padding:14px 12px 16px}
+  .ls-h{flex-wrap:wrap}
+  #toast{bottom:16px}
+}
+@media (max-width:400px){
+  .mark{display:none}
+  .acts .btn{padding:0 9px}
+}
+@media print{.top,.side,.miss,.nav{display:none}.app{display:block}}
+.full-only .ctl,.full-only-wrap>div{opacity:.45}
+.fulltag{display:inline-block;margin-left:8px;font-size:11px;font-weight:700;letter-spacing:.02em;color:#fff;background:#A88A4E;border-radius:999px;padding:2px 9px;vertical-align:1px}
+.full-only-wrap{position:relative;grid-column:1/-1}.full-only-wrap>.fulltag{position:absolute;right:0;top:0;z-index:2}
+.trialnote{background:#F1EEE6;border-left:3px solid #A88A4E;border-radius:8px;padding:12px 16px;margin:0 0 18px;font-size:14px}
+</style>
+</head>
+<body>
+<noscript><p style="padding:24px">This setup dashboard needs JavaScript. It runs entirely in your browser; nothing is sent anywhere.</p></noscript>
+<header class="top" id="top"></header>
+<div class="app">
+  <nav class="side" id="side" aria-label="Steps"></nav>
+  <main id="main" tabindex="-1"></main>
+  <aside class="miss" id="miss" aria-label="What's missing"></aside>
+</div>
+<div class="scrim" data-act="close-overlays"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="modal"></div>
+<input type="file" id="file" accept=".json,application/json" hidden>
+
+<datalist id="dl-lang">
+  <option value="English (US)"></option><option value="English (UK)"></option><option value="English"></option>
+  <option value="Tiếng Việt"></option><option value="Bahasa Indonesia"></option><option value="Bahasa Melayu"></option>
+  <option value="ภาษาไทย (Thai)"></option><option value="Filipino"></option><option value="日本語 (Japanese)"></option>
+  <option value="한국어 (Korean)"></option><option value="中文 (简体)"></option><option value="中文 (繁體)"></option>
+  <option value="Français"></option><option value="Deutsch"></option><option value="Español"></option><option value="Português (Brasil)"></option>
+</datalist>
+<datalist id="dl-model">
+  <option value="DTC (Shopify)"></option><option value="DTC (Shopify) + Amazon"></option>
+  <option value="Marketplace (Shopee, Lazada, TikTok Shop)"></option><option value="Retail and wholesale"></option>
+  <option value="Subscription"></option><option value="B2B SaaS"></option><option value="Café / restaurant chain"></option><option value="Service"></option>
+</datalist>
+<datalist id="dl-amazon">
+  <option value="www.amazon.com"></option><option value="www.amazon.co.uk"></option><option value="www.amazon.ca"></option>
+  <option value="www.amazon.com.au"></option><option value="www.amazon.de"></option><option value="www.amazon.fr"></option>
+  <option value="www.amazon.it"></option><option value="www.amazon.es"></option><option value="www.amazon.nl"></option>
+  <option value="www.amazon.co.jp"></option><option value="www.amazon.sg"></option><option value="www.amazon.in"></option>
+  <option value="www.amazon.ae"></option><option value="www.amazon.com.mx"></option><option value="www.amazon.com.br"></option>
+</datalist>
+<datalist id="dl-packs"><option value="default:us-beauty-culture"></option></datalist>
+
+<script type="application/json" id="example-profile">{"schema":1,"agency":{"name":"The Insight Café","tagline":"Your AI research agency","office_city":"New York","office_neighbourhood":"Flatiron","office_tz":"America/New_York","scene":"newyork","report_language":"English (US)","crew":[]},"brand":{"name":"Fernlight Skincare (example)","short":"Fernlight","website":"https://example.com","category":"Skincare and body care","one_liner":"An example US skincare brand — barrier-first formulas for people who want fewer steps. It shows how the office works; replace it with your own brand.","benefit":"Calm, healthy-looking skin with fewer steps.","signature":"A fern-green dropper over real, unfiltered skin.","price_position":"Mid-premium ($18–$49)","voice":{"tone":"Clear, warm, a little witty. Explains the science in plain words and never preaches.","banned_words":["miracle","flawless","anti-aging","detox","chemical-free","toxin-free"],"no_exclamation_marks":false},"look":"Bright daylight bathrooms, real skin with texture, hands applying product, close-up swatches, soft neutral backgrounds with one fern-green accent.","look_avoid":"Heavy retouching, before/after pictures framed as medical results, lab-coat stock photos, cluttered discount banners."},"business":{"model":"DTC website (Shopify) + Amazon + TikTok Shop","channels":["Website (Shopify)","Amazon","TikTok Shop"],"season_focus":"Holiday gifting (Nov–Dec), then the New Year routine reset (Jan)","goals":"Grow repeat purchase and win holiday gifting without deep discounts.","kpis":["Revenue","Repeat purchase rate","New customers","Blended ROAS"]},"market":{"country":"US","language":"en-US","currency":"USD","bing_mkt":"en-US","trends_geo":"US","youtube_region":"US","calendar":"US"},"audience":{"personas":[{"name":"The skin minimalist","description":"25–34, wants a 3-step routine that works, buys on the website and re-orders when it runs out."},{"name":"The ingredient checker","description":"22–35, reads the ingredient list, follows dermatologists and skincare creators on TikTok, compares on Amazon."},{"name":"The gift giver","description":"28–45, buys sets for birthdays and the holidays, wants something that looks considered and arrives on time."}]},"products":[{"key":"","name":"Barrier Cream Cleanser","price":28},{"key":"","name":"Peptide Glow Serum","price":38},{"key":"","name":"Cloud Barrier Moisturizer","price":36},{"key":"","name":"Overnight Lip Mask","price":18},{"key":"","name":"Body Glow Oil","price":34},{"key":"","name":"The Discovery Set (4 minis)","price":49}],"catalog":{"shopify_domain":""},"offers":{"rules":"One discount a season: 20% sitewide on Black Friday and Cyber Monday only. Gift-with-purchase the rest of the year. No stacked codes.","never":["No other percentages in copy","No fake countdowns or 'last chance' that isn't","No 'cheapest' claims"]},"claims_never":["Treats, cures, heals or prevents acne, eczema or rosacea","\"Clinically proven\" without a linked study","\"Dermatologist recommended\" without proof","Reverses wrinkles or aging"],"competitors":{"peers":[{"name":"Glossier","domain":"glossier.com","foreplay_id":""},{"name":"Summer Fridays","domain":"summerfridays.com","foreplay_id":""},{"name":"Rhode","domain":"rhodeskin.com","foreplay_id":""},{"name":"Tower 28","domain":"tower28beauty.com","foreplay_id":""}],"performance":[{"name":"The Ordinary","domain":"theordinary.com","foreplay_id":""},{"name":"CeraVe","domain":"cerave.com","foreplay_id":""},{"name":"Bubble","domain":"hellobubble.com","foreplay_id":""}],"instagram_watch":["glossier","summerfridays","rhode","tower28beauty","theordinary","cerave"],"also_watch":["Drunk Elephant","Laneige","Kosas"]},"content":{"pillars":["Barrier science, simply","Real routines","Gifting & occasions","Behind the formula"],"categories":["Gifting & occasions","Skincare & beauty","Wellness","Fashion & style","Celebrity & pop culture","Internet culture","Competitor move","Our brand"],"platforms":["TikTok","Instagram","YouTube","Pinterest","News","Search","Calendar","Meta Ads"],"formats":["static","carousel","reel","tiktok","story","ugc","ad","creator_brief","pr_pitch","seeding"],"instagram_hashtags":["skincareroutine","skintok","barrierrepair","glassskin","skincaretips","giftideas"],"tiktok_hashtags":["skincareroutine","skintok"],"radar_sections":["Skincare & beauty"]},"creative":{"angles":{"A1":"Visible result — show the skin, don't claim the result","A2":"Problem → solution — tight, flaky, stinging skin","A3":"Social proof — real reviews, word for word","A4":"Routine — three steps, done","A5":"Value math — price per use, minis before full size","A6":"Identity — for people who hate 12-step routines","A7":"Gift / occasion — the set that looks considered","A8":"Behind the formula — why each ingredient is there","A9":"Swap — replace three products with one","A10":"Sensory — texture, slip, finish"},"concepts":{"C1":"Unboxing","C2":"Demo / how-to","C3":"Texture close-up","C4":"Review card","C5":"Founder or formulator story","C6":"Get ready with me","C7":"Round-up","C8":"Side-by-side","C9":"Problem callout","C10":"Routine in 30 seconds"},"doctrine":"Angle decides scale, hook decides survival. Kill a hook at 1,000 impressions if the 3-second rate is under 20% or cost per order is over 1.5x target; judge a concept at 7 days and an angle at 14 days on cost per order. Never retire an angle until 3 concepts have failed it.","production_rules":"Masters stay evergreen unless the brief names a season: no dates, prices or offers burned into the film; the last 2 seconds are a separate end card so an offer drops in without a re-edit. Real skin, no heavy retouching, captions on every video."},"sources":{"news_feeds":"default:us-beauty-culture","news_queries":["skin barrier skincare trend","skincare launch","beauty TikTok trend","holiday beauty gift sets"],"youtube_searches":["skincare routine 2026","best moisturizer for dry skin","beauty gift sets 2026","minimal skincare routine"],"voice_queries":["barrier repair moisturizer review","peptide serum review","gentle cream cleanser review"],"voice_peer_queries":{"glossier review":"Glossier","summer fridays jet lag mask review":"Summer Fridays","rhode peptide glazing fluid review":"Rhode","tower 28 sos spray review":"Tower 28"},"listen_plan":{"youtube":[],"instagram":[]},"reviews":{"judgeme_shop":"","amazon_domain":"amazon.com","amazon_ours":[],"amazon_peers":[]},"mentions_feed":""},"calendar":{"occasions":[{"date":"2026-11-26","name":"Thanksgiving","note":"Content only — gratitude, no sale"},{"date":"2026-11-27","name":"Black Friday","note":"20% sitewide — the one discount of the season"},{"date":"2026-11-30","name":"Cyber Monday","note":"Last day of the 20%"},{"date":"2026-12-14","name":"Our gift-set shipping cutoff","note":"Push the Discovery Set until this date"},{"date":"2027-01-04","name":"New Year routine reset","note":"Lead with the moisturizer and 'fewer steps'"},{"date":"2027-02-14","name":"Valentine's Day","note":"Gift-with-purchase, no discount"}]},"team":{"lead":{"name":"Jordan","role":"Brand lead","slack_id":""},"members":[{"name":"Sam","slack_id":"","owns":"Content and social: TikTok, Instagram, creators, seeding","lanes":["Social media","TikTok content","Creators & seeding"]},{"name":"Priya","slack_id":"","owns":"Performance and retention: paid ads, Amazon, email and SMS","lanes":["Paid ads","Amazon","Email & SMS"]}],"slack_team":""},"schedule":{"team_tz":"America/New_York","reports":["07:30","17:30"],"adspy_every_min":110,"quiet_hours":[22,6],"team_city":"New York"},"delivery":{"brain_repo":"your-org/brand-brain","site_repo":"your-org/brand-office","site_url":"","dispatch_mode":"preview"},"standing_brief":"# Standing brief — Fernlight (example)\n\nThe office's house rules. The lead's morning huddle overrides anything here for the day;\nthis file is what still holds when the huddle hasn't said otherwise. Edit it, push, and the\nnext sweep uses it.\n\n> Fernlight is a made-up brand used to show how the office works. Replace every line with your own.\n\n## The brand\nFernlight makes barrier-first skincare for people who want fewer steps: a cleanser, a serum,\na moisturizer, and a body oil. Mid-premium ($18–$49), sold on our website, Amazon and TikTok Shop.\nPromise: **calm, healthy-looking skin with fewer steps.**\nVoice: clear, warm, a little witty. Explain the science in plain words. Never preach.\n\n## This season (now → end of December)\n- Focus: **holiday gifting**, then the **New Year routine reset** in January.\n- Hero products: the Discovery Set ($49) for gifting; the Cloud Barrier Moisturizer for the reset.\n- One discount only: **20% sitewide on Black Friday and Cyber Monday.** Gift-with-purchase the rest of the season.\n  No other percentages in copy, no stacked codes, no fake countdowns.\n\n## Always\n- Show real skin with texture. Hands applying product. Daylight.\n- Every hook names a person, a moment or a problem (\"for the friend who has 12 steps and no time\").\n- Plays need an owner, a format, a date and a reason we would win.\n\n## Never\n- Medical claims: treats, cures, heals, prevents (acne, eczema, rosacea).\n- \"Clinically proven\" or \"dermatologist recommended\" unless the study is linked.\n- \"Chemical-free\", \"toxin-free\", \"detox\", \"miracle\", \"flawless\", \"anti-aging\".\n- Before/after pictures framed as medical results.\n\n## Team\n- **Jordan** (brand lead) answers the huddle and approves anything that goes live.\n- **Sam** owns content and social: TikTok, Instagram, creators, seeding.\n- **Priya** owns performance and retention: paid ads, Amazon, email and SMS.\n"}</script>
+<script>
+(function(){
+'use strict';
+
+/* =====================================================================
+   Small helpers
+   ===================================================================== */
+var $ = function(s, r){ return (r || document).querySelector(s); };
+var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function clone(o){ return o === undefined ? undefined : JSON.parse(JSON.stringify(o)); }
+function str(v){ return v == null ? '' : String(v).trim(); }
+function asArr(v){ return Array.isArray(v) ? v : []; }
+function isObj(v){ return v && typeof v === 'object' && !Array.isArray(v); }
+function L(en, vi){ return {en: en, vi: vi}; }
+function cssq(s){ return (window.CSS && CSS.escape) ? CSS.escape(s) : String(s).replace(/"/g, '\\"'); }
+function filled(v){
+  if (v == null) return false;
+  if (typeof v === 'string') return v.trim() !== '';
+  if (Array.isArray(v)) return v.length > 0;
+  if (typeof v === 'object') return Object.keys(v).length > 0;
+  if (typeof v === 'number') return isFinite(v);
+  if (typeof v === 'boolean') return v;
+  return true;
+}
+function parts(p){ return p.split('.').map(function(s){ return /^\d+$/.test(s) ? +s : s; }); }
+function getP(o, p){ var c = o, ks = parts(p); for (var i = 0; i < ks.length; i++){ if (c == null || typeof c !== 'object') return undefined; c = c[ks[i]]; } return c; }
+function setP(o, p, v){
+  var ks = parts(p), c = o;
+  for (var i = 0; i < ks.length - 1; i++){
+    var k = ks[i];
+    if (c[k] == null || typeof c[k] !== 'object') c[k] = (typeof ks[i+1] === 'number') ? [] : {};
+    c = c[k];
+  }
+  c[ks[ks.length-1]] = v;
+}
+function delKey(o, p){ var ks = parts(p), last = ks.pop(); var c = ks.length ? getP(o, ks.join('.')) : o; if (c && typeof c === 'object' && !Array.isArray(c)) delete c[last]; }
+
+var sv = function(d){ return '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true">' + d + '</svg>'; };
+var ICON = {
+  up: sv('<path d="M4 10l4-4 4 4"/>'), down: sv('<path d="M4 6l4 4 4-4"/>'), x: sv('<path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/>'),
+  plus: sv('<path d="M8 3.5v9M3.5 8h9"/>'), check: sv('<path d="M3.5 8.5l3 3 6-7"/>'), next: sv('<path d="M6 3.5l4.5 4.5L6 12.5"/>'),
+  prev: sv('<path d="M10 3.5L5.5 8l4.5 4.5"/>')
+};
+
+/* =====================================================================
+   Vocabulary
+   ===================================================================== */
+var STD_CREW = [
+  {id:'coca', name:'Coca', role:'Agency director', job:'The brief: what happened, what it means, what we do', question:'What is the one thing the brand needs most this week?', look:{hair:'bun', top:'#A8443A', skin:'#EDB892', acc:'clip'}},
+  {id:'espresso', name:'Espresso', role:'Culture & social radar', job:'What happened in culture and social — and what people think, feel and do around the next occasions', question:'Any culture moment, show or creator you want me to keep on the radar?', look:{hair:'short', top:'#3B3430', skin:'#D9A27A', acc:'glasses', hairColor:'#4A2E22'}},
+  {id:'chai', name:'Chai', role:'Brand watch', job:'What other brands launched, said and did', question:'Any brand you want me to watch more closely, or drop?', look:{hair:'bob', top:'#4E5D78', skin:'#C98E6B', acc:'glasses'}},
+  {id:'mocha', name:'Mocha', role:'Creative strategist', job:"Reads other brands' ads, then proposes our static and video ads for every funnel stage, and why they'll work", question:'Any ad you saw that we should study, or any asset you want held back?', look:{hair:'beret', top:'#8C6A5C', skin:'#E8B48A', acc:'beret'}},
+  {id:'latte', name:'Latte', role:'Customer voice', job:'What our customers and the audiences of brands we sit beside say — and the hooks, angles and plans it gives us', question:'Anything we must not say, show or push right now? Claims, stock, sensitive topics.', look:{hair:'short', top:'#B6A188', skin:'#F2C9A5', acc:'earring'}},
+  {id:'matcha', name:'Matcha', role:'Strategist', job:'What we steal or leverage: every opportunity, scored', question:'Which campaigns, promotions, launches or events are live or coming up? Dates and codes, please.', look:{hair:'curly', top:'#2C332F', skin:'#8D5A3B', acc:'pencil'}},
+  {id:'tonic', name:'Tonic', role:'Producer', job:'The plays in flight with the team, and their tickets', question:'How is the team this week? Anyone away, overloaded, or waiting on something?', look:{hair:'braid', top:'#716A56', skin:'#B9845F', acc:'headset'}}
+];
+var CREW_IDS = STD_CREW.map(function(c){ return c.id; });
+var GEN_ANGLES = {A1:'Visible result', A2:'Problem → solution', A3:'Social proof', A4:'Ritual / routine', A5:'Value math', A6:'Identity — for people like me', A7:'Gift / occasion', A8:'Origin & craft', A9:'Swap / comparison', A10:'Sensory'};
+var GEN_CONCEPTS = {C1:'Unboxing', C2:'Demo / how-to', C3:'Before/after', C4:'Review card', C5:'Founder story', C6:'Day in the life', C7:'Round-up', C8:'Side-by-side', C9:'Problem callout', C10:'Sensory close-up'};
+var GEN_DOCTRINE = 'Angle decides scale, hook decides survival. Kill a hook at 1,000 impressions if the 3-second rate is under 20% or CPA is over 1.5x target; judge a concept at 7 days, an angle at 14 days on cost per order. Never retire an angle until 3 concepts have failed it. Rotate hooks every 4-6 weeks or at frequency above 2.5.';
+var GEN_PRODUCTION = 'Masters are evergreen unless the slate item names a season: no dates, holidays, prices or offers burned into the film; the last 2 seconds are a separate end card so an offer or occasion drops in without touching the film.';
+var GEN_PLATFORMS = ['TikTok', 'Instagram', 'YouTube', 'News', 'Search', 'Calendar', 'Meta Ads'];
+var GEN_FORMATS = ['static', 'carousel', 'reel', 'tiktok', 'story', 'ugc', 'ad', 'creator_brief', 'affiliate_brief', 'pr_pitch', 'seeding'];
+var GEN_CATEGORIES = ['Occasions', 'Culture & celebrity', 'Internet culture', 'Our category', 'Competitor move', 'Our brand'];
+
+var HAIRS = ['bun', 'short', 'bob', 'beret', 'curly', 'braid'];
+var ACCS = ['', 'clip', 'glasses', 'earring', 'pencil', 'headset', 'beret'];
+var LOOK_L = {
+  bun:L('Bun','Búi tóc'), short:L('Short','Tóc ngắn'), bob:L('Bob','Tóc bob'), beret:L('Beret','Mũ nồi'), curly:L('Curly','Tóc xoăn'), braid:L('Braid','Tóc tết'),
+  '':L('None','Không có'), clip:L('Hair clip','Kẹp tóc'), glasses:L('Glasses','Kính'), earring:L('Earrings','Khuyên tai'), pencil:L('Pencil','Bút chì'), headset:L('Headset','Tai nghe')
+};
+
+var MOMENTS = ['valentines','womens_day','mothers_day','fathers_day','black_friday','cyber_monday','singles_day','double_12','christmas','new_year','lunar_new_year','mid_autumn','diwali','eid','ramadan','halloween'];
+var MOMENT_L = {
+  valentines:L("Valentine's Day",'Lễ Tình nhân'), womens_day:L("Women's Day (8 Mar)",'Quốc tế Phụ nữ (8/3)'), mothers_day:L("Mother's Day",'Ngày của Mẹ'),
+  fathers_day:L("Father's Day",'Ngày của Cha'), black_friday:L('Black Friday','Black Friday'), cyber_monday:L('Cyber Monday','Cyber Monday'),
+  singles_day:L("11.11 Singles' Day",'Sale 11.11'), double_12:L('12.12 sale','Sale 12.12'), christmas:L('Christmas','Giáng sinh'), new_year:L('New Year','Năm mới'),
+  lunar_new_year:L('Lunar New Year','Tết Nguyên đán'), mid_autumn:L('Mid-Autumn','Trung thu'), diwali:L('Diwali','Diwali'), eid:L('Eid al-Fitr','Lễ Eid al-Fitr'),
+  ramadan:L('Ramadan','Tháng Ramadan'), halloween:L('Halloween','Halloween')
+};
+
+/* country presets: name, language, currency, Bing News market, calendar, time zones, report language, suggested moments */
+var COUNTRIES = {
+  US:{n:L('United States','Mỹ'), lang:'en-US', cur:'USD', bing:'en-US', cal:'US', tz:['America/New_York','America/Chicago','America/Denver','America/Phoenix','America/Los_Angeles','America/Anchorage','Pacific/Honolulu'], rl:'English (US)', m:[]},
+  VN:{n:L('Vietnam','Việt Nam'), lang:'vi-VN', cur:'VND', bing:'vi-VN', cal:'VN', tz:['Asia/Ho_Chi_Minh'], rl:'Tiếng Việt', m:['lunar_new_year','mid_autumn','womens_day','valentines','singles_day','double_12','christmas','new_year']},
+  GB:{n:L('United Kingdom','Vương quốc Anh'), lang:'en-GB', cur:'GBP', bing:'en-GB', cal:'GB', tz:['Europe/London'], rl:'English (UK)', m:['valentines','halloween','black_friday','cyber_monday','christmas','new_year','diwali']},
+  SG:{n:L('Singapore','Singapore'), lang:'en-SG', cur:'SGD', bing:'en-SG', cal:'SG', tz:['Asia/Singapore'], rl:'English (UK)', m:['valentines','mothers_day','singles_day','double_12','christmas','lunar_new_year','mid_autumn','diwali','eid']},
+  AU:{n:L('Australia','Úc'), lang:'en-AU', cur:'AUD', bing:'en-AU', cal:'AU', tz:['Australia/Sydney','Australia/Melbourne','Australia/Brisbane','Australia/Adelaide','Australia/Perth','Australia/Hobart','Australia/Darwin'], rl:'English (AU)', m:['valentines','mothers_day','fathers_day','black_friday','cyber_monday','christmas','new_year','lunar_new_year']},
+  ID:{n:L('Indonesia','Indonesia'), lang:'id-ID', cur:'IDR', bing:'id-ID', cal:'ID', tz:['Asia/Jakarta','Asia/Makassar','Asia/Jayapura'], rl:'Bahasa Indonesia', m:['valentines','mothers_day','singles_day','double_12','eid','ramadan','christmas']},
+  TH:{n:L('Thailand','Thái Lan'), lang:'th-TH', cur:'THB', bing:'th-TH', cal:'TH', tz:['Asia/Bangkok'], rl:'ภาษาไทย (Thai)', m:['valentines','singles_day','double_12','christmas','new_year','lunar_new_year']},
+  PH:{n:L('Philippines','Philippines'), lang:'en-PH', cur:'PHP', bing:'en-PH', cal:'PH', tz:['Asia/Manila'], rl:'English', m:['valentines','mothers_day','singles_day','double_12','christmas','new_year']},
+  MY:{n:L('Malaysia','Malaysia'), lang:'en-MY', cur:'MYR', bing:'en-MY', cal:'MY', tz:['Asia/Kuala_Lumpur'], rl:'English', m:['valentines','mothers_day','singles_day','double_12','christmas','lunar_new_year','eid','ramadan','diwali']},
+  JP:{n:L('Japan','Nhật Bản'), lang:'ja-JP', cur:'JPY', bing:'ja-JP', cal:'JP', tz:['Asia/Tokyo'], rl:'日本語 (Japanese)', m:['valentines','mothers_day','fathers_day','halloween','black_friday','christmas','new_year']},
+  KR:{n:L('South Korea','Hàn Quốc'), lang:'ko-KR', cur:'KRW', bing:'ko-KR', cal:'KR', tz:['Asia/Seoul'], rl:'한국어 (Korean)', m:['valentines','lunar_new_year','mid_autumn','black_friday','christmas','new_year']},
+  FR:{n:L('France','Pháp'), lang:'fr-FR', cur:'EUR', bing:'fr-FR', cal:'FR', tz:['Europe/Paris'], rl:'Français', m:['valentines','mothers_day','fathers_day','black_friday','cyber_monday','christmas','new_year']},
+  DE:{n:L('Germany','Đức'), lang:'de-DE', cur:'EUR', bing:'de-DE', cal:'DE', tz:['Europe/Berlin'], rl:'Deutsch', m:['valentines','mothers_day','fathers_day','black_friday','cyber_monday','christmas','new_year']},
+  CA:{n:L('Canada','Canada'), lang:'en-CA', cur:'CAD', bing:'en-CA', cal:'CA', tz:['America/Toronto','America/Vancouver','America/Edmonton','America/Winnipeg','America/Halifax','America/St_Johns'], rl:'English', m:['valentines','mothers_day','fathers_day','halloween','black_friday','cyber_monday','christmas','new_year']},
+  IN:{n:L('India','Ấn Độ'), lang:'en-IN', cur:'INR', bing:'en-IN', cal:'IN', tz:['Asia/Kolkata'], rl:'English', m:['valentines','mothers_day','diwali','eid','black_friday','christmas','new_year']},
+  AE:{n:L('United Arab Emirates','UAE'), lang:'en-AE', cur:'AED', bing:'en-AE', cal:'AE', tz:['Asia/Dubai'], rl:'English', m:['ramadan','eid','valentines','mothers_day','black_friday','new_year']},
+  HK:{n:L('Hong Kong','Hồng Kông'), lang:'zh-HK', cur:'HKD', bing:'zh-HK', cal:'HK', tz:['Asia/Hong_Kong'], rl:'中文 (繁體)', m:['lunar_new_year','mid_autumn','valentines','singles_day','double_12','christmas','new_year']},
+  TW:{n:L('Taiwan','Đài Loan'), lang:'zh-TW', cur:'TWD', bing:'zh-TW', cal:'TW', tz:['Asia/Taipei'], rl:'中文 (繁體)', m:['lunar_new_year','mid_autumn','valentines','singles_day','double_12','christmas','new_year']},
+  CN:{n:L('China','Trung Quốc'), lang:'zh-CN', cur:'CNY', bing:'zh-CN', cal:'CN', tz:['Asia/Shanghai'], rl:'中文 (简体)', m:['lunar_new_year','mid_autumn','womens_day','valentines','singles_day','double_12']},
+  NZ:{n:L('New Zealand','New Zealand'), lang:'en-NZ', cur:'NZD', bing:'en-NZ', cal:'NZ', tz:['Pacific/Auckland'], rl:'English', m:['valentines','mothers_day','fathers_day','black_friday','christmas','new_year']},
+  NL:{n:L('Netherlands','Hà Lan'), lang:'nl-NL', cur:'EUR', bing:'nl-NL', cal:'NL', tz:['Europe/Amsterdam'], rl:'Nederlands', m:['valentines','mothers_day','fathers_day','black_friday','christmas','new_year']},
+  ES:{n:L('Spain','Tây Ban Nha'), lang:'es-ES', cur:'EUR', bing:'es-ES', cal:'ES', tz:['Europe/Madrid'], rl:'Español', m:['valentines','mothers_day','fathers_day','black_friday','christmas','new_year']},
+  IT:{n:L('Italy','Ý'), lang:'it-IT', cur:'EUR', bing:'it-IT', cal:'IT', tz:['Europe/Rome'], rl:'Italiano', m:['valentines','mothers_day','fathers_day','black_friday','christmas','new_year']},
+  MX:{n:L('Mexico','Mexico'), lang:'es-MX', cur:'MXN', bing:'es-MX', cal:'MX', tz:['America/Mexico_City','America/Tijuana','America/Cancun'], rl:'Español', m:['valentines','mothers_day','fathers_day','halloween','black_friday','christmas','new_year']},
+  BR:{n:L('Brazil','Brazil'), lang:'pt-BR', cur:'BRL', bing:'pt-BR', cal:'BR', tz:['America/Sao_Paulo','America/Manaus','America/Fortaleza'], rl:'Português (Brasil)', m:['valentines','mothers_day','fathers_day','black_friday','christmas','new_year']}
+};
+
+/* =====================================================================
+   Interface text (EN / VI). Field keys and exported JSON stay in English.
+   ===================================================================== */
+var I18N = {
+ en:{
+  setup:'Agency setup', yourBrand:'Your brand', required:'required', optional:'optional', reqOf:'{a} of {b} required filled',
+  stepOf:'Step {n} of {m}', stepShort:'{n}/{m}', prev:'Back', next:'Next', saved:'Saved', notSaved:'Not saved — storage is off',
+  imp:'Import', exp:'Export', openFile:'Open a .json file', pasteJson:'Paste JSON', loadExample:'Load the example', loadExampleSub:"Fernlight — a made-up US skincare brand",
+  dlProfile:'Download profile.json', dlBrief:'Download standing-brief.md', copyJson:'Copy JSON', language:'Language',
+  startOver:'Start over', localNote:'Everything stays in this browser and saves as you type. Export to keep a copy or share it.',
+  steps:'Steps', missing:"What's missing", toFix:'{n} to fix', allGood:'Nothing missing. Export profile.json when you are ready.',
+  grpReq:'Required, still empty', grpErr:'Needs fixing', grpWarn:'Worth a look', close:'Close',
+  typeEnter:'Type and press Enter', addMore:'Add more…', removeX:'Remove {x}', moveUp:'Move up', moveDown:'Move down', remove:'Remove',
+  removed:'Removed.', undo:'Undo', noRows:'Nothing here yet.', cancel:'Cancel', ok:'OK', replace:'Replace', copy:'Copy', copied:'Copied to the clipboard.',
+  copyFail:"Couldn't copy — select the text and copy it by hand.", chooseTz:'Choose a time zone…', suggestedFor:'Suggested for {c}', allZones:'All time zones',
+  currentVal:'Current value', chooseCountry:'Choose a country…', otherCountry:'Other — type the two-letter code', presetApplied:'Filled in the {c} defaults — change anything below.',
+  from:'from', to:'to', addTime:'Add a report time', look:'Look', hair:'Hair', acc:'Accessory', top:'Top', skin:'Skin', hairColour:'Hair colour', unset:'not set',
+  clearColour:'Use the default hair colour', addStdCrew:'Add the standard crew', crewIdHelp:'Ties them to a desk.',
+  nfPack:'Ready-made pack', nfOwn:'My own RSS feeds', nfPackHelp:'Packs are a starting point. News searches (below) cover any market without a feed list.',
+  nfName:'Name', nfUrl:'RSS address', nfAdd:'Add a feed', nfItem:'Feed',
+  resetCreative:'Reset to the generic library', resetCreativeT:'Reset the creative library?', resetCreativeB:'Angles, concepts, doctrine and production rules go back to the generic evergreen library. Your own entries here are replaced.',
+  sortDates:'Sort by date', addVnWomen:"Add a rule for Vietnamese Women's Day (20/10)", suggestUrl:'Fill from the site repo',
+  draft:'Draft the standing brief from my answers', briefUses:'Uses: brand, benefit, signature, season focus, offer rules and nevers, pillars, personas, look, voice and banned words, claims, and who does what.',
+  briefPh:'# Standing brief — Your brand\n\nThe house rules every desk follows. Press "Draft the standing brief from my answers" to start, then edit freely.',
+  replaceBriefT:'Replace your standing brief?', replaceBriefB:'The brief has text you wrote or edited. Drafting again replaces all of it with a fresh draft from your answers.',
+  drafted:'Drafted. Read it through and edit anything that sounds off.', briefEmpty:'The standing brief is empty — draft it first.',
+  replaceT:'Replace what is here?', replaceB:'This replaces everything you have entered with the {what}. Export first if you want to keep a copy.', theExample:'example profile', theImport:'imported profile',
+  startOverT:'Start over?', startOverB:'This clears every answer and starts from the defaults (standard crew, generic creative library). It cannot be undone — export first if you want a copy.',
+  startedOver:'Started over from the defaults.', exampleLoaded:'Loaded the example profile.', imported:'Imported {b}.', badJson:"That isn't valid JSON: {e}",
+  notObject:'A profile is a JSON object ({ … }).', notProfileT:"This doesn't look like a brand profile", notProfileB:'None of the usual sections (agency, brand, market, team…) are in it. Import it anyway?', importAnyway:'Import anyway',
+  schemaWarn:'This file says schema {v}; the dashboard writes schema 1. Check it after import.', readFail:"Couldn't read that file.",
+  pasteT:'Paste a profile', pasteB:'Paste the contents of a profile.json file.', pasteBtn:'Import', downloaded:'Downloaded {f}.',
+  usCalNote:'The US uses the full built-in US calendar (holidays, retail moments, heritage months), so these are not needed.',
+  vnNote:"Vietnam's calendar already carries Vietnamese Women's Day (20/10) and Teachers' Day (20/11). Add them under Calendar only to give them a rule.",
+  momentsEmpty:'None picked: the calendar uses the market’s defaults.', done:'Done', nLeft:'{n} left', ready:'ready',
+  l1t:'Finish the profile', l1ok:'Every required field is filled and nothing needs fixing.', l1left:'{n} still to fill or fix before the scaffold will run.', seeMissing:"See what's missing",
+  l2t:'Export and check it', l2b:'Download profile.json into the skill folder, then run the checker. Errors stop the scaffold; warnings are things the office runs without, but thinner.',
+  l3t:'Build the agency folder', l3b:'The scaffold validates the profile, copies the office template, writes the profile and the standing brief into it, and builds the huddle form from the crew.',
+  l3fore:'Your competitors have no Foreplay ids yet. With FOREPLAY_API_KEY set, add --resolve-foreplay to look them up from their domains:',
+  l4t:'Create the two GitHub repos', l4brain:'private — the code and the agency’s memory. Push the scaffolded folder here.', l4site:'public — the encrypted office. Leave it empty.',
+  l4pages:'Then in {site}: Settings → Pages → deploy from the main branch, root. Only people with the passphrase can open the office.',
+  l5t:'Add the secrets', l5b:'In {brain}: Settings → Secrets and variables → Actions. A tick means your profile uses it.',
+  l5cmd:'Or from a terminal (each command asks for the value; nothing is stored in this page):',
+  l6t:'First run', l6b:'In {brain}: Actions → Agency → Run workflow → slot morning. About ten minutes later the office is live:',
+  l6preview:'Dispatch is in preview: every ticket goes to {lead} first. When the plays look right, switch to live in Schedule & delivery, export and push.',
+  l6live:'Dispatch is live: tickets go straight to the team.', theLead:'the lead',
+  sReq:'required', sImp:'your profile uses it', sNot:'not needed yet', sRec:'recommended',
+  sAnth:'The crew’s thinking — every desk runs on Claude.', sPass:'The office’s lock. Share it with the team privately.',
+  sPub:'A fine-grained GitHub token with Contents read/write on {site}, so each run can publish the office.',
+  sFore:'The ad spy: competitors’ live Meta ads, and Mocha’s creative desk.', wFore:'You list peers or performance competitors.',
+  sYt:'YouTube trends and review comments for the customer-voice desk.', wYt:'You list YouTube searches or review videos.',
+  sMeta:'Instagram hashtag posts.', wMeta:'You list Instagram hashtags.',
+  sApify:'TikTok hashtag videos.', wApify:'You list TikTok hashtags.',
+  sSlack:'Slack tickets and report announcements. Bot scopes: chat:write, im:write, mpim:write.', wSlack:'Your lead or a team member has a Slack id.',
+  sOffice:'The huddle saves itself from the office. Fine-grained token: this brain repo only, Actions read/write.', wOffice:'You named a lead to answer the huddle.',
+  chkUrl:'{f}: use a full web address starting with https://', chkDomain:'{f}: just the domain, like brand.com', chkTz:'{f}: not a time zone — pick one from the list',
+  chkTime:'Report time {i}: use HH:MM, 24-hour', chkTwoTimes:'Report times: the office runs two reports; only the first two are used', chkHash:'Instagram hashtags: {n} listed — only the first 12 are used (Instagram allows 30 a week)',
+  chkRepo:'{f}: write it as owner/repo', chkSameRepo:'The brain repo and the site repo must be two different repos', chkDate:'{f}: use a date like 2026-12-25',
+  chkNoDate:'{f}: has a name but no date', chkPairEmpty:'{f}: row {i} has no id', chkPairDup:'{f}: “{k}” is used twice — the second one wins',
+  chkCrewDup:'Crew: id “{k}” is used twice', chkCrewUnknown:'Crew: “{k}” is not one of the seven desks — the office ignores it',
+  chkAsin:'{f}: “{v}” doesn’t look like an ASIN (10 letters and digits)', chkQuiet:'Quiet hours: pick a start and an end hour (0–23)', chkAdspy:'Ad-spy interval: a whole number of minutes',
+  chkLang:'Language: use a code like en-US or vi-VN', chkCur:'Currency: a three-letter code like USD or VND', chkCountry:'Country: a two-letter code like US or VN',
+  chkBrief:'No standing brief yet — draft one from your answers', chkJudgeme:'Judge.me shop: usually ends in .myshopify.com', chkNoSlack:'{n} has no Slack id — tickets wait in the office instead of Slack',
+  chkNoComp:'No competitors — the ad spy and the brand watch will have little to read', chkNoPersona:'No personas — opportunities can’t be tagged to an audience',
+  chkNoProducts:'No products and no Shopify domain — plays can’t name a product', chkNoNews:'No news feeds or news searches — the culture radar reads only social and search',
+  chkFeedUrl:'News feed “{k}”: the address should start with https://', chkMembers:'Add at least one team member — plays need someone to go to',
+  rowLabel:'{item} {i}', live:'Live', preview:'Preview'
+ },
+ vi:{
+  setup:'Thiết lập agency', yourBrand:'Thương hiệu của bạn', required:'bắt buộc', optional:'tuỳ chọn', reqOf:'Đã điền {a}/{b} mục bắt buộc',
+  stepOf:'Bước {n}/{m}', stepShort:'{n}/{m}', prev:'Quay lại', next:'Tiếp', saved:'Đã lưu', notSaved:'Chưa lưu — trình duyệt đang chặn bộ nhớ',
+  imp:'Nhập', exp:'Xuất', openFile:'Mở tệp .json', pasteJson:'Dán JSON', loadExample:'Tải hồ sơ mẫu', loadExampleSub:"Fernlight — thương hiệu skincare Mỹ giả định",
+  dlProfile:'Tải profile.json', dlBrief:'Tải standing-brief.md', copyJson:'Sao chép JSON', language:'Ngôn ngữ',
+  startOver:'Làm lại từ đầu', localNote:'Mọi thứ chỉ nằm trong trình duyệt này và tự lưu khi bạn gõ. Hãy xuất tệp để giữ bản sao hoặc chia sẻ.',
+  steps:'Các bước', missing:'Còn thiếu gì', toFix:'{n} mục cần xử lý', allGood:'Không thiếu gì. Xuất profile.json khi bạn sẵn sàng.',
+  grpReq:'Bắt buộc, chưa điền', grpErr:'Cần sửa', grpWarn:'Nên xem lại', close:'Đóng',
+  typeEnter:'Gõ rồi nhấn Enter', addMore:'Thêm…', removeX:'Xoá {x}', moveUp:'Đưa lên', moveDown:'Đưa xuống', remove:'Xoá',
+  removed:'Đã xoá.', undo:'Hoàn tác', noRows:'Chưa có mục nào.', cancel:'Huỷ', ok:'Đồng ý', replace:'Thay thế', copy:'Sao chép', copied:'Đã sao chép.',
+  copyFail:'Không sao chép được — hãy chọn và sao chép thủ công.', chooseTz:'Chọn múi giờ…', suggestedFor:'Gợi ý cho {c}', allZones:'Tất cả múi giờ',
+  currentVal:'Giá trị hiện tại', chooseCountry:'Chọn quốc gia…', otherCountry:'Khác — nhập mã hai chữ cái', presetApplied:'Đã điền mặc định cho {c} — bạn vẫn sửa được bên dưới.',
+  from:'từ', to:'đến', addTime:'Thêm giờ báo cáo', look:'Ngoại hình', hair:'Kiểu tóc', acc:'Phụ kiện', top:'Áo', skin:'Màu da', hairColour:'Màu tóc', unset:'chưa đặt',
+  clearColour:'Dùng màu tóc mặc định', addStdCrew:'Thêm đội ngũ chuẩn', crewIdHelp:'Gắn với bàn làm việc.',
+  nfPack:'Gói có sẵn', nfOwn:'Nguồn RSS của tôi', nfPackHelp:'Gói chỉ là điểm khởi đầu. Từ khoá tin tức (bên dưới) phủ được mọi thị trường mà không cần danh sách nguồn.',
+  nfName:'Tên', nfUrl:'Địa chỉ RSS', nfAdd:'Thêm nguồn', nfItem:'Nguồn',
+  resetCreative:'Khôi phục thư viện chung', resetCreativeT:'Khôi phục thư viện sáng tạo?', resetCreativeB:'Góc tiếp cận, ý tưởng, nguyên tắc test và quy tắc sản xuất sẽ trở về thư viện chung. Những gì bạn đã viết ở đây sẽ bị thay thế.',
+  sortDates:'Sắp xếp theo ngày', addVnWomen:'Thêm quy tắc cho Ngày Phụ nữ Việt Nam (20/10)', suggestUrl:'Điền từ repo trang web',
+  draft:'Soạn standing brief từ các câu trả lời', briefUses:'Lấy từ: thương hiệu, lợi ích, dấu ấn, trọng tâm mùa, quy tắc ưu đãi, trụ cột, chân dung khách hàng, hình ảnh, giọng văn và từ cấm, tuyên bố cấm, và ai làm gì.',
+  briefPh:'# Standing brief — Thương hiệu của bạn\n\nNội quy mà mọi bàn làm việc tuân theo. Nhấn "Soạn standing brief từ các câu trả lời" để bắt đầu, rồi chỉnh sửa thoải mái.',
+  replaceBriefT:'Thay standing brief hiện tại?', replaceBriefB:'Brief đang có nội dung bạn đã viết hoặc chỉnh. Soạn lại sẽ thay toàn bộ bằng bản nháp mới từ câu trả lời của bạn.',
+  drafted:'Đã soạn xong. Đọc lại và sửa chỗ nào nghe chưa ổn.', briefEmpty:'Standing brief đang trống — hãy soạn trước.',
+  replaceT:'Thay thế nội dung hiện tại?', replaceB:'Thao tác này thay mọi thứ bạn đã nhập bằng {what}. Hãy xuất tệp trước nếu muốn giữ bản sao.', theExample:'hồ sơ mẫu', theImport:'hồ sơ được nhập',
+  startOverT:'Làm lại từ đầu?', startOverB:'Thao tác này xoá mọi câu trả lời và bắt đầu lại từ mặc định (đội ngũ chuẩn, thư viện sáng tạo chung). Không thể hoàn tác — hãy xuất tệp trước nếu muốn giữ bản sao.',
+  startedOver:'Đã làm lại từ mặc định.', exampleLoaded:'Đã tải hồ sơ mẫu.', imported:'Đã nhập {b}.', badJson:'Đây không phải JSON hợp lệ: {e}',
+  notObject:'Hồ sơ phải là một đối tượng JSON ({ … }).', notProfileT:'Tệp này không giống hồ sơ thương hiệu', notProfileB:'Không có phần quen thuộc nào (agency, brand, market, team…). Vẫn nhập?', importAnyway:'Vẫn nhập',
+  schemaWarn:'Tệp ghi schema {v}; dashboard viết schema 1. Hãy kiểm tra sau khi nhập.', readFail:'Không đọc được tệp.',
+  pasteT:'Dán hồ sơ', pasteB:'Dán nội dung của tệp profile.json.', pasteBtn:'Nhập', downloaded:'Đã tải {f}.',
+  usCalNote:'Thị trường Mỹ dùng lịch Mỹ đầy đủ có sẵn (ngày lễ, dịp mua sắm, tháng di sản), nên không cần chọn các dịp này.',
+  vnNote:'Lịch Việt Nam đã có sẵn Ngày Phụ nữ Việt Nam (20/10) và Ngày Nhà giáo (20/11). Chỉ thêm vào mục Lịch nếu muốn đặt quy tắc riêng cho ngày đó.',
+  momentsEmpty:'Chưa chọn: lịch sẽ dùng mặc định của thị trường.', done:'Xong', nLeft:'còn {n}', ready:'sẵn sàng',
+  l1t:'Hoàn tất hồ sơ', l1ok:'Mọi mục bắt buộc đã điền và không có gì cần sửa.', l1left:'Còn {n} mục cần điền hoặc sửa trước khi chạy scaffold.', seeMissing:'Xem còn thiếu gì',
+  l2t:'Xuất và kiểm tra', l2b:'Tải profile.json vào thư mục skill, rồi chạy trình kiểm tra. Lỗi sẽ chặn scaffold; cảnh báo là những thứ văn phòng vẫn chạy được, nhưng mỏng hơn.',
+  l3t:'Dựng thư mục agency', l3b:'Scaffold kiểm tra hồ sơ, sao chép mẫu văn phòng, ghi hồ sơ và standing brief vào đó, và tạo form huddle từ đội ngũ.',
+  l3fore:'Đối thủ của bạn chưa có Foreplay id. Khi đã đặt FOREPLAY_API_KEY, thêm --resolve-foreplay để tra từ tên miền:',
+  l4t:'Tạo hai repo GitHub', l4brain:'riêng tư — code và bộ nhớ của agency. Đẩy thư mục vừa dựng lên đây.', l4site:'công khai — văn phòng đã mã hoá. Để trống.',
+  l4pages:'Sau đó trong {site}: Settings → Pages → deploy từ nhánh main, thư mục gốc. Chỉ ai có passphrase mới mở được văn phòng.',
+  l5t:'Thêm secrets', l5b:'Trong {brain}: Settings → Secrets and variables → Actions. Dấu tích nghĩa là hồ sơ của bạn có dùng.',
+  l5cmd:'Hoặc từ terminal (mỗi lệnh sẽ hỏi giá trị; trang này không lưu gì):',
+  l6t:'Chạy lần đầu', l6b:'Trong {brain}: Actions → Agency → Run workflow → slot morning. Khoảng mười phút sau văn phòng sẽ hoạt động tại:',
+  l6preview:'Đang ở chế độ xem trước: mọi ticket đến tay {lead} trước. Khi các play đã ổn, chuyển sang chạy thật ở bước Lịch chạy & triển khai, xuất và đẩy lên.',
+  l6live:'Đang chạy thật: ticket được gửi thẳng cho team.', theLead:'trưởng nhóm',
+  sReq:'bắt buộc', sImp:'hồ sơ có dùng', sNot:'chưa cần', sRec:'nên có',
+  sAnth:'Bộ não của đội ngũ — mọi bàn làm việc chạy bằng Claude.', sPass:'Khoá của văn phòng. Chia sẻ riêng với team.',
+  sPub:'Token GitHub (fine-grained) có quyền Contents read/write trên {site}, để mỗi lượt chạy đăng được văn phòng.',
+  sFore:'Soi quảng cáo: quảng cáo Meta đang chạy của đối thủ, và bàn sáng tạo của Mocha.', wFore:'Bạn có liệt kê thương hiệu cùng tầm hoặc đối thủ trực tiếp.',
+  sYt:'Xu hướng YouTube và bình luận review cho bàn lắng nghe khách hàng.', wYt:'Bạn có liệt kê tìm kiếm YouTube hoặc video review.',
+  sMeta:'Bài đăng theo hashtag Instagram.', wMeta:'Bạn có liệt kê hashtag Instagram.',
+  sApify:'Video theo hashtag TikTok.', wApify:'Bạn có liệt kê hashtag TikTok.',
+  sSlack:'Ticket và thông báo báo cáo qua Slack. Quyền bot: chat:write, im:write, mpim:write.', wSlack:'Trưởng nhóm hoặc thành viên có Slack id.',
+  sOffice:'Huddle tự lưu từ văn phòng. Token fine-grained: chỉ repo bộ não này, quyền Actions read/write.', wOffice:'Bạn đã điền trưởng nhóm để trả lời huddle.',
+  chkUrl:'{f}: cần địa chỉ đầy đủ bắt đầu bằng https://', chkDomain:'{f}: chỉ tên miền, ví dụ brand.com', chkTz:'{f}: không phải múi giờ — hãy chọn trong danh sách',
+  chkTime:'Giờ báo cáo {i}: dùng định dạng HH:MM, 24 giờ', chkTwoTimes:'Giờ báo cáo: văn phòng chạy hai báo cáo; chỉ hai giờ đầu được dùng', chkHash:'Hashtag Instagram: có {n} — chỉ 12 cái đầu được dùng (Instagram cho 30 lượt mỗi tuần)',
+  chkRepo:'{f}: viết theo dạng owner/repo', chkSameRepo:'Repo bộ não và repo trang web phải là hai repo khác nhau', chkDate:'{f}: dùng ngày dạng 2026-12-25',
+  chkNoDate:'{f}: có tên nhưng chưa có ngày', chkPairEmpty:'{f}: dòng {i} chưa có id', chkPairDup:'{f}: “{k}” bị trùng — mục sau sẽ được dùng',
+  chkCrewDup:'Đội ngũ: id “{k}” bị trùng', chkCrewUnknown:'Đội ngũ: “{k}” không thuộc bảy bàn làm việc — văn phòng sẽ bỏ qua',
+  chkAsin:'{f}: “{v}” không giống ASIN (10 chữ và số)', chkQuiet:'Giờ yên lặng: chọn giờ bắt đầu và kết thúc (0–23)', chkAdspy:'Chu kỳ soi quảng cáo: số phút nguyên',
+  chkLang:'Ngôn ngữ: dùng mã như en-US hoặc vi-VN', chkCur:'Tiền tệ: mã ba chữ cái như USD hoặc VND', chkCountry:'Quốc gia: mã hai chữ cái như US hoặc VN',
+  chkBrief:'Chưa có standing brief — hãy soạn từ các câu trả lời', chkJudgeme:'Cửa hàng Judge.me: thường kết thúc bằng .myshopify.com', chkNoSlack:'{n} chưa có Slack id — ticket sẽ nằm trong văn phòng thay vì gửi qua Slack',
+  chkNoComp:'Chưa có đối thủ — bàn soi quảng cáo và theo dõi thương hiệu sẽ có ít thứ để đọc', chkNoPersona:'Chưa có chân dung khách hàng — không gắn được cơ hội với nhóm khách',
+  chkNoProducts:'Chưa có sản phẩm và tên miền Shopify — play không nêu được sản phẩm', chkNoNews:'Chưa có nguồn tin hoặc từ khoá tin tức — radar văn hoá chỉ đọc mạng xã hội và tìm kiếm',
+  chkFeedUrl:'Nguồn tin “{k}”: địa chỉ phải bắt đầu bằng https://', chkMembers:'Thêm ít nhất một thành viên — play cần có người nhận',
+  rowLabel:'{item} {i}', live:'Chạy thật', preview:'Xem trước'
+ }
+};
+
+/* =====================================================================
+   The form: one entry per schema section
+   ===================================================================== */
+var CFIELDS = [
+  {k:'name', req:1, w:2, l:L('Name','Tên'), ph:'Blue Bottle · Aesop · Notion'},
+  {k:'domain', req:1, w:2, t:'domain', l:L('Domain','Tên miền'), ph:'bluebottlecoffee.com'},
+  {k:'foreplay_id', w:2, l:L('Foreplay id','Foreplay id'), h:L('Filled by the scaffold. Leave empty.','Scaffold tự điền. Để trống.'), ph:'—'}
+];
+var NF_SPEC = {t:'pairs', wide:1, kl:L('Name','Tên'), vl:L('RSS address','Địa chỉ RSS'), kph:'Vogue Business', vph:'https://www.voguebusiness.com/rss', item:L('Feed','Nguồn'), add:L('Add a feed','Thêm nguồn')};
+
+var SECTIONS = [
+ {id:'agency', t:L('Agency & office','Agency & văn phòng'),
+  intro:L('Name the office your AI staff work in, where it sits and whose clock it keeps. Then meet the crew.','Đặt tên cho văn phòng nơi đội ngũ AI làm việc, văn phòng đặt ở đâu và chạy theo giờ nào. Sau đó làm quen với đội ngũ.'),
+  fields:[
+   {k:'agency.name', req:1, w:3, l:L('Agency name','Tên agency'), h:L('Shown on the office and on every report.','Hiển thị trên văn phòng và trong mọi báo cáo.'), ph:'The Insight Café'},
+   {k:'agency.tagline', w:3, l:L('Tagline','Dòng giới thiệu'), h:L('One short line under the name.','Một dòng ngắn dưới tên.'), ph:'Your AI research agency'},
+   {k:'agency.office_city', req:1, w:3, l:L('Office city','Thành phố đặt văn phòng'), h:L('Where the office is drawn.','Nơi văn phòng được vẽ.'), ph:'New York · Ho Chi Minh City · London'},
+   {k:'agency.office_neighbourhood', w:3, l:L('Neighbourhood','Khu phố'), h:L('Optional flavour for the drawing.','Thêm chút không khí cho bản vẽ.'), ph:'SoHo · Thảo Điền · Shoreditch'},
+   {k:'agency.office_tz', t:'tz', req:1, w:3, l:L('Office time zone','Múi giờ văn phòng'), h:L('Sets the office clock, sky and decor.','Quyết định đồng hồ, bầu trời và trang trí.')},
+   {k:'agency.scene', t:'select', w:3, l:L('Skyline','Cảnh nền'), h:L('New York draws the Empire State and Brooklyn Bridge.','New York vẽ Empire State và cầu Brooklyn.'),
+    opts:[['city',L('Any city — a generic skyline','Thành phố bất kỳ — đường chân trời chung')],['newyork',L('New York','New York')]]},
+   {k:'agency.report_language', list:'dl-lang', l:L('Report language','Ngôn ngữ báo cáo'), h:L('Every report and ticket is written in this language.','Mọi báo cáo và ticket được viết bằng ngôn ngữ này.'), ph:'English (US) · Tiếng Việt · Bahasa Indonesia'},
+   {k:'agency.crew', t:'crew', l:L('The crew','Đội ngũ AI'),
+    h:L('The office always seats these seven, one desk each. Rename them and change their looks freely; the id ties each one to its desk, so keep it.','Văn phòng luôn có bảy người này, mỗi người một bàn. Đổi tên và ngoại hình thoải mái; id gắn mỗi người với bàn làm việc của họ, nên hãy giữ nguyên.'),
+    item:L('Crew member','Thành viên'), add:L('Add a crew member','Thêm thành viên'), titleKey:'name',
+    newItem:{id:'', name:'', role:'', job:'', question:'', look:{hair:'short', top:'#2C332F', skin:'#E0B48F', acc:'glasses'}},
+    fields:[
+     {k:'id', t:'crewid', w:2, l:L('Desk id','Id bàn'), h:L('Keep as is.','Giữ nguyên.')},
+     {k:'name', w:2, l:L('Name','Tên'), ph:'Coca'},
+     {k:'role', w:2, l:L('Role','Vai trò'), ph:'Agency director'},
+     {k:'job', t:'textarea', rows:2, l:L('Job','Công việc'), h:L('What they hand the team, in one line.','Họ giao gì cho team, trong một dòng.'), ph:'The brief: what happened, what it means, what we do'},
+     {k:'question', l:L('Huddle question','Câu hỏi ở buổi huddle'), h:L('What they ask the lead at the morning huddle.','Câu họ hỏi trưởng nhóm ở buổi huddle buổi sáng.'), ph:'What is the one thing the brand needs most this week?'}
+    ]}
+  ]},
+ {id:'brand', t:L('Brand','Thương hiệu'),
+  intro:L('Who you are, how you sound and what your pictures look like. The desks quote this back, so plain words beat slogans.','Bạn là ai, nói chuyện ra sao và hình ảnh trông thế nào. Các bàn sẽ trích lại những gì bạn viết, nên lời giản dị tốt hơn khẩu hiệu.'),
+  fields:[
+   {k:'brand.name', req:1, w:3, l:L('Brand name','Tên thương hiệu'), h:L('The full name, as on pack.','Tên đầy đủ, như trên bao bì.'), ph:'Lumen Skin · Đồng Coffee Roasters'},
+   {k:'brand.short', req:1, w:3, l:L('Short name','Tên gọi tắt'), h:L('What the team calls it in a sentence.','Tên team hay gọi khi nói chuyện.'), ph:'Lumen · Đồng'},
+   {k:'brand.website', t:'url', w:3, l:L('Website','Website'), h:L('Your main site.','Website chính.'), ph:'https://threadandfield.com'},
+   {k:'brand.price_position', w:3, l:L('Price position','Định vị giá'), h:L('Where you sit on price.','Bạn đứng ở đâu về giá.'), ph:'Premium ($32–$88) · Mass · 45.000₫ a cup'},
+   {k:'brand.category', req:1, l:L('Category','Ngành hàng'), h:L('What you sell, in the words your market uses.','Bạn bán gì, theo cách thị trường gọi.'), ph:'Specialty coffee and cold brew · Project software for agencies · Linen workwear'},
+   {k:'brand.one_liner', req:1, t:'textarea', rows:2, l:L('One-liner','Mô tả một câu'), h:L('One sentence: what it is and why it exists.','Một câu: thương hiệu là gì và vì sao tồn tại.'), ph:'A Saigon roastery bringing single-origin Robusta to the morning commute.'},
+   {k:'brand.benefit', l:L('Brand benefit','Lợi ích thương hiệu'), h:L('The promise, in one line.','Lời hứa, gói trong một dòng.'), ph:'Better mornings, no barista needed · Clothes that outlast the trend'},
+   {k:'brand.signature', l:L('Signature','Dấu ấn nhận diện'), h:L('The visual or verbal red thread every asset carries.','Sợi chỉ đỏ về hình hoặc lời có mặt trong mọi ấn phẩm.'), ph:'The slow pour, always shot from above · A handwritten note in every box'},
+   {k:'brand.voice.tone', req:1, t:'textarea', rows:2, l:L('Voice and tone','Giọng văn'), h:L('How the brand sounds when it writes.','Thương hiệu “nghe” thế nào khi viết.'), ph:'Quiet, warm, specific. Plain sentences over slogans. · Witty, quick, a little nerdy.'},
+   {k:'brand.voice.banned_words', t:'tags', split:1, l:L('Banned words','Từ cấm'), h:L('Words copy never uses. Type one and press Enter.','Những từ không bao giờ dùng. Gõ từng từ rồi nhấn Enter.'), ph:'pampering, game-changer, hack'},
+   {k:'brand.voice.no_exclamation_marks', t:'bool', l:L('No exclamation marks in brand copy','Không dùng dấu chấm than trong nội dung thương hiệu'), h:L('The writers drop every “!”.','Người viết sẽ bỏ mọi dấu “!”.')},
+   {k:'brand.look', req:1, t:'textarea', rows:4, l:L('The look','Hình ảnh đúng chất thương hiệu'), h:L('What on-brand pictures look like: light, materials, framing, palette. The ad curator scores every competitor picture against this.','Hình ảnh đúng thương hiệu trông ra sao: ánh sáng, chất liệu, bố cục, bảng màu. Bàn quảng cáo chấm điểm mọi hình của đối thủ theo mô tả này.'), ph:'Warm window light, raw wood and linen, hands in frame, off-centre framing, a muted earthy palette, little or no text on the picture.'},
+   {k:'brand.look_avoid', t:'textarea', rows:3, l:L('What to avoid','Hình ảnh cần tránh'), h:L('What scores low.','Những gì bị chấm điểm thấp.'), ph:'High-key studio light, floating product, discount banners, cluttered collages, stock-photo feel.'}
+  ]},
+ {id:'business', t:L('Business','Kinh doanh'),
+  intro:L('How the brand makes money and what this season is for.','Thương hiệu kiếm tiền thế nào và mùa này nhắm tới điều gì.'),
+  fields:[
+   {k:'business.model', list:'dl-model', l:L('Business model','Mô hình kinh doanh'), h:L('How it makes money.','Cách thương hiệu kiếm tiền.'), ph:'DTC (Shopify) + Amazon · Subscription SaaS · Café chain + retail beans'},
+   {k:'business.channels', t:'tags', split:1, l:L('Sales channels','Kênh bán'), h:L('Where people buy. Press Enter after each.','Nơi khách mua. Nhấn Enter sau mỗi kênh.'), ph:'Shopify, Amazon US, Shopee VN, Sephora'},
+   {k:'business.season_focus', l:L('Season focus','Trọng tâm mùa này'), h:L('What this quarter is about, in one line.','Quý này tập trung vào điều gì, trong một dòng.'), ph:'Q4: gifting and bundles only · Tết gift boxes · Back-to-school trials'},
+   {k:'business.goals', t:'textarea', rows:3, l:L('Goals','Mục tiêu'), h:L('What success looks like this season.','Thành công mùa này trông như thế nào.'), ph:'Grow DTC on paid social; AOV above $70; 2,000 new trials a month.'},
+   {k:'business.kpis', t:'tags', split:1, l:L('KPIs','KPI'), h:L('The numbers you are judged on.','Những con số dùng để đánh giá.'), ph:'Revenue, AOV, ROAS, MRR, branded search'}
+  ]},
+ {id:'market', t:L('Market','Thị trường'),
+  intro:L('Where you compete. Pick a country and the rest fills itself — then adjust anything.','Bạn cạnh tranh ở đâu. Chọn quốc gia, phần còn lại tự điền — rồi chỉnh lại nếu cần.'),
+  fields:[
+   {k:'market.country', t:'country', req:1, l:L('Country','Quốc gia'), h:L('Choosing one fills the language, currency, news, trends, YouTube and calendar fields, and suggests time zones.','Chọn quốc gia sẽ tự điền ngôn ngữ, tiền tệ, tin tức, xu hướng, YouTube, lịch, và gợi ý múi giờ.')},
+   {k:'market.language', req:1, w:2, l:L('Language','Ngôn ngữ'), h:L('BCP-47 code.','Mã BCP-47.'), ph:'en-US · vi-VN'},
+   {k:'market.currency', req:1, w:2, l:L('Currency','Tiền tệ'), h:L('Three-letter code.','Mã ba chữ cái.'), ph:'USD · VND'},
+   {k:'market.calendar', w:2, l:L('Holiday calendar','Lịch ngày lễ'), h:L('“US” = the full US calendar.','“US” = lịch Mỹ đầy đủ.'), ph:'US · VN'},
+   {k:'market.bing_mkt', w:2, l:L('News market','Thị trường tin tức'), h:L('Bing News. Defaults to the language.','Bing News. Mặc định theo ngôn ngữ.'), ph:'en-US · vi-VN'},
+   {k:'market.trends_geo', w:2, l:L('Google Trends region','Vùng Google Trends'), h:L('Defaults to the country.','Mặc định theo quốc gia.'), ph:'US · VN'},
+   {k:'market.youtube_region', w:2, l:L('YouTube region','Vùng YouTube'), h:L('Defaults to the country.','Mặc định theo quốc gia.'), ph:'US · VN'},
+   {k:'market.global_moments', t:'moments', l:L('Global moments','Các dịp toàn cầu'), h:L('Shopping and culture moments added on top of the country’s public holidays. Tap to switch on or off.','Các dịp mua sắm và văn hoá được thêm vào cùng ngày lễ của quốc gia. Chạm để bật hoặc tắt.')}
+  ]},
+ {id:'audience', t:L('Audience','Khách hàng'),
+  intro:L('Who you are talking to. The strategy desk tags every opportunity to one of these people.','Bạn đang nói chuyện với ai. Bàn chiến lược gắn mỗi cơ hội với một trong những người này.'),
+  fields:[
+   {k:'audience.personas', t:'rows', l:L('Personas','Chân dung khách hàng'), h:L('Two to five is plenty. Name them the way the team talks about them.','Hai đến năm chân dung là đủ. Đặt tên theo cách team hay gọi.'),
+    item:L('Persona','Chân dung'), add:L('Add a persona','Thêm chân dung'), titleKey:'name', newItem:{name:'', description:''},
+    fields:[
+     {k:'name', req:1, l:L('Name','Tên'), ph:'The weekend home barista · The first-time founder · The gift-giver'},
+     {k:'description', req:1, t:'textarea', rows:2, l:L('Description','Mô tả'), h:L('Who they are, what they want, how they buy.','Họ là ai, muốn gì, mua thế nào.'), ph:'Buys beans monthly, follows two roasters on Instagram, wants café taste at home without the kit.'}
+    ]},
+   {k:'audience.insights', t:'textarea', rows:4, l:L('What you already know','Những gì bạn đã biết'), h:L('Research, reviews, sales patterns — anything the desks should start from.','Nghiên cứu, đánh giá, xu hướng bán — bất cứ điều gì các bàn nên biết trước.'), ph:'Repeat buyers come back at week 6. Reviews mention the smell first and the price second.'}
+  ]},
+ {id:'products', t:L('Products & offers','Sản phẩm & ưu đãi'),
+  intro:L('What you sell, the one offer the agency may use, and the claims it must never make.','Bạn bán gì, ưu đãi duy nhất agency được dùng, và những tuyên bố tuyệt đối không được đưa ra.'),
+  fields:[
+   {k:'products', t:'rows', l:L('Products','Sản phẩm'), h:L('What plays can name. Tick “hero” on the ones to push.','Những sản phẩm play có thể nhắc tên. Đánh dấu “hero” cho sản phẩm cần đẩy.'),
+    item:L('Product','Sản phẩm'), add:L('Add a product','Thêm sản phẩm'), titleKey:'name', newItem:{name:''},
+    fields:[
+     {k:'name', req:1, w:4, l:L('Name','Tên'), ph:'Cold Brew Concentrate 1 L · Barrier Serum 30 ml'},
+     {k:'price', t:'num', w:2, l:L('Price','Giá'), h:L('In your currency.','Theo tiền tệ của bạn.'), ph:'42'},
+     {k:'key', w:2, l:L('Key','Mã ngắn'), h:L('Short handle.','Mã gọi tắt.'), ph:'cold-brew'},
+     {k:'asin', w:2, l:L('ASIN','ASIN'), h:L('If it sells on Amazon.','Nếu bán trên Amazon.'), ph:'B0XXXXXXXX'},
+     {k:'hero', t:'flag', w:2, l:L('Hero','Hero'), box:L('Push this one','Ưu tiên đẩy')},
+     {k:'url', t:'url', l:L('Product page','Trang sản phẩm'), ph:'https://yourbrand.com/products/cold-brew'}
+    ]},
+   {k:'catalog.shopify_domain', t:'domain', l:L('Shopify domain','Tên miền Shopify'), h:L('If set, prices, stock and images are read live from Shopify.','Nếu điền, giá, tồn kho và hình ảnh được đọc trực tiếp từ Shopify.'), ph:'yourstore.myshopify.com · yourbrand.com'},
+   {k:'offers.rules', req:1, t:'textarea', rows:3, l:L('Offer rules','Quy tắc ưu đãi'), h:L('The one offer scheme the agency may use, exactly as copy should say it. Write “No discounts” if there are none.','Cơ chế ưu đãi duy nhất agency được dùng, đúng như nội dung sẽ viết. Ghi “No discounts” nếu không có ưu đãi.'), ph:"One scheme everywhere: 'Free shipping over $50.' Creator codes: an extra 10%."},
+   {k:'offers.never', t:'tags', l:L('Offers — never','Ưu đãi — không bao giờ'), h:L('Offer moves that are off limits. Press Enter after each.','Những kiểu ưu đãi bị cấm. Nhấn Enter sau mỗi mục.'), ph:'No strikethrough prices'},
+   {k:'claims_never', t:'tags', l:L('Claims — never','Tuyên bố cấm'), h:L('Claims no copy may make.','Những tuyên bố không nội dung nào được đưa ra.'), ph:"Medical claims · 'Cures' · 'Organic' (not certified)"}
+  ]},
+ {id:'competitors', t:L('Competitors','Đối thủ'),
+  intro:L('Who you sit beside and who you fight. Their ads, posts and news become the agency’s reference library.','Ai đứng cạnh bạn và ai là đối thủ trực tiếp. Quảng cáo, bài đăng và tin tức của họ thành thư viện tham khảo của agency.'),
+  fields:[
+   {k:'competitors.peers', t:'rows', l:L('Peers','Thương hiệu cùng tầm'), h:L('Like-minded brands you position beside. Their ads are the reference library.','Thương hiệu cùng chất mà bạn muốn đứng cạnh. Quảng cáo của họ là thư viện tham khảo.'),
+    item:L('Peer','Thương hiệu'), add:L('Add a peer','Thêm thương hiệu'), titleKey:'name', newItem:{name:'', domain:''}, fields:CFIELDS},
+   {k:'competitors.performance', t:'rows', l:L('Performance competitors','Đối thủ trực tiếp'), h:L('Direct competitors whose paid creative you benchmark.','Đối thủ trực tiếp mà bạn so sánh quảng cáo trả phí.'),
+    item:L('Competitor','Đối thủ'), add:L('Add a competitor','Thêm đối thủ'), titleKey:'name', newItem:{name:'', domain:''}, fields:CFIELDS},
+   {k:'competitors.instagram_watch', t:'tags', mode:'handle', split:1, l:L('Instagram accounts to watch','Tài khoản Instagram cần theo dõi'), h:L('Handles, without the @. The brand watch reads their posts.','Tên tài khoản, không cần @. Bàn theo dõi thương hiệu sẽ đọc bài đăng của họ.'), ph:'bluebottle, glossier, uniqlo'},
+   {k:'competitors.also_watch', t:'tags', l:L('Also watch in the news','Theo dõi thêm trên báo chí'), h:L('Other names the brand watch looks for.','Những tên khác cần để mắt trên tin tức.'), ph:'Highlands Coffee, Starbucks Reserve'}
+  ]},
+ {id:'content', t:L('Content','Nội dung'),
+  intro:L('The shape of what the agency proposes: pillars, topics, platforms and formats.','Khung cho những gì agency đề xuất: trụ cột, chủ đề, nền tảng và định dạng.'),
+  fields:[
+   {k:'content.pillars', t:'tags', l:L('Content pillars','Trụ cột nội dung'), h:L('Every play is tagged to exactly one. Leave empty to use Discovery, Proof, Occasion and Brand story.','Mỗi play gắn với đúng một trụ cột. Để trống sẽ dùng Discovery, Proof, Occasion và Brand story.'), ph:'Gift guide, Behind the roast, Ritual'},
+   {k:'content.categories', t:'tags', l:L('Opportunity categories','Nhóm cơ hội'), h:L('What an opportunity can be about.','Một cơ hội có thể thuộc chủ đề nào.'), ph:'Culture & trends, Competitor move'},
+   {k:'content.platforms', t:'tags', split:1, l:L('Platforms','Nền tảng'), h:L('Where the agency looks and plays.','Nơi agency quan sát và triển khai.'), ph:'TikTok, Instagram, YouTube, Zalo'},
+   {k:'content.formats', t:'tags', split:1, l:L('Formats','Định dạng'), h:L('What a play can be made as.','Một play có thể được làm dưới dạng gì.'), ph:'static, carousel, reel, ugc, pr_pitch'},
+   {k:'content.instagram_hashtags', t:'tags', mode:'hashtag', split:1, max:12, l:L('Instagram hashtags','Hashtag Instagram'), h:L('Up to 12, kept fixed, without the #. Instagram allows 30 unique hashtag searches a week.','Tối đa 12, giữ cố định, không cần #. Instagram chỉ cho tra 30 hashtag khác nhau mỗi tuần.'), ph:'giftideas, coffeelover'},
+   {k:'content.tiktok_hashtags', t:'tags', mode:'hashtag', split:1, l:L('TikTok hashtags','Hashtag TikTok'), h:L('Without the #.','Không cần #.'), ph:'skincareroutine, coffeetok'}
+  ]},
+ {id:'creative', t:L('Creative library','Thư viện sáng tạo'),
+  intro:L('The arguments your ads make (angles) and the containers they are shot in (concepts). A general evergreen library is filled in — make it yours.','Những lập luận quảng cáo đưa ra (góc tiếp cận) và khuôn hình để thể hiện chúng (ý tưởng). Đã có sẵn thư viện chung — hãy chỉnh cho đúng thương hiệu.'),
+  fields:[
+   {k:'creative.angles', t:'pairs', prefix:'A', l:L('Angles','Góc tiếp cận'), h:L('Id → the argument, in one line. “Name — explanation” works well.','Id → lập luận, trong một dòng. Dạng “Tên — giải thích” là tốt nhất.'), kl:L('Id','Id'), vl:L('Angle','Góc tiếp cận'), kph:'A11', vph:'Visible result — the change you can see', item:L('Angle','Góc'), add:L('Add an angle','Thêm góc tiếp cận')},
+   {k:'creative.concepts', t:'pairs', prefix:'C', l:L('Concepts','Ý tưởng thể hiện'), h:L('Id → the container’s name.','Id → tên khuôn hình.'), kl:L('Id','Id'), vl:L('Concept','Ý tưởng'), kph:'C11', vph:'Unboxing', item:L('Concept','Ý tưởng'), add:L('Add a concept','Thêm ý tưởng')},
+   {k:'creative.doctrine', t:'textarea', rows:4, l:L('Testing doctrine','Nguyên tắc thử nghiệm'), h:L('How you test, and when you kill.','Cách test, và khi nào thì dừng.'), ph:'Kill a hook at 1,000 impressions if…'},
+   {k:'creative.production_rules', t:'textarea', rows:4, l:L('Production rules','Quy tắc sản xuất'), h:L('What every master must and must not contain.','Mỗi bản master phải có và không được có gì.'), ph:'No prices burned into the film; the last 2 seconds are a separate end card.'}
+  ]},
+ {id:'sources', t:L('Sources','Nguồn dữ liệu'),
+  intro:L('Where the agency reads: news, YouTube, review videos and your own reviews. Leave anything empty that you do not use.','Agency đọc ở đâu: tin tức, YouTube, video review và đánh giá của khách. Mục nào không dùng thì để trống.'),
+  fields:[
+   {k:'sources.news_feeds', t:'newsfeeds', l:L('News feeds','Nguồn tin RSS'), h:L('A ready-made pack, or your own RSS feeds (name and address).','Dùng gói có sẵn, hoặc tự liệt kê nguồn RSS (tên và địa chỉ).')},
+   {k:'sources.news_queries', t:'tags', l:L('News searches','Từ khoá tin tức'), h:L('Bing News searches in the market language — the simplest way to cover any market.','Tìm kiếm Bing News bằng ngôn ngữ thị trường — cách đơn giản nhất để phủ mọi thị trường.'), ph:'specialty coffee Vietnam, cà phê đặc sản'},
+   {k:'sources.youtube_searches', t:'tags', l:L('YouTube searches','Tìm kiếm YouTube'), h:L('What is trending in your world on YouTube.','Điều gì đang nổi trong lĩnh vực của bạn trên YouTube.'), ph:'home espresso setup, capsule wardrobe 2026'},
+   {k:'sources.voice_queries', t:'tags', l:L('Review videos to listen to','Video review cần lắng nghe'), h:L('The customer-voice desk reads the comments under these.','Bàn lắng nghe khách hàng sẽ đọc bình luận dưới các video này.'), ph:'cold brew review, best serum for oily skin'},
+   {k:'sources.voice_peer_queries', t:'pairs', wide:1, l:L('Review videos about peer brands','Video review về thương hiệu cùng tầm'), h:L('Search → brand. Their audience’s words become your hooks.','Từ khoá → thương hiệu. Lời của khán giả họ thành hook của bạn.'), kl:L('Search','Từ khoá'), vl:L('Brand','Thương hiệu'), kph:'blue bottle coffee review', vph:'Blue Bottle', item:L('Search','Từ khoá'), add:L('Add a search','Thêm từ khoá')},
+   {k:'sources.listen_plan.youtube', t:'tags', l:L('Listening plan — YouTube','Kế hoạch lắng nghe — YouTube'), h:L('For the optional Mac gatherer (Agent Reach).','Cho bộ thu thập trên Mac (Agent Reach), không bắt buộc.'), ph:'your brand review, category worth it'},
+   {k:'sources.listen_plan.instagram', t:'tags', mode:'handle', split:1, l:L('Listening plan — Instagram','Kế hoạch lắng nghe — Instagram'), h:L('Handles, without the @.','Tên tài khoản, không cần @.'), ph:'yourbrand, peerbrand'},
+   {k:'sources.reviews.judgeme_shop', t:'domain', w:3, l:L('Judge.me shop','Cửa hàng Judge.me'), h:L('If your store uses Judge.me.','Nếu cửa hàng dùng Judge.me.'), ph:'yourstore.myshopify.com'},
+   {k:'sources.reviews.amazon_domain', w:3, list:'dl-amazon', l:L('Amazon marketplace','Sàn Amazon'), h:L('Where your Amazon reviews live.','Nơi có đánh giá Amazon của bạn.'), ph:'www.amazon.com'},
+   {k:'sources.reviews.amazon_ours', t:'rows', l:L('Our Amazon listings','Listing Amazon của mình'), h:L('Their reviews are read for customer voice.','Đánh giá của các listing này được đọc để lắng nghe khách.'),
+    item:L('Listing','Listing'), add:L('Add a listing','Thêm listing'), titleKey:'name', newItem:{asin:'', name:''},
+    fields:[{k:'asin', w:2, l:'ASIN', ph:'B0XXXXXXXX'}, {k:'name', w:4, l:L('Name','Tên'), ph:'Cold Brew Concentrate'}]},
+   {k:'sources.reviews.amazon_peers', t:'rows', l:L('Peer Amazon listings','Listing Amazon của thương hiệu cùng tầm'), h:L('What their buyers praise and complain about.','Người mua của họ khen và chê điều gì.'),
+    item:L('Listing','Listing'), add:L('Add a listing','Thêm listing'), titleKey:'name', newItem:{asin:'', brand:'', name:''},
+    fields:[{k:'asin', w:2, l:'ASIN', ph:'B0XXXXXXXX'}, {k:'brand', w:2, l:L('Brand','Thương hiệu'), ph:'Blue Bottle'}, {k:'name', w:2, l:L('Name','Tên'), ph:'Bright Cold Brew'}]},
+   {k:'sources.mentions_feed', t:'url', l:L('Mentions feed','Nguồn nhắc đến thương hiệu'), h:L('Optional JSON feed of your own brand mentions.','Nguồn JSON về các lượt nhắc đến thương hiệu (không bắt buộc).'), ph:'https://raw.githubusercontent.com/you/tracker/main/mentions.json'}
+  ]},
+ {id:'calendar', t:L('Calendar','Lịch'),
+  intro:L('Your own dates, on top of the market’s holidays and moments. A note on a date is a rule for that day.','Những ngày riêng của bạn, thêm vào ngày lễ và các dịp của thị trường. Ghi chú trên một ngày là quy tắc cho ngày đó.'),
+  fields:[
+   {k:'calendar.occasions', t:'rows', l:L('Your own dates','Ngày riêng của bạn'),
+    h:L('Launches, sales, local dates the global list misses. Notes are rules (“Content only — do not sell”). In Vietnam, Vietnamese Women’s Day (20/10) is already on the calendar — add it here only to give it a rule.','Ra mắt, sale, ngày địa phương mà danh sách toàn cầu bỏ sót. Ghi chú là quy tắc (“Chỉ làm nội dung — không bán”). Ở Việt Nam, Ngày Phụ nữ Việt Nam (20/10) đã có sẵn trong lịch — chỉ thêm vào đây khi muốn đặt quy tắc cho ngày đó.'),
+    item:L('Date','Ngày'), add:L('Add a date','Thêm ngày'), titleKey:'name', newItem:{date:'', name:'', note:''},
+    fields:[
+     {k:'date', t:'date', w:2, l:L('Date','Ngày')},
+     {k:'name', w:4, l:L('Name','Tên'), ph:'Store anniversary · Tết gift cut-off · Product launch'},
+     {k:'note', l:L('Rule for the day','Quy tắc cho ngày này'), ph:'Content only — do not sell'}
+    ]}
+  ]},
+ {id:'team', t:L('Team','Đội ngũ'),
+  intro:L('The humans. The lead answers the morning huddle; members get the plays in their lanes.','Những con người thật. Trưởng nhóm trả lời huddle buổi sáng; thành viên nhận các play thuộc mảng của mình.'),
+  fields:[
+   {k:'team.lead.name', req:1, w:2, l:L('Lead','Trưởng nhóm'), h:L('The person the huddle asks.','Người được hỏi ở buổi huddle.'), ph:'Linh · Sam'},
+   {k:'team.lead.role', w:2, l:L('Lead’s role','Vai trò'), h:L('Their title.','Chức danh.'), ph:'Brand lead'},
+   {k:'team.lead.slack_id', w:2, l:L('Lead’s Slack id','Slack id'), h:L('Profile → ⋯ → Copy member ID.','Hồ sơ → ⋯ → Copy member ID.'), ph:'U08XXXXXXX'},
+   {k:'team.members', t:'rows', minOne:1, l:L('Team members','Thành viên'), h:L('The people plays go to. A lane is a kind of work they own.','Những người nhận play. Mỗi mảng (lane) là một loại việc họ phụ trách.'),
+    item:L('Member','Thành viên'), add:L('Add a team member','Thêm thành viên'), titleKey:'name', newItem:{name:'', slack_id:'', owns:'', lanes:[]},
+    fields:[
+     {k:'name', req:1, w:3, l:L('Name','Tên'), ph:'Mai · Jordan'},
+     {k:'slack_id', w:3, l:L('Slack id','Slack id'), ph:'U09XXXXXXX'},
+     {k:'owns', req:1, t:'textarea', rows:2, l:L('Owns','Phụ trách'), h:L('What they own, in a sentence.','Họ phụ trách gì, trong một câu.'), ph:'Social media, in-house ads creative and seeding'},
+     {k:'lanes', req:1, t:'tags', l:L('Lanes','Mảng việc'), h:L('Kinds of work. Press Enter after each.','Các loại việc. Nhấn Enter sau mỗi mục.'), ph:'Social media, Earned media & PR'}
+    ]},
+   {k:'team.slack_team', l:L('Slack workspace id','Workspace id của Slack'), h:L('For deep links. Starts with T.','Dùng cho đường dẫn trực tiếp. Bắt đầu bằng chữ T.'), ph:'T0XXXXXXX'}
+  ]},
+ {id:'schedule', t:L('Schedule & delivery','Lịch chạy & triển khai'),
+  intro:L('When the agency reports, when it stays quiet, and where it lives on GitHub.','Khi nào agency gửi báo cáo, khi nào im lặng, và agency nằm ở đâu trên GitHub.'),
+  fields:[
+   {k:'schedule.team_tz', t:'tz', req:1, w:3, l:L('Team time zone','Múi giờ của team'), h:L('Report times and quiet hours use this clock.','Giờ báo cáo và giờ yên lặng theo đồng hồ này.')},
+   {k:'schedule.adspy_every_min', t:'int', w:3, l:L('Ad-spy interval (minutes)','Chu kỳ soi quảng cáo (phút)'), h:L('Minutes between ad-spy sweeps. Default 110.','Số phút giữa các lượt soi. Mặc định 110.'), ph:'110'},
+   {k:'schedule.reports', t:'times', w:3, l:L('Report times','Giờ gửi báo cáo'), h:L('Team time, 24-hour. Morning and evening.','Theo giờ team, 24 giờ. Sáng và tối.')},
+   {k:'schedule.quiet_hours', t:'quiet', w:3, l:L('Quiet hours','Giờ yên lặng'), h:L('No Slack messages between these hours.','Không gửi Slack trong khoảng giờ này.')},
+   {k:'delivery.brain_repo', t:'repo', req:1, w:3, l:L('Brain repo','Repo bộ não'), h:L('owner/repo — private: the code and the agency’s memory.','owner/repo — riêng tư: code và bộ nhớ của agency.'), ph:'yourname/brand-agency'},
+   {k:'delivery.site_repo', t:'repo', req:1, w:3, l:L('Site repo','Repo trang web'), h:L('owner/repo — public: the encrypted office on GitHub Pages.','owner/repo — công khai: văn phòng mã hoá trên GitHub Pages.'), ph:'yourname/brand-office'},
+   {k:'delivery.site_url', t:'url', suggest:1, l:L('Site address','Địa chỉ trang'), h:L('Usually https://owner.github.io/repo/ — leave empty and the scaffold works it out.','Thường là https://owner.github.io/repo/ — để trống thì scaffold sẽ tự tính.'), ph:'https://yourname.github.io/brand-office/'},
+   {k:'delivery.dispatch_mode', t:'radio', l:L('Dispatch mode','Chế độ gửi việc'), h:L('Who gets the Slack tickets.','Ai nhận ticket qua Slack.'),
+    opts:[['preview',L('Preview','Xem trước'),L('Every ticket goes to the lead first. Start here.','Mọi ticket đến tay trưởng nhóm trước. Nên bắt đầu từ đây.')],['live',L('Live','Chạy thật'),L('Tickets go straight to the team.','Ticket được gửi thẳng cho team.')]]}
+  ]},
+ {id:'brief', t:L('Standing brief','Brief thường trực'),
+  intro:L('The house rules every desk follows: the season’s message, the offer, pillars, visual rules, claims, who does what. Draft it from your answers, then edit freely.','Nội quy mà mọi bàn tuân theo: thông điệp mùa, ưu đãi, trụ cột, quy tắc hình ảnh, tuyên bố, ai làm gì. Soạn từ các câu trả lời, rồi chỉnh sửa thoải mái.'),
+  fields:[
+   {k:'standing_brief', t:'brief', l:L('Standing brief (markdown)','Standing brief (markdown)'), h:L('The lead’s morning huddle overrides this for the day; this is what still holds otherwise.','Huddle buổi sáng của trưởng nhóm được ưu tiên trong ngày; còn lại, đây là chuẩn.')}
+  ]},
+ {id:'launch', t:L('Run your trial','Chạy bản dùng thử'),
+  intro:L('Five steps from this profile to your first report. Generated from your answers.','Năm bước từ hồ sơ này đến báo cáo đầu tiên. Được tạo từ các câu trả lời của bạn.'),
+  fields:[]}
+];
+/* The trial: these fields belong to the full Insight Café. They stay visible, locked, and are never required. */
+var FULL_ONLY = ['competitors.instagram_watch', 'creative.angles', 'creative.concepts', 'creative.doctrine', 'creative.production_rules',
+  'sources.youtube_searches', 'sources.voice_queries', 'sources.voice_peer_queries', 'sources.listen_plan.youtube', 'sources.listen_plan.instagram',
+  'sources.reviews.judgeme_shop', 'sources.reviews.amazon_domain', 'sources.reviews.amazon_ours', 'sources.reviews.amazon_peers', 'sources.mentions_feed',
+  'content.instagram_hashtags', 'content.tiktok_hashtags', 'team.lead.slack_id', 'team.slack_team', 'schedule.adspy_every_min', 'schedule.reports',
+  'schedule.quiet_hours', 'delivery.brain_repo', 'delivery.site_repo', 'delivery.site_url', 'delivery.dispatch_mode'];
+SECTIONS.forEach(function(s){ s.fields.forEach(function(f){
+  if (FULL_ONLY.indexOf(f.k) >= 0){ f.full = 1; f.req = 0; }
+  if (f.k === 'team.members') (f.fields || []).forEach(function(sf){ if (sf.k === 'slack_id') sf.full = 1; });
+}); });
+var SEC_BY_ID = {}; SECTIONS.forEach(function(s){ SEC_BY_ID[s.id] = s; });
+var SPEC = {}; SECTIONS.forEach(function(s){ s.fields.forEach(function(f){ SPEC[f.k] = f; f.sec = s.id; }); });
+var MAP_PATHS = ['creative.angles', 'creative.concepts', 'sources.voice_peer_queries', 'sources.news_feeds'];
+
+/* =====================================================================
+   State
+   ===================================================================== */
+var STORE_KEY = 'brand-agency-setup.v1';
+var EXAMPLE = (function(){ try { return JSON.parse(document.getElementById('example-profile').textContent); } catch (e) { return null; } })();
+var S = null;
+var UI = {step:'agency', lang:/^vi\b/i.test(navigator.language || '') ? 'vi' : 'en', lastDraft:'', done:{}, countryOther:false, newsCache:null, packCache:''};
+var REG = {};
+var storageOK = true;
+
+function freshProfile(){
+  return {
+    schema: 1,
+    agency: {name:'', tagline:'Your AI research agency', office_city:'', office_neighbourhood:'', office_tz:'', scene:'city', report_language:'', crew:clone(STD_CREW)},
+    brand: {name:'', short:'', website:'', category:'', one_liner:'', benefit:'', signature:'', price_position:'', voice:{tone:'', banned_words:[], no_exclamation_marks:false}, look:'', look_avoid:''},
+    business: {model:'', channels:[], season_focus:'', goals:'', kpis:[]},
+    market: {country:'', language:'', currency:'', bing_mkt:'', trends_geo:'', youtube_region:'', calendar:'', global_moments:[]},
+    audience: {personas:[], insights:''},
+    products: [],
+    catalog: {shopify_domain:''},
+    offers: {rules:'', never:[]},
+    claims_never: [],
+    competitors: {peers:[], performance:[], instagram_watch:[], also_watch:[]},
+    content: {pillars:[], categories:GEN_CATEGORIES.slice(), platforms:GEN_PLATFORMS.slice(), formats:GEN_FORMATS.slice(), instagram_hashtags:[], tiktok_hashtags:[]},
+    creative: {angles:clone(GEN_ANGLES), concepts:clone(GEN_CONCEPTS), doctrine:GEN_DOCTRINE, production_rules:GEN_PRODUCTION},
+    sources: {news_feeds:{}, news_queries:[], youtube_searches:[], voice_queries:[], voice_peer_queries:{}, listen_plan:{youtube:[], instagram:[]}, reviews:{judgeme_shop:'', amazon_domain:'', amazon_ours:[], amazon_peers:[]}, mentions_feed:''},
+    calendar: {occasions:[]},
+    team: {lead:{name:'', role:'', slack_id:''}, members:[], slack_team:''},
+    schedule: {team_tz:'', reports:['06:30', '18:30'], adspy_every_min:110, quiet_hours:[22, 6]},
+    delivery: {brain_repo:'', site_repo:'', site_url:'', dispatch_mode:'preview'},
+    standing_brief: ''
+  };
+}
+/* internal form: {id: text} maps become ordered [id, text] pairs so rows can be edited, reordered and duplicated safely */
+function fromProfile(p){
+  var c = clone(p);
+  MAP_PATHS.forEach(function(mp){ var v = getP(c, mp); if (isObj(v)) setP(c, mp, Object.keys(v).map(function(k){ return [k, v[k]]; })); });
+  return c;
+}
+function toProfile(s){
+  var c = clone(s);
+  MAP_PATHS.forEach(function(mp){
+    var v = getP(c, mp);
+    if (Array.isArray(v) && v.every(function(x){ return Array.isArray(x); })){
+      var o = {};
+      v.forEach(function(pr){ var k = str(pr[0]); if (k) o[k] = pr[1] == null ? '' : pr[1]; });
+      setP(c, mp, o);
+    }
+  });
+  if (c.schema !== 1){ var out = {schema:1}; Object.keys(c).forEach(function(k){ if (k !== 'schema') out[k] = c[k]; }); c = out; }
+  return c;
+}
+function profileJSON(){ return JSON.stringify(toProfile(S), null, 1) + '\n'; }
+function isPristine(){ return JSON.stringify(toProfile(S)) === JSON.stringify(toProfile(fromProfile(freshProfile()))); }
+
+function save(){
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify({v:1, state:S, ui:{step:UI.step, lang:UI.lang, lastDraft:UI.lastDraft, done:UI.done, countryOther:UI.countryOther}}));
+    storageOK = true;
+  } catch (e) { storageOK = false; }
+  showSaved();
+}
+function loadStore(){
+  try {
+    var raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return false;
+    var d = JSON.parse(raw);
+    if (!d || !isObj(d.state)) return false;
+    S = d.state;
+    if (isObj(d.ui)) Object.keys(d.ui).forEach(function(k){ UI[k] = d.ui[k]; });
+    if (!UI.done || typeof UI.done !== 'object') UI.done = {};
+    return true;
+  } catch (e) { storageOK = false; return false; }
+}
+var savedTimer = null;
+function showSaved(){
+  var el = $('#saved'); if (!el) return;
+  el.classList.toggle('off', !storageOK);
+  el.title = storageOK ? t('saved') : t('notSaved');
+  var tx = $('.saved-t', el); if (tx) tx.textContent = storageOK ? t('saved') : t('notSaved');
+  el.classList.remove('pulse'); void el.offsetWidth; el.classList.add('pulse');
+  clearTimeout(savedTimer); savedTimer = setTimeout(function(){ el.classList.remove('pulse'); }, 700);
+}
+
+/* =====================================================================
+   i18n
+   ===================================================================== */
+function T(x){ if (x == null) return ''; if (typeof x === 'string') return x; return x[UI.lang] || x.en || ''; }
+function t(k, vars){
+  var s = (I18N[UI.lang] && I18N[UI.lang][k] != null) ? I18N[UI.lang][k] : (I18N.en[k] != null ? I18N.en[k] : k);
+  if (vars) s = s.replace(/\{(\w+)\}/g, function(m, n){ return vars[n] != null ? vars[n] : m; });
+  return s;
+}
+
+/* =====================================================================
+   Time zones
+   ===================================================================== */
+var TZ_FIX = {'Asia/Saigon':'Asia/Ho_Chi_Minh','Asia/Calcutta':'Asia/Kolkata','Asia/Katmandu':'Asia/Kathmandu','Asia/Rangoon':'Asia/Yangon','Europe/Kiev':'Europe/Kyiv','America/Godthab':'America/Nuuk','Atlantic/Faeroe':'Atlantic/Faroe','Pacific/Enderbury':'Pacific/Kanton','Pacific/Truk':'Pacific/Chuuk','Pacific/Ponape':'Pacific/Pohnpei','America/Buenos_Aires':'America/Argentina/Buenos_Aires','America/Indianapolis':'America/Indiana/Indianapolis','America/Louisville':'America/Kentucky/Louisville'};
+var TZ_ALL = null, TZ_OFF = {};
+function tzList(){
+  if (TZ_ALL) return TZ_ALL;
+  var a = [];
+  try { a = Intl.supportedValuesOf('timeZone'); } catch (e) {}
+  var set = {};
+  a.forEach(function(z){ set[TZ_FIX[z] || z] = 1; });
+  Object.keys(COUNTRIES).forEach(function(c){ COUNTRIES[c].tz.forEach(function(z){ set[z] = 1; }); });
+  ['UTC','Europe/Dublin','Europe/Lisbon','Europe/Stockholm','Europe/Zurich','Africa/Johannesburg','Africa/Lagos','Asia/Karachi','Asia/Dhaka','Asia/Kathmandu','Asia/Riyadh','America/Bogota','America/Lima','America/Santiago','America/Argentina/Buenos_Aires'].forEach(function(z){ set[z] = 1; });
+  TZ_ALL = Object.keys(set).filter(validTz).sort();
+  return TZ_ALL;
+}
+function validTz(z){ if (!z) return false; try { new Intl.DateTimeFormat('en-US', {timeZone:z}); return true; } catch (e) { return false; } }
+function tzOff(z){
+  if (z in TZ_OFF) return TZ_OFF[z];
+  var s = '';
+  try {
+    var p = new Intl.DateTimeFormat('en-US', {timeZone:z, timeZoneName:'shortOffset'}).formatToParts(new Date());
+    for (var i = 0; i < p.length; i++) if (p[i].type === 'timeZoneName') s = p[i].value;
+  } catch (e) {}
+  s = s.replace(/^GMT$/, 'UTC').replace(/^GMT/, 'UTC');
+  TZ_OFF[z] = s; return s;
+}
+function tzLabel(z){ var o = tzOff(z); return z.replace(/_/g, ' ') + (o ? '  (' + o + ')' : ''); }
+
+/* =====================================================================
+   Field rendering
+   ===================================================================== */
+function fieldHTML(f, path){
+  if (f.full && !fieldHTML.inner){
+    fieldHTML.inner = 1; var inner = fieldHTML(f, path); fieldHTML.inner = 0;
+    return inner.indexOf('full-only') >= 0 ? inner : '<div class="full-only-wrap"><span class="fulltag">' + esc(T(L('Full version', 'Bản đầy đủ'))) + '</span><div inert>' + inner + '</div></div>';
+  }
+  REG[path] = f;
+  var ty = f.t || 'text';
+  var v = getP(S, path);
+  var id = 'f-' + path.replace(/\./g, '-');
+  var req = (f.req || f.minOne) ? ' <span class="req">' + esc(t('required')) + '</span>' : '';
+  var help = f.h ? '<p class="help" id="' + id + '-h">' + esc(T(f.h)) + '</p>' : '';
+  var ph = f.ph ? ' placeholder="' + esc(T(f.ph)) + '"' : '';
+  var desc = f.h ? ' aria-describedby="' + id + '-h"' : '';
+  var w = f.w ? ' w' + f.w : '';
+  var head = '<label class="lab" for="' + id + '">' + esc(T(f.l)) + req + '</label>' + help;
+  var ctl = '';
+  switch (ty){
+    case 'text': case 'url': case 'domain': case 'repo':
+      ctl = '<input id="' + id + '" type="' + (ty === 'url' ? 'url' : 'text') + '" data-path="' + path + '" value="' + esc(v == null ? '' : v) + '"' + ph + desc +
+            (f.list ? ' list="' + f.list + '"' : '') + ' autocomplete="off"' + (ty !== 'text' ? ' spellcheck="false" autocapitalize="off"' : '') + '>';
+      if (f.suggest) ctl += '<div class="inline-act"><button type="button" class="btn ghost small" data-act="suggest-url">' + esc(t('suggestUrl')) + '</button></div>';
+      break;
+    case 'textarea':
+      ctl = '<textarea id="' + id + '" data-path="' + path + '" rows="' + (f.rows || 3) + '"' + ph + desc + '>' + esc(v == null ? '' : v) + '</textarea>';
+      break;
+    case 'num': case 'int':
+      ctl = '<input id="' + id + '" type="number" data-type="' + ty + '" data-path="' + path + '" value="' + esc(v == null ? '' : v) + '"' + ph + desc +
+            (ty === 'int' ? ' step="1" min="1" inputmode="numeric"' : ' step="any" min="0" inputmode="decimal"') + '>';
+      break;
+    case 'bool':
+      return '<div class="field' + w + '" data-field="' + path + '"><label class="check"><input id="' + id + '" type="checkbox" data-type="bool" data-path="' + path + '"' + (v === true ? ' checked' : '') + desc + '><span><span class="lab" style="margin:0">' + esc(T(f.l)) + '</span>' + (f.h ? '<span class="help" id="' + id + '-h" style="display:block;margin:2px 0 0">' + esc(T(f.h)) + '</span>' : '') + '</span></label></div>';
+    case 'flag':
+      ctl = '<label class="check" style="min-height:42px;align-items:center"><input id="' + id + '" type="checkbox" data-type="flag" data-path="' + path + '"' + (v === true ? ' checked' : '') + '><span>' + esc(T(f.box)) + '</span></label>';
+      break;
+    case 'select':
+      var known = f.opts.some(function(o){ return o[0] === v; });
+      ctl = '<select id="' + id + '" data-path="' + path + '"' + desc + '>' + (known ? '' : '<option value="' + esc(v == null ? '' : v) + '" selected>' + esc(v == null || v === '' ? '—' : v) + '</option>') +
+            f.opts.map(function(o){ return '<option value="' + esc(o[0]) + '"' + (o[0] === v ? ' selected' : '') + '>' + esc(T(o[1])) + '</option>'; }).join('') + '</select>';
+      break;
+    case 'tz': ctl = tzHTML(f, path, id, desc); break;
+    case 'date':
+      var okDate = !v || /^\d{4}-\d{2}-\d{2}$/.test(v);
+      ctl = '<input id="' + id + '" type="' + (okDate ? 'date' : 'text') + '" data-path="' + path + '" value="' + esc(v == null ? '' : v) + '" placeholder="YYYY-MM-DD">';
+      break;
+    case 'crewid':
+      var opts = CREW_IDS.slice(); if (v && opts.indexOf(v) < 0) opts.unshift(v);
+      ctl = '<select id="' + id + '" data-path="' + path + '"' + desc + '>' + (v ? '' : '<option value="" selected>—</option>') + opts.map(function(o){ return '<option value="' + esc(o) + '"' + (o === v ? ' selected' : '') + '>' + esc(o) + '</option>'; }).join('') + '</select>';
+      break;
+    case 'tags': ctl = tagsHTML(f, path, id); break;
+    case 'moments': head = '<div class="lab" id="' + id + '">' + esc(T(f.l)) + req + '</div>' + help; ctl = momentsHTML(f, path); break;
+    case 'country': ctl = countryHTML(f, path, id, desc); break;
+    case 'rows': case 'crew': head = '<div class="lab" id="' + id + '">' + esc(T(f.l)) + req + '</div>' + help; ctl = rowsHTML(f, path); break;
+    case 'pairs': head = '<div class="lab" id="' + id + '">' + esc(T(f.l)) + req + '</div>' + help; ctl = pairsHTML(f, path); break;
+    case 'times': head = '<div class="lab" id="' + id + '">' + esc(T(f.l)) + req + '</div>' + help; ctl = timesHTML(f, path); break;
+    case 'quiet': head = '<div class="lab" id="' + id + '">' + esc(T(f.l)) + req + '</div>' + help; ctl = quietHTML(f, path); break;
+    case 'radio': head = '<div class="lab" id="' + id + '">' + esc(T(f.l)) + req + '</div>' + help; ctl = radioHTML(f, path); break;
+    case 'newsfeeds': head = '<div class="lab" id="' + id + '">' + esc(T(f.l)) + req + '</div>' + help; ctl = newsHTML(f, path); break;
+    case 'brief': ctl = briefHTML(f, path, id, desc); break;
+  }
+  if (f.full) return '<div class="field full-only' + w + '" data-field="' + path + '">' + head.replace('</label>', ' <span class="fulltag">' + esc(T(L('Full version', 'Bản đầy đủ'))) + '</span></label>') + '<div class="ctl" inert>' + ctl + '</div></div>';
+  return '<div class="field' + w + '" data-field="' + path + '">' + head + '<div class="ctl">' + ctl + '</div></div>';
+}
+
+function tzHTML(f, path, id, desc){
+  var v = str(getP(S, path));
+  var all = tzList();
+  var c = COUNTRIES[str(getP(S, 'market.country'))];
+  var sug = c ? c.tz.slice() : [];
+  if (path === 'schedule.team_tz'){ var otz = str(getP(S, 'agency.office_tz')); if (otz && sug.indexOf(otz) < 0) sug.push(otz); }
+  if (path === 'agency.office_tz'){ var ttz = str(getP(S, 'schedule.team_tz')); if (ttz && sug.indexOf(ttz) < 0) sug.push(ttz); }
+  var h = '<select id="' + id + '" data-path="' + path + '"' + desc + '>';
+  h += '<option value=""' + (v ? '' : ' selected') + '>' + esc(t('chooseTz')) + '</option>';
+  if (v && all.indexOf(v) < 0 && sug.indexOf(v) < 0) h += '<optgroup label="' + esc(t('currentVal')) + '"><option value="' + esc(v) + '" selected>' + esc(v) + '</option></optgroup>';
+  var used = {};
+  if (sug.length){
+    h += '<optgroup label="' + esc(c ? t('suggestedFor', {c:T(c.n)}) : t('suggestedFor', {c:''})) + '">';
+    sug.forEach(function(z){ used[z] = 1; h += '<option value="' + esc(z) + '"' + (z === v ? ' selected' : '') + '>' + esc(tzLabel(z)) + '</option>'; });
+    h += '</optgroup>';
+  }
+  h += '<optgroup label="' + esc(t('allZones')) + '">';
+  all.forEach(function(z){ if (!used[z]) h += '<option value="' + esc(z) + '"' + (z === v ? ' selected' : '') + '>' + esc(tzLabel(z)) + '</option>'; });
+  return h + '</optgroup></select>';
+}
+
+function tagsHTML(f, path, id){
+  var list = asArr(getP(S, path));
+  var chips = list.map(function(x, i){
+    return '<span class="chip"><span>' + esc(f.mode === 'hashtag' ? '#' + x : (f.mode === 'handle' ? '@' + x : x)) + '</span><button type="button" class="chip-x" data-act="del-tag" data-path="' + path + '" data-i="' + i + '" aria-label="' + esc(t('removeX', {x:x})) + '">' + ICON.x + '</button></span>';
+  }).join('');
+  var ph = list.length ? t('addMore') : (T(f.ph) || t('typeEnter'));
+  var h = '<div class="tags" data-tags="' + path + '">' + chips + '<input id="' + id + '" class="tag-in" type="text" data-tag-path="' + path + '" data-mode="' + (f.mode || '') + '" placeholder="' + esc(ph) + '" autocomplete="off" enterkeyhint="enter"' + (f.mode ? ' spellcheck="false" autocapitalize="off"' : '') + (f.h ? ' aria-describedby="' + id + '-h"' : '') + '></div>';
+  if (f.max) h += '<p class="count' + (list.length > f.max ? ' over' : '') + '">' + list.length + ' / ' + f.max + '</p>';
+  return h;
+}
+
+function momentsHTML(f, path){
+  var on = asArr(getP(S, path));
+  var keys = MOMENTS.slice(); on.forEach(function(m){ if (keys.indexOf(m) < 0) keys.push(m); });
+  var h = '<div class="moments" data-anchor="' + path + '" role="group">' + keys.map(function(m){
+    return '<button type="button" class="mo" data-act="moment" data-m="' + esc(m) + '" aria-pressed="' + (on.indexOf(m) >= 0) + '">' + esc(MOMENT_L[m] ? T(MOMENT_L[m]) : m) + '</button>';
+  }).join('') + '</div>';
+  var country = str(getP(S, 'market.country')).toUpperCase(), cal = str(getP(S, 'market.calendar')).toUpperCase() || country;
+  if (cal === 'US') h += '<p class="note">' + esc(t('usCalNote')) + '</p>';
+  else if (!on.length) h += '<p class="help" style="margin-top:8px">' + esc(t('momentsEmpty')) + '</p>';
+  if (country === 'VN') h += '<p class="note">' + esc(t('vnNote')) + '</p>';
+  return h;
+}
+
+function countryHTML(f, path, id, desc){
+  var v = str(getP(S, path)).toUpperCase();
+  var known = !!COUNTRIES[v];
+  var other = !known && (v !== '' || UI.countryOther);
+  var codes = Object.keys(COUNTRIES).sort(function(a, b){ return T(COUNTRIES[a].n).localeCompare(T(COUNTRIES[b].n)); });
+  var h = '<select id="' + id + '" data-change="country"' + desc + '><option value=""' + (!known && !other ? ' selected' : '') + '>' + esc(t('chooseCountry')) + '</option>';
+  codes.forEach(function(c){ h += '<option value="' + c + '"' + (c === v ? ' selected' : '') + '>' + esc(T(COUNTRIES[c].n)) + ' (' + c + ')</option>'; });
+  h += '<option value="__other"' + (other ? ' selected' : '') + '>' + esc(t('otherCountry')) + '</option></select>';
+  if (other) h += '<input type="text" style="margin-top:8px;max-width:160px" data-path="' + path + '" data-upper="1" value="' + esc(getP(S, path) || '') + '" maxlength="2" placeholder="NZ" aria-label="' + esc(t('otherCountry')) + '" spellcheck="false" autocapitalize="characters">';
+  return h;
+}
+
+function toolsHTML(path, i, n){
+  return '<span class="tools">' +
+    '<button type="button" class="ib" data-act="move" data-d="-1" data-path="' + path + '" data-i="' + i + '" aria-label="' + esc(t('moveUp')) + '" title="' + esc(t('moveUp')) + '"' + (i === 0 ? ' disabled' : '') + '>' + ICON.up + '</button>' +
+    '<button type="button" class="ib" data-act="move" data-d="1" data-path="' + path + '" data-i="' + i + '" aria-label="' + esc(t('moveDown')) + '" title="' + esc(t('moveDown')) + '"' + (i === n - 1 ? ' disabled' : '') + '>' + ICON.down + '</button>' +
+    '<button type="button" class="ib x" data-act="del-row" data-path="' + path + '" data-i="' + i + '" aria-label="' + esc(t('remove')) + '" title="' + esc(t('remove')) + '">' + ICON.x + '</button></span>';
+}
+
+function rowsHTML(f, path){
+  var list = asArr(getP(S, path));
+  var h = '<div class="rows" data-anchor="' + path + '">';
+  if (!list.length){
+    h += '<p class="empty">' + esc(t('noRows')) + '</p>';
+    if (f.t === 'crew') h += '<button type="button" class="btn" data-act="std-crew">' + esc(t('addStdCrew')) + '</button>';
+  }
+  list.forEach(function(row, i){
+    var rp = path + '.' + i;
+    var nm = f.titleKey && isObj(row) ? str(row[f.titleKey]) : '';
+    h += '<div class="card" data-row="' + rp + '"><div class="card-h"><div class="card-t">' +
+      (f.t === 'crew' ? '<span class="av" data-avatar="' + rp + '">' + avatar(isObj(row) ? row.look : null) + '</span>' : '') +
+      '<span class="card-n"><span class="ci">' + esc(T(f.item)) + ' </span>' + (i + 1) + '</span><span class="nm">' + (nm ? '· ' + esc(nm) : '') + '</span></div>' + toolsHTML(path, i, list.length) + '</div>';
+    h += '<div class="grid g-tight">' + f.fields.map(function(sf){ return fieldHTML(sf, rp + '.' + sf.k); }).join('');
+    if (f.t === 'crew') h += lookHTML(rp, isObj(row) && isObj(row.look) ? row.look : {});
+    h += '</div></div>';
+  });
+  h += '<button type="button" class="add" data-act="add-row" data-path="' + path + '">' + ICON.plus + esc(T(f.add)) + '</button></div>';
+  return h;
+}
+
+function safeColor(c, d){
+  c = str(c);
+  if (/^#[0-9a-f]{6}$/i.test(c)) return c.toLowerCase();
+  if (/^#[0-9a-f]{3}$/i.test(c)) return ('#' + c[1] + c[1] + c[2] + c[2] + c[3] + c[3]).toLowerCase();
+  return d;
+}
+function lookHTML(rp, look){
+  function sel(k, opts){
+    var v = look[k] == null ? (k === 'acc' ? '' : opts[0]) : look[k];
+    var list = opts.slice(); if (list.indexOf(v) < 0) list.push(v);
+    return '<select data-path="' + rp + '.look.' + k + '" data-redraw="' + rp + '">' + list.map(function(o){ return '<option value="' + esc(o) + '"' + (o === v ? ' selected' : '') + '>' + esc(LOOK_L[o] ? T(LOOK_L[o]) : o) + '</option>'; }).join('') + '</select>';
+  }
+  function col(k, d){ return '<input type="color" data-path="' + rp + '.look.' + k + '" data-redraw="' + rp + '" value="' + safeColor(look[k], d) + '" aria-label="' + esc(t(k === 'top' ? 'top' : k === 'skin' ? 'skin' : 'hairColour')) + '">'; }
+  return '<div class="field look" data-field="' + rp + '.look"><div class="lab">' + esc(t('look')) + '</div><div class="look-row">' +
+    '<label>' + esc(t('hair')) + sel('hair', HAIRS) + '</label>' +
+    '<label>' + esc(t('acc')) + sel('acc', ACCS) + '</label>' +
+    '<label class="sw">' + esc(t('top')) + col('top', '#2c332f') + '</label>' +
+    '<label class="sw">' + esc(t('skin')) + col('skin', '#e0b48f') + '</label>' +
+    '<label class="sw">' + esc(t('hairColour')) + (look.hairColor ? '' : ' <span style="font-size:11px">(' + esc(t('unset')) + ')</span>') + '<span class="swrow">' + col('hairColor', '#2a1a16') +
+      (look.hairColor ? '<button type="button" class="ib x" data-act="clear-key" data-path="' + rp + '.look.hairColor" aria-label="' + esc(t('clearColour')) + '" title="' + esc(t('clearColour')) + '">' + ICON.x + '</button>' : '') + '</span></label>' +
+    '</div></div>';
+}
+
+/* a tiny portrait in the office's style, from the crew member's look */
+function avatar(look){
+  look = isObj(look) ? look : {};
+  var skin = safeColor(look.skin, '#e0b48f'), top = safeColor(look.top, '#2c332f'), hc = safeColor(look.hairColor, '#2a1a16');
+  var hair = look.hair || 'short', acc = look.acc || '';
+  var s = '<svg viewBox="0 0 64 64" aria-hidden="true">';
+  s += '<path d="M12 64 C12 50 20 45 32 45 C44 45 52 50 52 64Z" fill="' + top + '"/><rect x="28.5" y="37" width="7" height="9" fill="' + skin + '"/>';
+  if (hair === 'bob' || hair === 'beret') s += '<path d="M18 30 C17 15 25 11 32 11 C39 11 47 15 46 30 L47 42 Q43 44 41 42 L23 42 Q21 44 17 42Z" fill="' + hc + '"/>';
+  if (hair === 'bun' || hair === 'braid') s += '<path d="M19 30 C18 16 25 13 32 13 C39 13 46 16 45 30 Q46 38 42 42 L22 42 Q18 38 19 30Z" fill="' + hc + '"/>';
+  if (hair === 'curly') [[19,24,6],[18,32,6],[20,39,5],[25,17,6],[32,14,7],[39,17,6],[45,24,6],[46,32,6],[44,39,5]].forEach(function(c){ s += '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="' + c[2] + '" fill="' + hc + '"/>'; });
+  if (hair === 'braid') s += '<g fill="' + hc + '"><circle cx="45" cy="44" r="3.4"/><circle cx="46" cy="50" r="3.2"/><circle cx="47" cy="56" r="3"/></g>';
+  if (hair === 'bun') s += '<circle cx="32" cy="10" r="6" fill="' + hc + '"/>';
+  s += '<ellipse cx="32" cy="29" rx="11" ry="12.5" fill="' + skin + '"/>';
+  if (hair === 'short') s += '<path d="M20.5 28 C20 16 26 14 32.5 14 C39 14 44.5 17 43.5 28 C40 21 35 20.5 31 21 C26 21.5 23 23 20.5 28Z" fill="' + hc + '"/>';
+  if (hair === 'bun' || hair === 'braid') s += '<path d="M20.5 27 C21 18 26 16.5 32 16.5 C38 16.5 43 18 43.5 27 C40 22 36 21 32 21 C28 21 24 22 20.5 27Z" fill="' + hc + '"/>';
+  if (hair === 'bob' || hair === 'beret') s += '<path d="M20.5 28 C20.5 18 25 16 32 16 C39 16 43.5 18 43.5 28 C41 24 37 24 32 24.5 C27 24 23 24 20.5 28Z" fill="' + hc + '"/>';
+  if (hair === 'curly') s += '<g fill="' + hc + '"><circle cx="25" cy="21" r="4.5"/><circle cx="31" cy="19" r="4.5"/><circle cx="37" cy="19.5" r="4.5"/><circle cx="41.5" cy="22.5" r="4"/></g>';
+  if (hair === 'beret' || acc === 'beret') s += '<ellipse cx="30" cy="15" rx="14" ry="5" fill="#3B3430"/><rect x="29" y="8.5" width="2.5" height="3" fill="#3B3430"/>';
+  s += '<circle cx="27.5" cy="30" r="1.3" fill="#252525"/><circle cx="36.5" cy="30" r="1.3" fill="#252525"/><path d="M29 35.2 Q32 37.4 35 35.2" stroke="#252525" stroke-width="1.1" fill="none" stroke-linecap="round"/>';
+  if (acc === 'glasses') s += '<g fill="none" stroke="#241E2A" stroke-width="1.1"><circle cx="27.5" cy="30" r="3.6"/><circle cx="36.5" cy="30" r="3.6"/><path d="M31.1 30 L32.9 30"/></g>';
+  if (acc === 'clip') s += '<rect x="38" y="17" width="6" height="2.4" fill="#D97757" transform="rotate(-25 41 18)"/>';
+  if (acc === 'earring' || hair === 'bun') s += '<circle cx="20.6" cy="33.5" r="1.6" fill="none" stroke="#D7A536" stroke-width="1"/><circle cx="43.4" cy="33.5" r="1.6" fill="none" stroke="#D7A536" stroke-width="1"/>';
+  if (acc === 'pencil') s += '<g transform="rotate(-28 44 24)"><rect x="42.5" y="14" width="2.6" height="15" fill="#F2B530"/><path d="M42.5 29 L43.8 32 L45.1 29Z" fill="#F6D9B0"/></g>';
+  if (acc === 'headset') s += '<path d="M19 31 C18 13 46 13 45 31" stroke="#241E2A" stroke-width="1.8" fill="none"/><rect x="17" y="28" width="4" height="7" fill="' + top + '"/><rect x="43" y="28" width="4" height="7" fill="' + top + '"/><path d="M19 35 Q20 41 28 41" stroke="#241E2A" stroke-width="1" fill="none"/>';
+  return s + '</svg>';
+}
+
+function pairsHTML(f, path){
+  var v = getP(S, path);
+  var list = Array.isArray(v) ? v : [];
+  var h = '<div class="pairs' + (f.wide ? ' wide' : '') + '" data-anchor="' + path + '">';
+  if (list.length) h += '<div class="pair-h" aria-hidden="true"><span>' + esc(T(f.kl)) + '</span><span>' + esc(T(f.vl)) + '</span></div>';
+  else h += '<p class="empty">' + esc(t('noRows')) + '</p>';
+  list.forEach(function(pr, i){
+    var rp = path + '.' + i; pr = Array.isArray(pr) ? pr : ['', ''];
+    h += '<div class="pair" data-row="' + rp + '"><input class="pk" type="text" data-path="' + rp + '.0" value="' + esc(pr[0] == null ? '' : pr[0]) + '" placeholder="' + esc(T(f.kph)) + '" aria-label="' + esc(T(f.kl)) + ' ' + (i + 1) + '" spellcheck="false" autocomplete="off">' +
+         '<input class="pv" type="text" data-path="' + rp + '.1" value="' + esc(pr[1] == null ? '' : pr[1]) + '" placeholder="' + esc(T(f.vph)) + '" aria-label="' + esc(T(f.vl)) + ' ' + (i + 1) + '" autocomplete="off">' + toolsHTML(path, i, list.length) + '</div>';
+  });
+  return h + '<button type="button" class="add" data-act="add-row" data-path="' + path + '">' + ICON.plus + esc(T(f.add)) + '</button></div>';
+}
+
+function timesHTML(f, path){
+  var list = asArr(getP(S, path));
+  return '<div class="times" data-anchor="' + path + '">' + list.map(function(x, i){
+    return '<span class="time"><input type="text" inputmode="numeric" maxlength="5" placeholder="06:30" autocomplete="off" data-path="' + path + '.' + i + '" value="' + esc(x) + '" aria-label="' + esc(T(f.l)) + ' ' + (i + 1) + '"><button type="button" class="ib x" data-act="del-row" data-path="' + path + '" data-i="' + i + '" aria-label="' + esc(t('remove')) + '">' + ICON.x + '</button></span>';
+  }).join('') + (list.length < 2 ? '<button type="button" class="add" data-act="add-time" data-path="' + path + '">' + ICON.plus + esc(t('addTime')) + '</button>' : '') + '</div>';
+}
+
+function quietHTML(f, path){
+  var q = asArr(getP(S, path));
+  function opt(sel){
+    var has = typeof sel === 'number' && sel >= 0 && sel <= 23;
+    var o = has ? '' : '<option value="" selected>—</option>';
+    for (var h = 0; h < 24; h++) o += '<option value="' + h + '"' + (has && sel === h ? ' selected' : '') + '>' + (h < 10 ? '0' : '') + h + ':00</option>';
+    return o;
+  }
+  return '<div class="quiet" data-anchor="' + path + '"><span>' + esc(t('from')) + '</span><select data-path="' + path + '.0" data-type="int" aria-label="' + esc(T(f.l)) + ' — ' + esc(t('from')) + '">' + opt(q[0]) + '</select><span>' + esc(t('to')) + '</span><select data-path="' + path + '.1" data-type="int" aria-label="' + esc(T(f.l)) + ' — ' + esc(t('to')) + '">' + opt(q[1]) + '</select></div>';
+}
+
+function radioHTML(f, path){
+  var v = getP(S, path);
+  return '<div class="radios" role="radiogroup" data-anchor="' + path + '">' + f.opts.map(function(o){
+    return '<label class="radio' + (v === o[0] ? ' on' : '') + '"><input type="radio" name="r-' + path + '" value="' + esc(o[0]) + '" data-path="' + path + '"' + (v === o[0] ? ' checked' : '') + '><span><b>' + esc(T(o[1])) + '</b><span class="help">' + esc(T(o[2])) + '</span></span></label>';
+  }).join('') + '</div>';
+}
+
+function newsHTML(f, path){
+  var v = getP(S, path);
+  var pack = typeof v === 'string';
+  var h = '<div class="seg2" role="radiogroup"><label><input type="radio" name="nf-mode" value="pack" data-change="news-mode"' + (pack ? ' checked' : '') + '> ' + esc(t('nfPack')) + '</label>' +
+          '<label><input type="radio" name="nf-mode" value="own" data-change="news-mode"' + (pack ? '' : ' checked') + '> ' + esc(t('nfOwn')) + '</label></div>';
+  if (pack) h += '<input type="text" data-path="' + path + '" value="' + esc(v) + '" list="dl-packs" placeholder="default:us-beauty-culture" spellcheck="false" autocomplete="off" aria-label="' + esc(t('nfPack')) + '"><p class="help" style="margin-top:6px">' + esc(t('nfPackHelp')) + '</p>';
+  else h += pairsHTML(NF_SPEC, path);
+  return h;
+}
+
+function briefHTML(f, path, id, desc){
+  return '<div class="brief-tools"><button type="button" class="btn primary" data-act="draft-brief">' + esc(t('draft')) + '</button><button type="button" class="btn" data-act="dl-brief">' + esc(t('dlBrief')) + '</button></div>' +
+    '<p class="brief-uses">' + esc(t('briefUses')) + '</p>' +
+    '<textarea id="' + id + '" class="mono" data-path="' + path + '" rows="28" placeholder="' + esc(t('briefPh')) + '"' + desc + ' spellcheck="true">' + esc(getP(S, path) || '') + '</textarea>';
+}
+
+function extraHTML(sec){
+  if (sec.id === 'creative') return '<div class="extra"><button type="button" class="btn ghost" data-act="reset-creative">' + esc(t('resetCreative')) + '</button></div>';
+  if (sec.id === 'calendar'){
+    var h = '<div class="extra"><button type="button" class="btn ghost" data-act="sort-occ">' + esc(t('sortDates')) + '</button>';
+    if (str(getP(S, 'market.country')).toUpperCase() === 'VN') h += '<button type="button" class="btn ghost" data-act="add-vn-women">' + esc(t('addVnWomen')) + '</button>';
+    return h + '</div>';
+  }
+  return '';
+}
+
+/* =====================================================================
+   Page rendering
+   ===================================================================== */
+function renderHeader(){
+  $('#top').innerHTML =
+    '<div class="top-in">' +
+      '<div class="id"><span class="mark" aria-hidden="true"></span><div class="id-t"><div class="eyebrow" id="h-agency"></div><div class="bname" id="h-brand"></div></div></div>' +
+      '<div class="prog" aria-hidden="true"><div class="bar"><i id="h-bar"></i></div><div class="prog-t" id="h-prog"></div></div>' +
+      '<div class="acts">' +
+        '<span class="saved" id="saved" role="status" aria-live="polite"><span class="saved-t"></span></span>' +
+        '<button type="button" class="btn ghost miss-md js-miss" data-act="toggle-miss"></button>' +
+        '<div class="seg" role="group" aria-label="' + esc(t('language')) + '"><button type="button" data-act="lang" data-lang="en" aria-pressed="' + (UI.lang === 'en') + '">EN</button><button type="button" data-act="lang" data-lang="vi" aria-pressed="' + (UI.lang === 'vi') + '">VI</button></div>' +
+        '<div class="menu-wrap"><button type="button" class="btn" data-act="menu" data-menu="m-import" aria-haspopup="true" aria-expanded="false">' + esc(t('imp')) + ICON.down + '</button>' +
+          '<div class="menu" id="m-import" hidden role="menu">' +
+            '<button type="button" role="menuitem" data-act="open-file">' + esc(t('openFile')) + '</button>' +
+            '<button type="button" role="menuitem" data-act="paste-json">' + esc(t('pasteJson')) + '</button><hr>' +
+            '<button type="button" role="menuitem" data-act="load-example">' + esc(t('loadExample')) + '<span class="sub">' + esc(t('loadExampleSub')) + '</span></button>' +
+          '</div></div>' +
+        '<div class="menu-wrap"><button type="button" class="btn primary" data-act="menu" data-menu="m-export" aria-haspopup="true" aria-expanded="false">' + esc(t('exp')) + ICON.down + '</button>' +
+          '<div class="menu" id="m-export" hidden role="menu">' +
+            '<button type="button" role="menuitem" data-act="dl-json">' + esc(t('dlProfile')) + '</button>' +
+            '<button type="button" role="menuitem" data-act="dl-brief">' + esc(t('dlBrief')) + '</button>' +
+            '<button type="button" role="menuitem" data-act="copy-json">' + esc(t('copyJson')) + '</button>' +
+          '</div></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="stepbar"><button type="button" class="stepbtn" data-act="toggle-steps" aria-expanded="false" id="h-step"></button><button type="button" class="btn ghost missbtn js-miss" data-act="toggle-miss"></button></div>' +
+    '<div class="mbar" aria-hidden="true"><i id="h-mbar"></i></div>';
+  showSaved();
+  setHH();
+}
+function setHH(){ var h = $('#top').offsetHeight; if (h) document.documentElement.style.setProperty('--hh', h + 'px'); }
+
+function renderMain(keepScroll){
+  var sec = SEC_BY_ID[UI.step] || SECTIONS[0];
+  var idx = SECTIONS.indexOf(sec);
+  REG = {};
+  var h = '<div class="wrap"><div class="sec-head"><p class="eyebrow">' + esc(t('stepOf', {n:idx + 1, m:SECTIONS.length})) + '</p><h1>' + esc(T(sec.t)) + '</h1><p class="intro">' + esc(T(sec.intro)) + '</p><p class="sec-status" id="sec-status"></p></div>';
+  if (sec.id === 'launch') h += launchHTML();
+  else h += '<div class="grid">' + sec.fields.map(function(f){ return fieldHTML(f, f.k); }).join('') + '</div>' + extraHTML(sec);
+  var prev = SECTIONS[idx - 1], next = SECTIONS[idx + 1];
+  h += '<nav class="nav" aria-label="' + esc(t('steps')) + '">' +
+    (prev ? '<button type="button" class="btn ghost" data-act="goto" data-sec="' + prev.id + '">' + ICON.prev + '<span>' + esc(t('prev')) + '<span class="sub">' + esc(T(prev.t)) + '</span></span></button>' : '') +
+    (next ? '<button type="button" class="btn primary next" data-act="goto" data-sec="' + next.id + '"><span>' + esc(t('next')) + '<span class="sub">' + esc(T(next.t)) + '</span></span>' + ICON.next + '</button>' : '') +
+    '</nav></div>';
+  var y = window.scrollY;
+  $('#main').innerHTML = h;
+  if (keepScroll) window.scrollTo(0, y);
+}
+
+function renderAll(){
+  document.documentElement.lang = UI.lang;
+  document.title = t('setup');
+  renderHeader();
+  renderMain();
+  refreshStatus();
+}
+
+/* =====================================================================
+   Completeness and checks
+   ===================================================================== */
+function rowItemLabel(f, i, sf){ return t('rowLabel', {item:T(f.item), i:i + 1}) + ' · ' + T(sf.l); }
+function status(){
+  var req = [];
+  SECTIONS.forEach(function(sec){
+    sec.fields.forEach(function(f){
+      if (f.t === 'rows' || f.t === 'crew'){
+        var list = asArr(getP(S, f.k));
+        if (f.minOne) req.push({sec:sec.id, path:f.k, label:T(f.l), ok:list.length > 0});
+        list.forEach(function(row, i){
+          f.fields.forEach(function(sf){ if (sf.req) req.push({sec:sec.id, path:f.k + '.' + i + '.' + sf.k, label:rowItemLabel(f, i, sf), ok:filled(isObj(row) ? row[sf.k] : null)}); });
+        });
+      } else if (f.req){
+        req.push({sec:sec.id, path:f.k, label:T(f.l), ok:filled(getP(S, f.k))});
+      }
+    });
+  });
+  var per = {};
+  SECTIONS.forEach(function(s){ per[s.id] = {n:0, ok:0, any:s.fields.some(function(f){ return filled(getP(S, f.k)); })}; });
+  req.forEach(function(r){ per[r.sec].n++; if (r.ok) per[r.sec].ok++; });
+  var chk = checks();
+  var done = req.filter(function(r){ return r.ok; }).length;
+  return {req:req, per:per, chk:chk, total:req.length, done:done};
+}
+
+function checks(){
+  var out = [];
+  function add(sec, path, level, msg){ out.push({sec:sec, path:path, level:level, msg:msg}); }
+  function lab(k){ return SPEC[k] ? T(SPEC[k].l) : k; }
+  var urlRe = /^https?:\/\/[^\s/?#]+\.[^\s/?#]+(?:[/?#]\S*)?$/i;
+  var domRe = /^(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$/i;
+  var asinRe = /^[A-Z0-9]{10}$/i;
+
+  [['brand','brand.website'],['sources','sources.mentions_feed'],['schedule','delivery.site_url']].forEach(function(a){ var v = str(getP(S, a[1])); if (v && !urlRe.test(v)) add(a[0], a[1], 'err', t('chkUrl', {f:lab(a[1])})); });
+  [['products','catalog.shopify_domain'],['sources','sources.reviews.judgeme_shop']].forEach(function(a){ var v = str(getP(S, a[1])); if (v && !domRe.test(v)) add(a[0], a[1], 'err', t('chkDomain', {f:lab(a[1])})); });
+  var jm = str(getP(S, 'sources.reviews.judgeme_shop')); if (jm && domRe.test(jm) && !/\.myshopify\.com$/i.test(jm)) add('sources', 'sources.reviews.judgeme_shop', 'warn', t('chkJudgeme'));
+
+  ['agency.office_tz', 'schedule.team_tz'].forEach(function(k){ var v = str(getP(S, k)); if (v && !validTz(v)) add(SPEC[k].sec, k, 'err', t('chkTz', {f:lab(k)})); });
+
+  var times = getP(S, 'schedule.reports');
+  asArr(times).forEach(function(x, i){ if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(str(x))) add('schedule', 'schedule.reports.' + i, 'err', t('chkTime', {i:i + 1})); });
+  if (asArr(times).length > 2) add('schedule', 'schedule.reports', 'warn', t('chkTwoTimes'));
+  var q = getP(S, 'schedule.quiet_hours');
+  if (q !== undefined){ q = asArr(q); if (q.length !== 2 || q.some(function(h){ return typeof h !== 'number' || h < 0 || h > 23 || h % 1; })) add('schedule', 'schedule.quiet_hours', 'err', t('chkQuiet')); }
+  var ad = getP(S, 'schedule.adspy_every_min'); if (ad !== undefined && !(typeof ad === 'number' && ad >= 1 && ad % 1 === 0)) add('schedule', 'schedule.adspy_every_min', 'err', t('chkAdspy'));
+
+  var repoRe = /^[\w.-]+\/[\w.-]+$/;
+  ['delivery.brain_repo', 'delivery.site_repo'].forEach(function(k){ var v = str(getP(S, k)); if (v && !repoRe.test(v)) add('schedule', k, 'err', t('chkRepo', {f:lab(k)})); });
+  var br = str(getP(S, 'delivery.brain_repo')), sr = str(getP(S, 'delivery.site_repo'));
+  if (br && sr && br.toLowerCase() === sr.toLowerCase()) add('schedule', 'delivery.site_repo', 'err', t('chkSameRepo'));
+
+  var hs = asArr(getP(S, 'content.instagram_hashtags')); if (hs.length > 12) add('content', 'content.instagram_hashtags', 'warn', t('chkHash', {n:hs.length}));
+
+  var lg = str(getP(S, 'market.language')); if (lg && !/^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$/.test(lg)) add('market', 'market.language', 'warn', t('chkLang'));
+  var cu = str(getP(S, 'market.currency')); if (cu && !/^[A-Z]{3}$/.test(cu)) add('market', 'market.currency', 'warn', t('chkCur'));
+  var co = str(getP(S, 'market.country')); if (co && !/^[A-Z]{2}$/.test(co)) add('market', 'market.country', 'warn', t('chkCountry'));
+
+  asArr(getP(S, 'products')).forEach(function(p, i){
+    if (!isObj(p)) return;
+    var u = str(p.url); if (u && !urlRe.test(u)) add('products', 'products.' + i + '.url', 'err', t('chkUrl', {f:t('rowLabel', {item:T(SPEC.products.item), i:i + 1}) + ' · ' + T(L('Product page','Trang sản phẩm'))}));
+    var a = str(p.asin); if (a && !asinRe.test(a)) add('products', 'products.' + i + '.asin', 'warn', t('chkAsin', {f:t('rowLabel', {item:T(SPEC.products.item), i:i + 1}), v:a}));
+  });
+  ['sources.reviews.amazon_ours', 'sources.reviews.amazon_peers'].forEach(function(k){
+    asArr(getP(S, k)).forEach(function(r, i){ var a = str(isObj(r) ? r.asin : ''); if (a && !asinRe.test(a)) add('sources', k + '.' + i + '.asin', 'warn', t('chkAsin', {f:T(SPEC[k].l) + ' ' + (i + 1), v:a})); });
+  });
+  ['competitors.peers', 'competitors.performance'].forEach(function(k){
+    asArr(getP(S, k)).forEach(function(r, i){ var d = str(isObj(r) ? r.domain : ''); if (d && !domRe.test(d)) add('competitors', k + '.' + i + '.domain', 'err', t('chkDomain', {f:t('rowLabel', {item:T(SPEC[k].item), i:i + 1})})); });
+  });
+
+  asArr(getP(S, 'calendar.occasions')).forEach(function(o, i){
+    if (!isObj(o)) return;
+    var d = str(o.date), nm = t('rowLabel', {item:T(SPEC['calendar.occasions'].item), i:i + 1}) + (str(o.name) ? ' (' + str(o.name) + ')' : '');
+    if (d && !/^\d{4}-\d{2}-\d{2}$/.test(d)) add('calendar', 'calendar.occasions.' + i + '.date', 'err', t('chkDate', {f:nm}));
+    else if (!d && (str(o.name) || str(o.note))) add('calendar', 'calendar.occasions.' + i + '.date', 'err', t('chkNoDate', {f:nm}));
+  });
+
+  ['creative.angles', 'creative.concepts', 'sources.voice_peer_queries'].forEach(function(k){
+    var v = getP(S, k); if (!Array.isArray(v)) return;
+    var seen = {};
+    v.forEach(function(pr, i){
+      var key = str(Array.isArray(pr) ? pr[0] : '');
+      if (!key){ if (str(Array.isArray(pr) ? pr[1] : '')) add(SPEC[k].sec, k + '.' + i + '.0', 'err', t('chkPairEmpty', {f:T(SPEC[k].l), i:i + 1})); return; }
+      if (seen[key]) add(SPEC[k].sec, k + '.' + i + '.0', 'err', t('chkPairDup', {f:T(SPEC[k].l), k:key}));
+      seen[key] = 1;
+    });
+  });
+  var nf = getP(S, 'sources.news_feeds');
+  if (Array.isArray(nf)){
+    var seenF = {};
+    nf.forEach(function(pr, i){
+      var k = str(pr && pr[0]), u = str(pr && pr[1]);
+      if (!k && u) add('sources', 'sources.news_feeds.' + i + '.0', 'err', t('chkPairEmpty', {f:T(SPEC['sources.news_feeds'].l), i:i + 1}));
+      if (k && seenF[k]) add('sources', 'sources.news_feeds.' + i + '.0', 'err', t('chkPairDup', {f:T(SPEC['sources.news_feeds'].l), k:k}));
+      if (k) seenF[k] = 1;
+      if (u && !urlRe.test(u)) add('sources', 'sources.news_feeds.' + i + '.1', 'err', t('chkFeedUrl', {k:k || i + 1}));
+    });
+  }
+
+  var crew = asArr(getP(S, 'agency.crew')), seenC = {};
+  crew.forEach(function(c, i){
+    var id = str(isObj(c) ? c.id : '');
+    if (!id) return;
+    if (seenC[id]) add('agency', 'agency.crew.' + i + '.id', 'err', t('chkCrewDup', {k:id}));
+    else if (CREW_IDS.indexOf(id) < 0) add('agency', 'agency.crew.' + i + '.id', 'warn', t('chkCrewUnknown', {k:id}));
+    seenC[id] = 1;
+  });
+
+  /* the validator's softer warnings */
+  if (!asArr(getP(S, 'competitors.peers')).length && !asArr(getP(S, 'competitors.performance')).length) add('competitors', 'competitors.peers', 'warn', t('chkNoComp'));
+  if (!asArr(getP(S, 'audience.personas')).length) add('audience', 'audience.personas', 'warn', t('chkNoPersona'));
+  if (!asArr(getP(S, 'products')).length && !str(getP(S, 'catalog.shopify_domain'))) add('products', 'products', 'warn', t('chkNoProducts'));
+  if (!filled(getP(S, 'sources.news_feeds')) && !asArr(getP(S, 'sources.news_queries')).length) add('sources', 'sources.news_feeds', 'warn', t('chkNoNews'));
+  if (!str(getP(S, 'standing_brief'))) add('brief', 'standing_brief', 'warn', t('chkBrief'));
+  return out;
+}
+
+function refreshStatus(){
+  var st = status();
+  var brand = str(getP(S, 'brand.name')), agency = str(getP(S, 'agency.name'));
+  $('#h-brand').textContent = brand || t('yourBrand');
+  $('#h-agency').textContent = t('setup') + (agency ? ' · ' + agency : '');
+  var pct = st.total ? Math.round(st.done / st.total * 100) : 0;
+  $('#h-bar').style.width = pct + '%';
+  $('#h-mbar').style.width = pct + '%';
+  $('#h-prog').textContent = t('reqOf', {a:st.done, b:st.total});
+  var errs = st.chk.filter(function(c){ return c.level === 'err'; }).length;
+  var nFix = st.total - st.done + errs;
+  $$('.js-miss').forEach(function(b){ b.textContent = nFix ? t('toFix', {n:nFix}) : '✓ ' + t('ready'); b.setAttribute('aria-label', t('missing') + ': ' + nFix); });
+
+  /* steps: built once per language, then updated in place so a click in flight is never swallowed */
+  var side = $('#side');
+  if (side.dataset.lang !== UI.lang || !$('.steps', side)){
+    side.dataset.lang = UI.lang;
+    side.innerHTML = '<div class="side-h">' + esc(t('steps')) + '</div><div class="steps">' + SECTIONS.map(function(s, i){
+      return '<button type="button" class="step" data-act="goto" data-sec="' + s.id + '"><span class="num">' + (i < 9 ? '0' : '') + (i + 1) + '</span><span class="nm">' + esc(T(s.t)) + '</span><span class="cnt"></span></button>';
+    }).join('') + '</div><div class="side-f"><button type="button" class="link danger" data-act="start-over">' + esc(t('startOver')) + '</button><p class="tiny">' + esc(t('localNote')) + '</p></div>';
+  }
+  SECTIONS.forEach(function(s){
+    var c = st.per[s.id], cnt, done = false;
+    if (s.id === 'launch'){ done = nFix === 0; cnt = done ? ICON.check : esc(t('nLeft', {n:nFix})); }
+    else if (c.n){ done = c.ok === c.n; cnt = done ? ICON.check : c.ok + '/' + c.n; }
+    else cnt = (c.any ? '<span class="some" aria-hidden="true"></span>' : '') + esc(t('optional'));
+    var b = $('.step[data-sec="' + s.id + '"]', side);
+    b.classList.toggle('cur', s.id === UI.step);
+    b.classList.toggle('done', done);
+    if (s.id === UI.step) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+    var ce = $('.cnt', b);
+    if (ce.dataset.h !== cnt){ ce.dataset.h = cnt; ce.innerHTML = cnt; }
+  });
+
+  /* mobile step button */
+  var sec = SEC_BY_ID[UI.step] || SECTIONS[0], idx = SECTIONS.indexOf(sec), pc = st.per[sec.id];
+  $('#h-step').innerHTML = '<span class="c">' + esc(t('stepShort', {n:idx + 1, m:SECTIONS.length})) + '</span><span class="t">' + esc(T(sec.t)) + '</span><span class="c">' + (pc.n ? pc.ok + '/' + pc.n : '') + '</span>' + ICON.down;
+
+  /* section status */
+  var ss = $('#sec-status');
+  if (ss){
+    if (sec.id === 'launch') ss.innerHTML = '';
+    else if (pc.n) ss.innerHTML = '<span class="bar"><i style="width:' + Math.round(pc.ok / pc.n * 100) + '%"></i></span>' + esc(t('reqOf', {a:pc.ok, b:pc.n}));
+    else ss.textContent = T(L('Every field in this step is optional.','Mọi mục trong bước này đều không bắt buộc.'));
+  }
+
+  /* missing panel */
+  var req = st.req.filter(function(r){ return !r.ok; });
+  var err = st.chk.filter(function(c){ return c.level === 'err'; });
+  var warn = st.chk.filter(function(c){ return c.level === 'warn'; });
+  function grp(title, list, cls){
+    if (!list.length) return '';
+    return '<h3>' + esc(title) + '</h3><ul>' + list.map(function(x){
+      return '<li><button type="button" class="mi ' + cls + '" data-act="jump" data-sec="' + x.sec + '" data-path="' + esc(x.path) + '"><span class="dot" aria-hidden="true"></span><span><span class="sec">' + esc(T(SEC_BY_ID[x.sec].t)) + '</span>' + esc(x.label || x.msg) + '</span></button></li>';
+    }).join('') + '</ul>';
+  }
+  var missHTML = '<div class="miss-h"><h2>' + esc(t('missing')) + '</h2><span class="badge' + (nFix ? '' : ' ok') + '">' + nFix + '</span><button type="button" class="ib miss-close" data-act="toggle-miss" aria-label="' + esc(t('close')) + '">' + ICON.x + '</button></div>' +
+    (nFix ? '' : '<p class="all-good">' + esc(t('allGood')) + '</p>') +
+    grp(t('grpReq'), req, 'req') + grp(t('grpErr'), err, 'err') + grp(t('grpWarn'), warn, 'warn');
+  var missEl = $('#miss');
+  if (missEl._h !== missHTML){ missEl._h = missHTML; missEl.innerHTML = missHTML; }
+  return st;
+}
+
+/* =====================================================================
+   Launch checklist
+   ===================================================================== */
+function secretList(){
+  function has(k){ return filled(getP(S, k)); }
+  var slack = str(getP(S, 'team.lead.slack_id')) || asArr(getP(S, 'team.members')).some(function(m){ return isObj(m) && str(m.slack_id); });
+  var site = str(getP(S, 'delivery.site_repo')) || 'owner/site-repo';
+  return [
+    {names:['ANTHROPIC_API_KEY'], req:1, d:t('sAnth')},
+    {names:['AGENCY_PASSPHRASE'], req:1, d:t('sPass')},
+    {names:['PUBLISH_TOKEN'], req:1, d:t('sPub', {site:site})},
+    {names:['FOREPLAY_API_KEY'], rec:1, on:has('competitors.peers') || has('competitors.performance'), d:t('sFore'), why:t('wFore')},
+    {names:['YOUTUBE_API_KEY'], rec:1, on:has('sources.youtube_searches') || has('sources.voice_queries') || has('sources.voice_peer_queries'), d:t('sYt'), why:t('wYt')},
+    {names:['META_TOKEN', 'IG_USER_ID'], on:has('content.instagram_hashtags'), d:t('sMeta'), why:t('wMeta')},
+    {names:['APIFY_TOKEN'], on:has('content.tiktok_hashtags'), d:t('sApify'), why:t('wApify')},
+    {names:['AGENCY_SLACK_TOKEN'], on:!!slack, d:t('sSlack'), why:t('wSlack')},
+    {names:['OFFICE_TOKEN'], on:has('team.lead.name'), d:t('sOffice'), why:t('wOffice')}
+  ];
+}
+function codeHTML(cmd){
+  /* wrap only between words on narrow screens, never inside a flag like --profile */
+  var shown = cmd.split('\n').map(function(line){ return line.split(' ').map(function(w){ return '<span class="tk">' + esc(w) + '</span>'; }).join(' '); }).join('\n');
+  return '<div class="code"><pre><code>' + shown + '</code></pre><button type="button" class="btn" data-act="copy" data-copy="' + esc(cmd) + '">' + esc(t('copy')) + '</button></div>'; }
+function launchHTML(){
+  var st = status();
+  var nFix = st.total - st.done + st.chk.filter(function(c){ return c.level === 'err'; }).length;
+  function step(key, n, title, body){
+    var d = !!(UI.done && UI.done[key]);
+    return '<section class="ls' + (d ? ' is-done' : '') + '" data-ls="' + key + '"><div class="ls-h"><span class="ls-n">' + (d ? ICON.check : n) + '</span><h2>' + esc(title) + '</h2><label class="ls-done"><input type="checkbox" data-change="done" data-key="' + key + '"' + (d ? ' checked' : '') + '> ' + esc(t('done')) + '</label></div>' + body + '</section>';
+  }
+  var X = function(en, vi){ return T(L(en, vi)); };
+  var h = '<p class="trialnote">' + esc(X('This is the trial: your office runs on your computer, whenever you start it. Four of the seven specialists work; the rest of the office is there to see, locked.',
+    'Đây là bản dùng thử: văn phòng chạy trên máy của bạn, khi bạn bấm chạy. Bốn trong bảy chuyên viên làm việc; phần còn lại của văn phòng vẫn hiện ra, nhưng bị khoá.')) + '</p>';
+  h += step('profile', 1, t('l1t'), '<p class="status-line' + (nFix ? '' : ' ok') + '"><span class="dot" aria-hidden="true"></span>' + esc(nFix ? t('l1left', {n:nFix}) : t('l1ok')) + '</p>');
+  h += step('export', 2, t('l2t'), '<p>' + esc(t('l2b')) + '</p><div class="btnrow"><button type="button" class="btn primary" data-act="dl-json">' + esc(t('dlProfile')) + '</button></div>');
+  h += step('scaffold', 3, X('Build your office', 'Dựng văn phòng'), '<p>' + esc(X('In the skill folder, with profile.json beside it:', 'Trong thư mục skill, đặt profile.json bên cạnh:')) + '</p>' +
+       codeHTML('python3 scripts/scaffold.py --profile profile.json --out ~/Desktop/my-insight-cafe'));
+  h += step('key', 4, X('Add your Anthropic API key', 'Thêm API key của Anthropic'), '<p>' + esc(X('Paste it into agency/.env in the new folder. It stays on your computer. A report costs about $1 of Claude.',
+    'Dán vào agency/.env trong thư mục mới. Key chỉ nằm trên máy bạn. Mỗi báo cáo tốn khoảng $1 phí Claude.')) + ' <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener noreferrer">console.anthropic.com</a></p>');
+  h += step('first', 5, X('Run your first report', 'Chạy báo cáo đầu tiên'), '<p>' + esc(X('A few minutes later the office opens in your browser.', 'Vài phút sau văn phòng tự mở trên trình duyệt.')) + '</p>' +
+       codeHTML('cd ~/Desktop/my-insight-cafe\npython3 -m pip install -r agency/requirements.txt\npython3 -m agency.run'));
+  return '<div class="launch">' + h + '</div>';
+}
+
+/* =====================================================================
+   Standing brief draft
+   ===================================================================== */
+function draftBrief(){
+  var vi = UI.lang === 'vi';
+  function X(en, v){ return vi ? v : en; }
+  function s(k){ return str(getP(S, k)); }
+  function a(k){ return asArr(getP(S, k)).map(str).filter(Boolean); }
+  function dot(x){ return /[.!?…:;"”’']$/.test(x) ? x : x + '.'; }
+  var brand = s('brand.name') || X('the brand', 'thương hiệu');
+  var lead = s('team.lead.name');
+  var out = ['# Standing brief — ' + brand, ''];
+  out.push(lead
+    ? X("The agency's house rules. " + lead + "'s morning huddle overrides anything here for the day; this file is what still holds when " + lead + " hasn't said otherwise. Edit it freely — the next sweep uses it.",
+        'Nội quy của agency. Trong ngày, điều ' + lead + ' chốt ở buổi huddle buổi sáng được ưu tiên hơn mọi điều ở đây; khi ' + lead + ' chưa nói khác, tệp này vẫn là chuẩn. Cứ sửa thoải mái — lượt quét sau sẽ dùng bản mới.')
+    : X("The agency's house rules. The morning huddle overrides anything here for the day; otherwise this file holds. Edit it freely — the next sweep uses it.",
+        'Nội quy của agency. Trong ngày, buổi huddle buổi sáng được ưu tiên hơn mọi điều ở đây; còn lại, tệp này là chuẩn. Cứ sửa thoải mái — lượt quét sau sẽ dùng bản mới.'), '');
+
+  var b = [];
+  if (s('brand.category')) b.push('- ' + X('Category', 'Ngành hàng') + ': ' + dot(s('brand.category')));
+  if (s('brand.price_position')) b.push('- ' + X('Price position', 'Định vị giá') + ': ' + dot(s('brand.price_position')));
+  if (s('brand.benefit')) b.push('- ' + X('Brand benefit', 'Lợi ích thương hiệu') + ': **' + s('brand.benefit') + '**');
+  if (s('brand.signature')) b.push('- ' + X('Red thread on every asset', 'Sợi chỉ đỏ trên mọi ấn phẩm') + ': **' + s('brand.signature') + '**');
+  if (s('brand.one_liner') || b.length){
+    out.push(X('## The brand', '## Thương hiệu'));
+    if (s('brand.one_liner')) out.push(dot(s('brand.one_liner')), '');
+    out = out.concat(b); out.push('');
+  }
+
+  var se = [];
+  if (s('business.season_focus')) se.push('- ' + X('Focus', 'Trọng tâm') + ': **' + s('business.season_focus') + '**');
+  if (s('business.goals')) se.push('- ' + X('Goals', 'Mục tiêu') + ': ' + dot(s('business.goals')));
+  if (a('business.kpis').length) se.push('- ' + X('We are judged on', 'Được đánh giá bằng') + ': ' + a('business.kpis').join(', ') + '.');
+  if (a('business.channels').length) se.push('- ' + X('Channels', 'Kênh bán') + ': ' + a('business.channels').join(', ') + '.');
+  if (se.length){ out.push(X('## This season', '## Mùa này')); out = out.concat(se); out.push(''); }
+
+  var never = a('offers.never');
+  if (s('offers.rules') || never.length){
+    out.push(X('## Offer', '## Ưu đãi'), X('The only offer the agency may use. Copy quotes it exactly and invents nothing else.', 'Ưu đãi duy nhất agency được dùng. Nội dung trích nguyên văn và không tự nghĩ thêm ưu đãi khác.'), '');
+    if (s('offers.rules')) out.push('- ' + dot(s('offers.rules')));
+    if (never.length){ out.push('', '**' + X('Never', 'Không bao giờ') + ':**', ''); never.forEach(function(x){ out.push('- ' + x); }); }
+    out.push('');
+  }
+
+  var pil = a('content.pillars');
+  if (pil.length){ out.push(X('## Content pillars', '## Trụ cột nội dung'), X("Tag every play to exactly one pillar, or don't make it:", 'Gắn mỗi play với đúng một trụ cột, không thì đừng làm:'), ''); pil.forEach(function(x){ out.push('- **' + x + '**'); }); out.push(''); }
+
+  var per = asArr(getP(S, 'audience.personas')).filter(function(x){ return isObj(x) && (str(x.name) || str(x.description)); });
+  if (per.length || s('audience.insights')){
+    out.push(X('## Audiences', '## Chân dung khách hàng'));
+    if (per.length){ out.push(X('Tag every opportunity to one of these people:', 'Gắn mỗi cơ hội với một trong những người sau:'), ''); per.forEach(function(x){ out.push('- **' + (str(x.name) || '—') + '**' + (str(x.description) ? ' — ' + dot(str(x.description)) : '')); }); }
+    if (s('audience.insights')) out.push('', X('What we already know: ', 'Những gì đã biết: ') + dot(s('audience.insights')));
+    out.push('');
+  }
+
+  var vis = [];
+  if (s('brand.look')) vis.push('- ' + X('On brand', 'Đúng thương hiệu') + ': ' + dot(s('brand.look')));
+  if (s('brand.look_avoid')) vis.push('- ' + X('Avoid', 'Tránh') + ': ' + dot(s('brand.look_avoid')));
+  if (vis.length){ out.push(X('## Visual rules', '## Quy tắc hình ảnh')); out = out.concat(vis); out.push(''); }
+
+  var bw = a('brand.voice.banned_words'), noEx = getP(S, 'brand.voice.no_exclamation_marks') === true;
+  if (s('brand.voice.tone') || bw.length || noEx){
+    out.push(X('## Voice', '## Giọng văn'));
+    if (s('brand.voice.tone')) out.push(dot(s('brand.voice.tone')), '');
+    if (bw.length) out.push('- ' + X('Banned words', 'Từ cấm') + ': ' + bw.join(', ') + '.');
+    if (noEx) out.push('- ' + X('No exclamation marks in brand copy.', 'Không dùng dấu chấm than trong nội dung thương hiệu.'));
+    out.push('');
+  }
+
+  var cl = a('claims_never');
+  if (cl.length){ out.push(X('## Claims — never', '## Tuyên bố — không bao giờ')); cl.forEach(function(x){ out.push('- ' + x); }); out.push(''); }
+
+  var wd = [];
+  if (lead){
+    var role = s('team.lead.role');
+    wd.push('- **' + lead + '**' + (role ? ' (' + role + ')' : '') + ' — ' + (getP(S, 'delivery.dispatch_mode') === 'live'
+      ? X("leads the huddle and sets the day's priorities.", 'chủ trì huddle và chốt ưu tiên trong ngày.')
+      : X('leads the huddle; while dispatch is in preview, every ticket goes to ' + lead + ' first.', 'chủ trì huddle; khi đang ở chế độ xem trước, mọi ticket đến tay ' + lead + ' trước.')));
+  }
+  asArr(getP(S, 'team.members')).forEach(function(m){
+    if (!isObj(m) || !str(m.name)) return;
+    var lanes = asArr(m.lanes).map(str).filter(Boolean);
+    wd.push('- **' + str(m.name) + '** — ' + (str(m.owns) ? dot(str(m.owns)) : '') + (lanes.length ? ' ' + X('Lanes', 'Mảng việc') + ': ' + lanes.join(', ') + '.' : ''));
+  });
+  if (wd.length){ out.push(X('## Who does what', '## Ai làm gì')); out = out.concat(wd); out.push(''); }
+
+  return out.join('\n').replace(/\n{3,}/g, '\n\n').trim() + '\n';
+}
+
+/* =====================================================================
+   Actions
+   ===================================================================== */
+function changed(p, el){
+  save();
+  refreshStatus();
+  var m = p.match(/^(.+)\.(\d+)\.([^.]+)$/);
+  if (m && REG[m[1]] && REG[m[1]].titleKey === m[3]){
+    var nm = $('#main [data-row="' + cssq(m[1] + '.' + m[2]) + '"] .nm');
+    if (nm) nm.textContent = el && str(el.value) ? '· ' + str(el.value) : '';
+  }
+  if (el && el.dataset.redraw){
+    var a = $('#main [data-avatar="' + cssq(el.dataset.redraw) + '"]');
+    if (a) a.innerHTML = avatar(getP(S, el.dataset.redraw + '.look'));
+  }
+}
+function writeVal(el){
+  var p = el.dataset.path, ty = el.dataset.type;
+  if (!p) return;
+  if (el.type === 'checkbox'){
+    if (ty === 'flag'){ if (el.checked) setP(S, p, true); else delKey(S, p); }
+    else setP(S, p, el.checked);
+  } else if (el.type === 'radio'){
+    if (!el.checked) return;
+    setP(S, p, el.value);
+    var g = el.closest('.radios'); if (g) $$('.radio', g).forEach(function(l){ l.classList.toggle('on', l.contains(el)); });
+  } else if (ty === 'num' || ty === 'int'){
+    var sv2 = el.value.trim();
+    if (sv2 === ''){ if (/\.\d+$/.test(p)) return; delKey(S, p); }
+    else { var n = ty === 'int' ? parseInt(sv2, 10) : parseFloat(sv2); if (!isFinite(n)) return; setP(S, p, n); }
+  } else {
+    var v = el.value;
+    if (el.dataset.upper) v = v.toUpperCase();
+    setP(S, p, v);
+  }
+  changed(p, el);
+}
+
+function rerenderField(path, focusTag){
+  var f = REG[path];
+  var box = $('#main [data-field="' + cssq(path) + '"]');
+  if (!f || !box){ renderMain(true); refreshStatus(); return; }
+  var tmp = document.createElement('div');
+  tmp.innerHTML = fieldHTML(f, path);
+  box.parentNode.replaceChild(tmp.firstElementChild, box);
+  if (focusTag){ var inp = $('#main [data-tag-path="' + cssq(path) + '"]'); if (inp) inp.focus(); }
+}
+function normTag(x, mode){
+  x = str(x);
+  if (mode === 'handle') x = x.replace(/^https?:\/\/(www\.)?(instagram\.com|tiktok\.com)\//i, '').replace(/^@+/, '').replace(/[/?#].*$/, '').trim();
+  if (mode === 'hashtag') x = x.replace(/^#+/, '').replace(/\s+/g, '');
+  return x;
+}
+function addTags(path, raw, mode, focus){
+  var f = REG[path] || {};
+  var bits = f.split ? String(raw).split(/[,\n]+/) : String(raw).split(/\n+/);
+  var arr = getP(S, path);
+  if (!Array.isArray(arr)){ arr = []; setP(S, path, arr); }
+  bits.forEach(function(x){
+    x = normTag(x, mode);
+    if (!x) return;
+    if (arr.some(function(y){ return String(y).toLowerCase() === x.toLowerCase(); })) return;
+    arr.push(x);
+  });
+  save(); rerenderField(path, focus !== false); refreshStatus();
+}
+
+function newRow(path){
+  var f = REG[path] || SPEC[path] || {};
+  var arr = getP(S, path);
+  if (!Array.isArray(arr)){ arr = []; setP(S, path, arr); }
+  var item;
+  if (f.t === 'pairs' || f.t === 'newsfeeds'){
+    var id = '';
+    if (f.prefix){ var max = 0; arr.forEach(function(pr){ var k = str(pr && pr[0]); if (k.indexOf(f.prefix) === 0){ var n = parseInt(k.slice(f.prefix.length), 10); if (n > max) max = n; } }); id = f.prefix + (max + 1); }
+    item = [id, ''];
+  } else item = clone(f.newItem || {});
+  arr.push(item);
+  save(); renderMain(true); refreshStatus();
+  var row = $('#main [data-row="' + cssq(path + '.' + (arr.length - 1)) + '"]');
+  if (row){
+    var inp = row.querySelector(f.prefix ? '.pv' : 'input[type=text]:not([readonly]), textarea, input[type=date]');
+    row.scrollIntoView({block:'nearest'});
+    if (inp) inp.focus({preventScroll:true});
+  }
+}
+var lastRemoved = null;
+function removeRow(path, i){
+  var arr = getP(S, path); if (!Array.isArray(arr)) return;
+  var item = arr.splice(i, 1)[0];
+  lastRemoved = {path:path, i:i, item:item};
+  save(); renderMain(true); refreshStatus();
+  toast(t('removed'), {label:t('undo'), fn:function(){
+    if (!lastRemoved) return;
+    var a2 = getP(S, lastRemoved.path); if (!Array.isArray(a2)){ a2 = []; setP(S, lastRemoved.path, a2); }
+    a2.splice(Math.min(lastRemoved.i, a2.length), 0, lastRemoved.item);
+    lastRemoved = null; save(); renderMain(true); refreshStatus();
+  }});
+}
+function moveRow(path, i, d){
+  var arr = getP(S, path); if (!Array.isArray(arr)) return;
+  var j = i + d; if (j < 0 || j >= arr.length) return;
+  var x = arr[i]; arr[i] = arr[j]; arr[j] = x;
+  save(); renderMain(true); refreshStatus();
+  var b = $('#main [data-act="move"][data-path="' + cssq(path) + '"][data-i="' + j + '"][data-d="' + d + '"]');
+  if (!b || b.disabled) b = $('#main [data-act="move"][data-path="' + cssq(path) + '"][data-i="' + j + '"][data-d="' + (-d) + '"]');
+  if (b) b.focus({preventScroll:true});
+}
+
+function applyCountry(code){
+  if (code === '__other'){
+    UI.countryOther = true;
+    if (COUNTRIES[str(getP(S, 'market.country')).toUpperCase()]) setP(S, 'market.country', '');
+    save(); renderMain(true); refreshStatus();
+    var inp = $('#main input[data-path="market.country"]'); if (inp) inp.focus();
+    return;
+  }
+  UI.countryOther = false;
+  if (!code){ setP(S, 'market.country', ''); save(); renderMain(true); refreshStatus(); return; }
+  var c = COUNTRIES[code];
+  setP(S, 'market.country', code);
+  setP(S, 'market.language', c.lang);
+  setP(S, 'market.currency', c.cur);
+  setP(S, 'market.bing_mkt', c.bing);
+  setP(S, 'market.trends_geo', code);
+  setP(S, 'market.youtube_region', code);
+  setP(S, 'market.calendar', c.cal);
+  setP(S, 'market.global_moments', c.m.slice());
+  if (!str(getP(S, 'agency.office_tz'))) setP(S, 'agency.office_tz', c.tz[0]);
+  if (!str(getP(S, 'schedule.team_tz'))) setP(S, 'schedule.team_tz', c.tz[0]);
+  if (!str(getP(S, 'agency.report_language'))) setP(S, 'agency.report_language', c.rl);
+  save(); renderMain(true); refreshStatus();
+  toast(t('presetApplied', {c:T(c.n)}));
+}
+
+function goTo(id, focusPath){
+  if (!SEC_BY_ID[id]) return;
+  UI.step = id;
+  save();
+  renderMain();
+  refreshStatus();
+  closeOverlays();
+  try { history.replaceState(null, '', '#' + id); } catch (e) {}
+  if (focusPath) setTimeout(function(){ focusField(focusPath); }, 30);
+  else { window.scrollTo(0, 0); var m = $('#main'); if (m) m.focus({preventScroll:true}); }
+}
+function focusField(path){
+  var sels = ['[data-path="' + cssq(path) + '"]', '[data-tag-path="' + cssq(path) + '"]', '[data-anchor="' + cssq(path) + '"]', '[data-field="' + cssq(path) + '"]', '[data-row="' + cssq(path) + '"]'];
+  var el = null;
+  for (var i = 0; i < sels.length && !el; i++) el = $('#main ' + sels[i]);
+  if (!el){ window.scrollTo(0, 0); return; }
+  var box = el.closest('.field') || el;
+  box.scrollIntoView({block:'center'});
+  var foc = el.matches('input,textarea,select,button') ? el : el.querySelector('input:not([type=hidden]),textarea,select,button');
+  if (foc) foc.focus({preventScroll:true});
+  box.classList.remove('flash'); void box.offsetWidth; box.classList.add('flash');
+}
+
+function closeMenus(){ $$('.menu').forEach(function(m){ m.hidden = true; }); $$('[data-act="menu"]').forEach(function(b){ b.setAttribute('aria-expanded', 'false'); }); }
+function closeOverlays(){ document.body.classList.remove('steps-open', 'miss-open'); var sb = $('#h-step'); if (sb) sb.setAttribute('aria-expanded', 'false'); }
+
+var toastTimer = null;
+function toast(msg, action){
+  var el = $('#toast');
+  el.innerHTML = '<span>' + esc(msg) + '</span>' + (action ? '<button type="button">' + esc(action.label) + '</button>' : '');
+  if (action) el.querySelector('button').onclick = function(){ action.fn(); el.classList.remove('on'); };
+  el.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ el.classList.remove('on'); }, action ? 7000 : 2800);
+}
+
+var modalResolve = null, modalPrevFocus = null;
+function openModal(o){
+  modalPrevFocus = document.activeElement;
+  var m = $('#modal');
+  m.className = 'modal';
+  m.innerHTML = '<div class="scrim2" data-m="cancel"></div><div class="dlg' + (o.wide ? ' wide' : '') + '" role="dialog" aria-modal="true" aria-labelledby="dlg-t"><h2 id="dlg-t">' + esc(o.title) + '</h2>' + o.body +
+    '<div class="dlg-f"><button type="button" class="btn ghost" data-m="cancel">' + esc(o.cancel || t('cancel')) + '</button><button type="button" class="btn ' + (o.danger ? 'danger' : 'primary') + '" data-m="ok">' + esc(o.ok || t('ok')) + '</button></div></div>';
+  $$('[data-m]', m).forEach(function(b){
+    b.addEventListener('click', function(){
+      if (b.dataset.m === 'ok'){ if (o.onOk && o.onOk() === false) return; closeModal(); if (o.resolve) o.resolve(true); }
+      else { closeModal(); if (o.resolve) o.resolve(false); }
+    });
+  });
+  modalResolve = function(){ closeModal(); if (o.resolve) o.resolve(false); };
+  var f = $(o.focus || '[data-m="ok"]', m); if (f) f.focus();
+}
+function closeModal(){ var m = $('#modal'); m.className = ''; m.innerHTML = ''; modalResolve = null; if (modalPrevFocus && modalPrevFocus.focus) try { modalPrevFocus.focus({preventScroll:true}); } catch (e) {} }
+function confirmBox(title, body, okText, danger){
+  return new Promise(function(res){ openModal({title:title, body:'<p>' + esc(body) + '</p>', ok:okText, danger:danger, resolve:res}); });
+}
+
+function download(name, text, type){
+  var blob = new Blob([text], {type:type});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = name; a.style.display = 'none';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+  toast(t('downloaded', {f:name}));
+}
+function copyText(text){
+  function fallback(){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '-1000px';
+    document.body.appendChild(ta); ta.select();
+    var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+    ta.remove();
+    toast(ok ? t('copied') : t('copyFail'));
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function(){ toast(t('copied')); }, fallback);
+  else fallback();
+}
+
+function replaceState(obj, msg){
+  S = fromProfile(obj);
+  UI.lastDraft = ''; UI.countryOther = false; UI.done = {};
+  save(); renderAll(); toast(msg);
+}
+function importText(txt){
+  var obj;
+  try { obj = JSON.parse(txt); } catch (e) { return Promise.resolve({ok:false, err:t('badJson', {e:e.message})}); }
+  if (!isObj(obj)) return Promise.resolve({ok:false, err:t('notObject')});
+  var known = ['agency', 'brand', 'business', 'market', 'audience', 'products', 'competitors', 'team', 'delivery', 'schedule'].some(function(k){ return k in obj; });
+  var p = Promise.resolve(true);
+  if (!known) p = p.then(function(){ return confirmBox(t('notProfileT'), t('notProfileB'), t('importAnyway')); });
+  return p.then(function(go){
+    if (!go) return {ok:false, cancelled:true};
+    return (isPristine() ? Promise.resolve(true) : confirmBox(t('replaceT'), t('replaceB', {what:t('theImport')}), t('replace'), true)).then(function(ok){
+      if (!ok) return {ok:false, cancelled:true};
+      replaceState(obj, t('imported', {b:str(getP(obj, 'brand.name')) || 'profile.json'}));
+      if (obj.schema != null && obj.schema !== 1) setTimeout(function(){ toast(t('schemaWarn', {v:obj.schema})); }, 2900);
+      return {ok:true};
+    });
+  });
+}
+function pasteModal(){
+  openModal({title:t('pasteT'), wide:true, body:'<p>' + esc(t('pasteB')) + '</p><textarea id="paste-in" spellcheck="false" aria-label="JSON"></textarea><p class="err" id="paste-err" hidden></p>', ok:t('pasteBtn'), focus:'#paste-in',
+    onOk:function(){
+      var txt = $('#paste-in').value;
+      var errEl = $('#paste-err');
+      var obj; try { obj = JSON.parse(txt); } catch (e) { errEl.textContent = t('badJson', {e:e.message}); errEl.hidden = false; return false; }
+      if (!isObj(obj)){ errEl.textContent = t('notObject'); errEl.hidden = false; return false; }
+      setTimeout(function(){ importText(txt); }, 0);
+      return true;
+    }});
+}
+
+function draftAction(){
+  var cur = str(getP(S, 'standing_brief'));
+  var draft = draftBrief();
+  var go = (cur && cur !== str(UI.lastDraft)) ? confirmBox(t('replaceBriefT'), t('replaceBriefB'), t('replace'), true) : Promise.resolve(true);
+  go.then(function(ok){
+    if (!ok) return;
+    setP(S, 'standing_brief', draft);
+    UI.lastDraft = draft;
+    save();
+    var ta = $('#main textarea[data-path="standing_brief"]'); if (ta){ ta.value = draft; ta.scrollTop = 0; }
+    refreshStatus();
+    toast(t('drafted'));
+  });
+}
+
+/* =====================================================================
+   Events
+   ===================================================================== */
+document.addEventListener('click', function(e){
+  var target = e.target;
+  if (!target.closest('.menu-wrap')) closeMenus();
+  if (target.classList && target.classList.contains('tags')){ var ti = $('.tag-in', target); if (ti) ti.focus(); return; }
+  var b = target.closest('[data-act]');
+  if (!b || b.tagName === 'INPUT' || b.tagName === 'SELECT') return;
+  var act = b.dataset.act, path = b.dataset.path, i = parseInt(b.dataset.i, 10);
+  switch (act){
+    case 'menu':
+      var m = $('#' + b.dataset.menu), open = m.hidden;
+      closeMenus(); m.hidden = !open; b.setAttribute('aria-expanded', String(open));
+      if (open){ var first = $('button', m); if (first) first.focus(); }
+      break;
+    case 'lang': UI.lang = b.dataset.lang === 'vi' ? 'vi' : 'en'; closeMenus(); save(); renderAll(); break;
+    case 'open-file': closeMenus(); $('#file').click(); break;
+    case 'paste-json': closeMenus(); pasteModal(); break;
+    case 'load-example':
+      closeMenus();
+      if (!EXAMPLE){ toast(t('readFail')); break; }
+      (isPristine() ? Promise.resolve(true) : confirmBox(t('replaceT'), t('replaceB', {what:t('theExample')}), t('replace'), true)).then(function(ok){ if (ok) replaceState(EXAMPLE, t('exampleLoaded')); });
+      break;
+    case 'dl-json': closeMenus(); download('profile.json', profileJSON(), 'application/json'); break;
+    case 'dl-brief':
+      closeMenus();
+      var brief = getP(S, 'standing_brief');
+      if (!str(brief)){ toast(t('briefEmpty')); break; }
+      download('standing-brief.md', String(brief).replace(/\s*$/, '') + '\n', 'text/markdown');
+      break;
+    case 'copy-json': closeMenus(); copyText(profileJSON()); break;
+    case 'copy': copyText(b.dataset.copy || ''); break;
+    case 'start-over':
+      closeOverlays();
+      confirmBox(t('startOverT'), t('startOverB'), t('startOver'), true).then(function(ok){
+        if (!ok) return;
+        UI.step = 'agency';
+        try { history.replaceState(null, '', '#agency'); } catch (e2) {}
+        replaceState(freshProfile(), t('startedOver'));
+        window.scrollTo(0, 0);
+      });
+      break;
+    case 'goto': goTo(b.dataset.sec); break;
+    case 'jump': goTo(b.dataset.sec, path); break;
+    case 'toggle-steps':
+      var open2 = !document.body.classList.contains('steps-open');
+      document.body.classList.remove('miss-open');
+      document.body.classList.toggle('steps-open', open2); b.setAttribute('aria-expanded', String(open2));
+      break;
+    case 'toggle-miss':
+      var openM = !document.body.classList.contains('miss-open');
+      document.body.classList.remove('steps-open');
+      document.body.classList.toggle('miss-open', openM);
+      if (openM){ var mc = $('#miss .mi') || $('#miss .miss-close'); if (mc) mc.focus({preventScroll:true}); }
+      break;
+    case 'open-miss':
+      if (window.matchMedia('(min-width:1280px)').matches){ var mp = $('#miss'); mp.classList.remove('flash'); void mp.offsetWidth; mp.classList.add('flash'); var f1 = $('#miss .mi'); if (f1) f1.focus(); }
+      else { document.body.classList.add('miss-open'); var f2 = $('#miss .mi'); if (f2) f2.focus({preventScroll:true}); }
+      break;
+    case 'close-overlays': closeOverlays(); break;
+    case 'add-row': newRow(path); break;
+    case 'del-row': removeRow(path, i); break;
+    case 'move': moveRow(path, i, parseInt(b.dataset.d, 10)); break;
+    case 'del-tag':
+      var arr = getP(S, path);
+      if (Array.isArray(arr)){ arr.splice(i, 1); save(); rerenderField(path, true); refreshStatus(); }
+      break;
+    case 'moment':
+      var mm = b.dataset.m, list = getP(S, 'market.global_moments');
+      if (!Array.isArray(list)){ list = []; setP(S, 'market.global_moments', list); }
+      var at = list.indexOf(mm);
+      if (at >= 0) list.splice(at, 1); else list.push(mm);
+      save(); rerenderField('market.global_moments'); refreshStatus();
+      var nb = $('#main .mo[data-m="' + cssq(mm) + '"]'); if (nb) nb.focus();
+      break;
+    case 'add-time':
+      var times = getP(S, path); if (!Array.isArray(times)){ times = []; setP(S, path, times); }
+      times.push(times.length ? '18:30' : '06:30');
+      save(); renderMain(true); refreshStatus();
+      break;
+    case 'clear-key': delKey(S, path); save(); renderMain(true); refreshStatus(); break;
+    case 'std-crew': setP(S, 'agency.crew', clone(STD_CREW)); save(); renderMain(true); refreshStatus(); break;
+    case 'suggest-url':
+      var site = str(getP(S, 'delivery.site_repo'));
+      if (!/^[\w.-]+\/[\w.-]+$/.test(site)){ focusField('delivery.site_repo'); break; }
+      var own = site.split('/')[0], rep = site.split('/')[1];
+      var u = rep.toLowerCase() === (own + '.github.io').toLowerCase() ? 'https://' + rep + '/' : 'https://' + own + '.github.io/' + rep + '/';
+      setP(S, 'delivery.site_url', u); save(); rerenderField('delivery.site_url'); refreshStatus();
+      break;
+    case 'reset-creative':
+      confirmBox(t('resetCreativeT'), t('resetCreativeB'), t('replace'), true).then(function(ok){
+        if (!ok) return;
+        setP(S, 'creative.angles', Object.keys(GEN_ANGLES).map(function(k){ return [k, GEN_ANGLES[k]]; }));
+        setP(S, 'creative.concepts', Object.keys(GEN_CONCEPTS).map(function(k){ return [k, GEN_CONCEPTS[k]]; }));
+        setP(S, 'creative.doctrine', GEN_DOCTRINE);
+        setP(S, 'creative.production_rules', GEN_PRODUCTION);
+        save(); renderMain(true); refreshStatus();
+      });
+      break;
+    case 'sort-occ':
+      var occ = getP(S, 'calendar.occasions');
+      if (Array.isArray(occ)){ occ.sort(function(x, y){ var a = str(x && x.date) || '9999', c = str(y && y.date) || '9999'; return a < c ? -1 : a > c ? 1 : 0; }); save(); renderMain(true); refreshStatus(); }
+      break;
+    case 'add-vn-women':
+      var now = new Date(), yr = now.getFullYear();
+      if (now > new Date(yr, 9, 20, 23, 59)) yr++;
+      var occ2 = getP(S, 'calendar.occasions'); if (!Array.isArray(occ2)){ occ2 = []; setP(S, 'calendar.occasions', occ2); }
+      occ2.push({date:yr + '-10-20', name:"Vietnamese Women's Day", note:''});
+      save(); renderMain(true); refreshStatus();
+      var last = $('#main [data-path="calendar.occasions.' + (occ2.length - 1) + '.note"]'); if (last){ last.scrollIntoView({block:'center'}); last.focus({preventScroll:true}); }
+      break;
+    case 'draft-brief': draftAction(); break;
+  }
+});
+
+document.addEventListener('input', function(e){
+  var el = e.target;
+  if (!el.closest || !el.closest('#main')) return;
+  if (el.classList.contains('tag-in') || el.dataset.change) return;
+  if (el.type === 'checkbox' || el.type === 'radio' || el.tagName === 'SELECT') return;
+  if (el.dataset.path) writeVal(el);
+});
+document.addEventListener('change', function(e){
+  var el = e.target;
+  if (!el.closest || !el.closest('#main')) return;
+  if (el.dataset.change === 'country'){ applyCountry(el.value); return; }
+  if (el.dataset.change === 'news-mode'){
+    var cur = getP(S, 'sources.news_feeds');
+    if (el.value === 'pack'){
+      if (Array.isArray(cur)) UI.newsCache = cur;
+      setP(S, 'sources.news_feeds', UI.packCache || 'default:us-beauty-culture');
+    } else {
+      if (typeof cur === 'string') UI.packCache = cur;
+      setP(S, 'sources.news_feeds', Array.isArray(UI.newsCache) ? UI.newsCache : []);
+    }
+    save(); rerenderField('sources.news_feeds'); refreshStatus();
+    return;
+  }
+  if (el.dataset.change === 'done'){
+    UI.done = UI.done || {}; UI.done[el.dataset.key] = el.checked; save();
+    var sec = el.closest('.ls'); if (sec){ sec.classList.toggle('is-done', el.checked); var n = $('.ls-n', sec); var idx = $$('.ls').indexOf(sec) + 1; if (n) n.innerHTML = el.checked ? ICON.check : String(idx); }
+    return;
+  }
+  if (el.classList.contains('tag-in')) return;
+  /* text, number, date and time fields are already saved on 'input'; handling their 'change' too would
+     re-render the side panels on blur and swallow the click that caused the blur */
+  if (el.dataset.path && (el.type === 'checkbox' || el.type === 'radio' || el.tagName === 'SELECT' || el.type === 'color')) writeVal(el);
+});
+
+document.addEventListener('keydown', function(e){
+  var el = e.target;
+  if (e.key === 'Escape'){
+    if (modalResolve){ modalResolve(); return; }
+    closeMenus(); closeOverlays();
+    return;
+  }
+  if (!el.classList || !el.classList.contains('tag-in')) return;
+  if (e.isComposing || e.keyCode === 229) return;  /* Vietnamese / CJK input methods: let the composition finish */
+  var p = el.dataset.tagPath, f = REG[p] || {};
+  if (e.key === 'Enter' || (e.key === ',' && f.split)){
+    e.preventDefault();
+    var v = el.value; el.value = '';
+    if (str(v)) addTags(p, v, el.dataset.mode);
+  } else if (e.key === 'Backspace' && el.value === ''){
+    var arr = getP(S, p);
+    if (Array.isArray(arr) && arr.length){ e.preventDefault(); arr.pop(); save(); rerenderField(p, true); refreshStatus(); }
+  }
+});
+document.addEventListener('paste', function(e){
+  var el = e.target;
+  if (!el.classList || !el.classList.contains('tag-in')) return;
+  var txt = (e.clipboardData || window.clipboardData).getData('text');
+  var f = REG[el.dataset.tagPath] || {};
+  if ((f.split ? /[,\n]/ : /\n/).test(txt)){ e.preventDefault(); var v = el.value + txt; el.value = ''; addTags(el.dataset.tagPath, v, el.dataset.mode); }
+});
+document.addEventListener('focusout', function(e){
+  var el = e.target;
+  if (!el.classList || !el.classList.contains('tag-in') || !str(el.value)) return;
+  var p = el.dataset.tagPath, v = el.value, mode = el.dataset.mode;
+  el.value = '';
+  setTimeout(function(){ addTags(p, v, mode, false); }, 0);
+});
+
+$('#file').addEventListener('change', function(e){
+  var file = e.target.files && e.target.files[0];
+  e.target.value = '';
+  if (!file) return;
+  var r = new FileReader();
+  r.onload = function(){ importText(String(r.result)).then(function(res){ if (!res.ok && res.err) toast(res.err); }); };
+  r.onerror = function(){ toast(t('readFail')); };
+  r.readAsText(file);
+});
+window.addEventListener('resize', setHH);
+window.addEventListener('pagehide', save);
+
+/* =====================================================================
+   Start
+   ===================================================================== */
+if (!loadStore()) S = fromProfile(freshProfile());
+var hash = (location.hash || '').slice(1);
+if (SEC_BY_ID[hash]) UI.step = hash;
+if (!SEC_BY_ID[UI.step]) UI.step = 'agency';
+renderAll();
+save();
+})();
+</script>
+</body>
+</html>

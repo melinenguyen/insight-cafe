@@ -1,0 +1,17 @@
+{
+  "name": "insight-cafe",
+  "owner": {
+    "name": "Méline Nguyen",
+    "url": "https://www.tiktok.com/@himeline"
+  },
+  "metadata": {
+    "description": "The Insight Café: your AI research agency, served fresh every morning."
+  },
+  "plugins": [
+    {
+      "name": "insight-cafe",
+      "source": "./",
+      "description": "The free trial of The Insight Café: four AI specialists research trends, occasions and competitors for your brand, score the opportunities and write up the best one."
+    }
+  ]
+}
