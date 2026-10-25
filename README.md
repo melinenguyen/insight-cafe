@@ -157,13 +157,13 @@ Never. The crew only reads public stuff. It doesn't post, like, follow or slide 
 Yes. The setup form is in English and Vietnamese, and your reports can be written in whatever language your team
 speaks.
 
-## 🇻🇳 Cho các bác người Việt
+## 🇻🇳 Vietnamese nè các bác
 
-The Insight Café là một agency nghiên cứu AI tí hon, được vẽ thành văn phòng với 7 "nhân viên" tên đồ uống. Mỗi
-sáng chỉ cần một trang: đang trend gì, đối thủ làm gì, nên làm gì trước, ai làm. Bản dùng thử miễn phí có 4 bạn
-đi làm (Espresso, Chai, Matcha, Coca), mở cửa 24/7 trên GitHub (miễn phí) và sống theo lịch thật: ngày đêm, giờ
-giấc, Halloween hay Tết là văn phòng tự đổi đồ. Hoặc chạy ngay trên máy các bác cũng được. Form thiết lập có tiếng Việt: chọn **VI** là xong.
-Chúc các bác ít tab hơn, nhiều cà phê hơn ☕
+The Insight Café là một AI-powered agency marketing, mô phỏng một văn phòng với 7 nhân viên mang tên đồ uống. Công việc của các bạn là theo dõi thị trường, đối thủ cùng ngành/cùng ngách và tìm ra những cơ hội mới cho thương hiệu. Mỗi ngày chỉ cần mở văn phòng là nắm được: có gì đang trending, đối thủ đang làm gì, việc gì đáng ưu tiên cho brand và next steps cho team là gì.
+
+Bản dùng thử miễn phí có 4 bạn đi làm (Espresso, Chai, Matcha, Coca). Văn phòng mở cửa 24/7 trên GitHub (miễn phí) và hoạt động theo lịch thật: sáng tối, giờ giấc, đến Halloween, Christmas hay Tết là tự biết thay đồ. Các bác cũng có thể chạy ngay trên máy nếu thích nha. Form thiết lập có tiếng Việt để các bác setup context và những data cần thiết cho AI learn trước khi văn phòng khai trương.
+
+Chúc các bác ít tab hơn, nhiều cà phê hơn. ☕
 
 <br>
 
