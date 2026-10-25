@@ -6,8 +6,8 @@ Everything brand-specific lives in `agency/profile.json` (written by the setup d
 through `agency/config.py`.
 
 This is the trial. Three more specialists (Mocha: ads, Latte: customer voice, Tonic: Slack hand-over), the
-morning huddle that teaches the crew your taste, and the 24/7 cloud schedule are part of the full Insight Café.
-Their rooms are in the office, locked.
+morning huddle that teaches the crew your taste, the 2-hourly ad spy and the report archive are part of the full
+Insight Café. Their rooms are in the office, locked.
 
 ## How it runs
 
@@ -16,8 +16,11 @@ Their rooms are in the office, locked.
 | `python -m agency.run` | scouts → desks → office: a full report, then opens `site/index.html` | about $1 of Claude, a few minutes |
 | `python -m agency.run --rebuild` | redraws the office from the last report | free |
 | `python -m agency.run --scouts` | prints what the scouts find right now | free |
+| `.github/workflows/agency.yml` | on GitHub, every hour: `--slot auto` runs whichever report is due (`schedule.py`), builds the office encrypted with `AGENCY_PASSPHRASE`, commits the memory and publishes the page to the site repo | about $1 per report |
 
-The Anthropic API key lives in `agency/.env` (`ANTHROPIC_API_KEY=…`), or in the environment.
+On your computer the Anthropic API key lives in `agency/.env` (`ANTHROPIC_API_KEY=…`); on GitHub, in the repo's
+Actions secrets with `AGENCY_PASSPHRASE` and `PUBLISH_TOKEN`. A report is due once its time has passed and none has
+finished since, so a late or skipped tick is caught by the next one; a failed report is retried up to twice a day.
 
 ## The crew
 
@@ -48,7 +51,9 @@ nothing; the office never invents.
 - **The board schema sits at the structured-output grammar limit.** Adding a field to `BOARD_SCHEMA` can get
   "compiled grammar is too large". Test any schema change with a small request first.
 - **Memory** is `agency/data/memory.json`: the board, the plays and a 30-day history of what was seen when.
-  Delete it to start fresh.
+  On GitHub it is committed back after every run (`[skip ci]`). Delete it to start fresh.
+- **The office page is encrypted on GitHub** (AES-GCM, key from the passphrase via PBKDF2). The public site repo
+  only ever holds ciphertext. Without a passphrase, `build.py` writes a plain page for your own computer.
 
 ## Changing things
 

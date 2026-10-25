@@ -177,13 +177,13 @@ def merge(memory: dict, office: dict, sweep: dict, slot: str, usage: dict, now: 
     memory.setdefault("runs", []).append({"at": now.isoformat(), "slot": slot, "usage": usage,
                                           "signals": len(sweep["signals"]), "new_plays": len(office["new_plays"])})
     memory["runs"] = memory["runs"][-60:]
-    if slot in config.REPORTS:
+    if slot in config.REPORT_SLOTS:
         memory["digests"] = (memory.get("digests", []) + [digest(memory, office, slot, now, usage,
                                                                  len(sweep["signals"]))])[-120:]
     return memory
 
 
-SLOT_LABEL = {"report": "Report"}
+SLOT_LABEL = {"report": "Report", "morning": "Morning report", "evening": "Evening report"}
 
 
 def digest(memory: dict, office: dict, slot: str, now: datetime, usage: dict, signals: int) -> dict:
@@ -191,7 +191,7 @@ def digest(memory: dict, office: dict, slot: str, now: datetime, usage: dict, si
     memo, trends = office.get("memo") or {}, memory.get("trends", [])
     radar, brands = memory.get("radar") or {}, memory.get("brands") or {}
     live = [p for p in memory.get("plays", []) if p["status"] in ("new", "sent")]
-    report = slot in config.REPORTS  # the desks only write with the two reports; a re-plan reuses theirs
+    report = slot in config.REPORT_SLOTS
     return {
         "at": now.isoformat(), "slot": slot, "label": SLOT_LABEL.get(slot, slot),
         "headline": memo.get("headline", ""), "focuses": memo.get("bullets", [])[:3],

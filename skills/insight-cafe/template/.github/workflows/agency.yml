@@ -1,0 +1,111 @@
+name: __AGENCY__ (open 24/7)
+
+# The café works around the clock from here; nobody's computer needs to be on.
+# One tick every hour. agency/schedule.py decides whether a report is due (one or two a day at
+# schedule.reports, the team's time) or nothing. GitHub may run a tick late or skip one; the next tick catches up.
+on:
+  schedule:
+    - cron: '17 * * * *'
+  push:
+    branches: [main]
+    paths:                  # office or brief edits: redraw the page, no Claude
+      - 'agency/web/**'
+      - 'agency/standing_brief.md'
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: 'Which run'
+        type: choice
+        options: [auto, morning, evening, rebuild]
+        default: auto
+
+concurrency:
+  group: agency
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  agency:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pick the slot
+        id: slot
+        env:
+          EVENT: ${{ github.event_name }}
+          INPUT_SLOT: ${{ inputs.slot }}
+        run: |
+          case "$EVENT" in
+            schedule)          S=$(python3 -m agency.schedule) ;;
+            push)              S=rebuild ;;
+            workflow_dispatch) S="$INPUT_SLOT"; [ "$S" = "auto" ] && S=$(python3 -m agency.schedule) ;;
+          esac
+          echo "slot=$S" >> "$GITHUB_OUTPUT"
+          echo "Slot: $S"
+
+      - uses: actions/setup-python@v5
+        if: steps.slot.outputs.slot != 'none'
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: agency/requirements.txt
+
+      - run: pip install -r agency/requirements.txt
+        if: steps.slot.outputs.slot != 'none'
+
+      - name: Restore image cache
+        if: steps.slot.outputs.slot != 'none'
+        uses: actions/cache@v4
+        with:
+          path: agency/.cache
+          key: agency-img-${{ github.run_id }}
+          restore-keys: agency-img-
+
+      - name: Check out the office page
+        if: steps.slot.outputs.slot != 'none'
+        uses: actions/checkout@v4
+        with:
+          repository: __SITE_REPO__
+          token: ${{ secrets.PUBLISH_TOKEN }}
+          path: site
+
+      - name: Sync to the latest memory
+        if: steps.slot.outputs.slot != 'none'
+        # a run that waited in the queue may have checked out before the previous run saved its memory
+        run: git pull --rebase -q origin main || true
+
+      - name: Run the café
+        id: agency
+        if: steps.slot.outputs.slot != 'none'
+        env:
+          AGENCY_SITE_DIR: site
+          AGENCY_PASSPHRASE: ${{ secrets.AGENCY_PASSPHRASE }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python -m agency.run --slot "${{ steps.slot.outputs.slot }}" --no-open
+
+      - name: Save the café's memory
+        if: always() && steps.slot.outputs.slot != 'rebuild' && steps.slot.outputs.slot != 'none'
+        run: |
+          git config user.name "__AGENCY__"
+          git config user.email "agency@noreply.github.com"
+          git add agency/data
+          git diff --staged --quiet && exit 0
+          git commit -m "café: ${{ steps.slot.outputs.slot }} $(date -u +%Y-%m-%dT%H:%MZ) [skip ci]"
+          for i in 1 2 3; do git pull --rebase -X theirs -q && git push -q && exit 0; git rebase --abort 2>/dev/null; sleep 5; done
+          exit 1
+
+      - name: Open the doors (publish the office)
+        if: always() && steps.slot.outputs.slot != 'none'
+        working-directory: site
+        run: |
+          [ -f index.html ] || { echo "nothing built"; exit 0; }
+          git config user.name "__AGENCY__"
+          git config user.email "agency@noreply.github.com"
+          git add -A
+          git diff --staged --quiet && exit 0
+          git commit -q -m "office: ${{ steps.slot.outputs.slot }} $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -q

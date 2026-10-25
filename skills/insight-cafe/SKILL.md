@@ -1,6 +1,6 @@
 ---
 name: insight-cafe
-description: The Insight Café (trial) — set up a small AI research agency for any brand, shop or service, drawn as an illustrated office. Four AI specialists read culture, the calendar and competitors in the news, score the opportunities and write up the strongest one as a play; it runs on the user's own computer with their Anthropic API key. Use when someone wants to try an AI research agency or opportunity tracker for their brand, a trend and competitor watch, or a daily marketing brief, or wants to set up, run or change their trial office. Starts from a local setup dashboard that collects the brand's context.
+description: The Insight Café (trial) — set up a small AI research agency for any brand, shop or service, drawn as an illustrated office. Four AI specialists read culture, the calendar and competitors in the news, score the opportunities and write up the strongest one as a play. It opens 24/7 on GitHub (scheduled reports, an encrypted office page that lives on the real calendar) or runs on the user's computer, always with their own Anthropic API key. Use when someone wants to try an AI research agency or opportunity tracker for their brand, a trend and competitor watch, or a daily marketing brief, or wants to set up, run or change their trial office. Starts from a local setup dashboard that collects the brand's context.
 ---
 
 # The Insight Café (trial)
@@ -14,10 +14,12 @@ A brand's own research agency, drawn as an office. In the trial, four AI special
 | Chai | Brand watch: what competitors launched, said and did, from the news |
 | Matcha | Every opportunity, scored on five axes for the brand |
 
-The studio writes the strongest play in full (hooks, approach, tactics, references). Mocha (ads), Latte
-(customer voice) and Tonic's Slack hand-over sit in the office too, locked: they are part of the full Insight
-Café, along with the morning huddle that learns the lead's taste and the 24/7 cloud schedule. When the user
-asks for one of those, say plainly that it is in the full version.
+The studio writes the strongest play in full (hooks, approach, tactics, references). The café opens 24/7 on
+GitHub: reports at the user's times, and an office page that runs on real time (clocks, day and night, decor for
+the calendar's occasions), locked with a passphrase. Mocha (ads), Latte (customer voice), Tonic's Slack
+hand-over, the morning huddle that learns the lead's taste, the 2-hourly ad spy and the report archive sit in the
+office too, locked: they are part of the full Insight Café. When the user asks for one of those, say plainly that
+it is in the full version.
 
 ## What's in this skill
 - `dashboard/index.html` — the setup dashboard. Opens offline, autosaves, EN/VI. Exports `profile.json`.
@@ -44,6 +46,16 @@ asks for one of those, say plainly that it is in the full version.
    The office opens from `site/index.html`. Walk the user through the rooms.
 6. **Without spending:** `python3 -m agency.run --scouts` shows what the scouts find; `--rebuild` redraws
    the office from the last report.
+7. **Open 24/7 (when the user asks, e.g. "open my café 24/7").** Follow `references/setup.md` → "Open 24/7":
+   - Ask for the report time(s) and the two repo names (private brain, public site); put them in
+     `schedule.reports` and `delivery` in the profile, validate and scaffold again (this writes the workflow).
+   - Creating repos, pushing and switching on Pages are the user's calls: confirm before doing any of them. With
+     the `gh` CLI signed in, you can run them for the user once they say yes.
+   - The three secrets (`ANTHROPIC_API_KEY`, `AGENCY_PASSPHRASE`, `PUBLISH_TOKEN`) are pasted by the user in the
+     repo's Settings. Never ask for, print or store their values.
+   - Say the cost before switching it on: about $1 per report, so about $30 a month for one a day. GitHub's free
+     plan covers the hourly checks.
+   - First run: Actions → Run workflow → slot `morning`, then open the site URL with the passphrase.
 
 ## Rules
 - Every number in a report comes from a signal or says "not available". Every finding shows its proof.

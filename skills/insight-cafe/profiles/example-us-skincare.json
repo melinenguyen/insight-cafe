@@ -365,8 +365,7 @@
  "schedule": {
   "team_tz": "America/New_York",
   "reports": [
-   "07:30",
-   "17:30"
+   "07:00"
   ],
   "adspy_every_min": 110,
   "quiet_hours": [

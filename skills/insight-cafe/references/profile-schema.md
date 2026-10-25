@@ -8,7 +8,8 @@ watchlist and room reads from it — nothing brand-specific lives in code.
 dashboard shows them locked: `competitors.instagram_watch`, all of `creative`, `sources.youtube_searches`,
 `sources.voice_queries`, `sources.voice_peer_queries`, `sources.listen_plan`, `sources.reviews`,
 `sources.mentions_feed`, `content.instagram_hashtags`, `content.tiktok_hashtags`, every Slack id,
-`schedule.reports`, `schedule.adspy_every_min`, `schedule.quiet_hours` and all of `delivery`.
+`schedule.adspy_every_min`, `schedule.quiet_hours` and `delivery.dispatch_mode`. The trial does read
+`schedule.reports` (one or two report times) and `delivery.brain_repo` / `site_repo` / `site_url` (to open 24/7).
 
 `*` = required. Everything else has a sensible default or is simply skipped when empty.
 `profiles/example-us-skincare.json` is a complete example (a made-up brand).

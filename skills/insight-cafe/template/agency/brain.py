@@ -289,7 +289,7 @@ def board_prompt(sweep: dict, memory: dict, slot: str, now: datetime) -> str:
     c = _context(sweep, memory, now)
     sigs = _prune(sweep["signals"])
     return "\n\n".join([
-        c["now"] + f" Slot: {slot}.", BOARD_ASK[slot].replace("CREW", ", ".join(x["name"] for x in config.STAFF)),
+        c["now"] + f" Slot: {slot}.", BOARD_ASK["report"].replace("CREW", ", ".join(x["name"] for x in config.STAFF)),
         c["huddle"], c["radar"], c["brands"], c["calendar"], c["catalogue"],
         c["plays"] + "\n(retire any that the news makes wrong; never commission a duplicate)", c["history"], c["status"],
         f"Signals ({len(sigs)} of {len(sweep['signals'])} collected, last {config.WINDOW_HOURS}h):\n"

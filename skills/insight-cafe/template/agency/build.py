@@ -1,9 +1,10 @@
 """
 Builds the office: memory.json → site/index.html.
 
-The trial office lives on your own computer: one page with everything inside it (the crew's work, pictures as
-small data URIs), opened straight from the folder. Nothing is published. The full Insight Café runs on a
-schedule and publishes an encrypted office your team opens from anywhere.
+Two ways to open the café:
+- on GitHub, 24/7: the page is AES-GCM encrypted with a key derived from the passphrase and decrypted in the
+  browser, so the public site repo only ever holds ciphertext (third-party thumbnails ride inside it as data URIs);
+- on your computer: one plain page with everything inside it, opened straight from the folder.
 """
 
 from __future__ import annotations
@@ -21,10 +22,11 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from . import calendar_world, config, state
+from . import calendar_world, config, schedule, state
 
 log = logging.getLogger("agency.build")
 CACHE = Path(os.getenv("AGENCY_CACHE_DIR", config.ROOT / ".cache"))
+PBKDF2_ITER = 310_000
 
 # what the full office adds, room by room — shown in the trial's locked rooms
 FULL = {
@@ -39,12 +41,11 @@ FULL = {
                "One click re-plans the whole board around what you said"],
     "dispatch": ["Tonic sends every play to its owner on Slack, with the idea, the proof and the due day",
                  "Quiet hours respected; you preview first, then switch the team on"],
-    "archive": ["Two reports a day, morning and evening, on autopilot",
-                "Every report kept, so you can see what changed and what the crew got right"],
+    "archive": ["Every report kept, so you can see what changed and what the crew got right"],
     "rules": ["Latte checks every line against your rule book before it reaches the team"],
     "plays": ["The studio writes every commissioned play, not just the top one"],
-    "always": ["Runs 24/7 in the cloud: no laptop needed", "A private office page your whole team opens",
-               "Instagram, TikTok, YouTube and Reddit scouts on top of the news, search and the calendar"],
+    "always": ["Instagram, TikTok, YouTube and Reddit scouts on top of the news, search and the calendar",
+               "A 24/7 ad spy that checks your competitors' new ads every two hours"],
 }
 
 
@@ -141,7 +142,22 @@ def md_to_html(md: str) -> str:
     return "\n".join(x + ("</p>" if x.startswith("<p>") and not x.endswith("</p>") else "") for x in out)
 
 
-def payload(memory: dict, site: Path, now: datetime) -> dict:
+# ---------------------------------------------------------------------------
+# encryption (matches unlock() in office.html)
+# ---------------------------------------------------------------------------
+def encrypt(payload: dict, passphrase: str) -> str:
+    from cryptography.hazmat.primitives import hashes
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+    from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+
+    salt, iv = os.urandom(16), os.urandom(12)
+    key = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt, iterations=PBKDF2_ITER).derive(passphrase.encode())
+    ct = AESGCM(key).encrypt(iv, json.dumps(payload, ensure_ascii=False).encode(), None)
+    b = lambda x: base64.b64encode(x).decode()  # noqa: E731
+    return json.dumps({"v": 1, "iter": PBKDF2_ITER, "salt": b(salt), "iv": b(iv), "ct": b(ct)})
+
+
+def payload(memory: dict, site: Path, now: datetime, cloud: bool = False) -> dict:
     assets = site / "assets"
     (assets / "p").mkdir(parents=True, exist_ok=True)
 
@@ -163,7 +179,8 @@ def payload(memory: dict, site: Path, now: datetime) -> dict:
     ny = now.astimezone(ZoneInfo(config.OFFICE_TZ)).date()
     return {
         "generated_at": now.isoformat(), "updated_at": memory.get("updated_at", now.isoformat()),
-        "slot": memory.get("slot", ""), "next_sweep": "when you run it", "schedule_note": "whenever you run it",
+        "slot": memory.get("slot", ""), "next_sweep": schedule.next_report(now) if cloud else "when you run it",
+        "schedule_note": " and ".join(f"{h:02d}:{m:02d}" for h, m in config.REPORTS.values()) if cloud else "whenever you run it",
         "memo": memory.get("memo", {}), "trends": memory.get("trends", []), "plays": memory.get("plays", []),
         "library": library, "catalogue": catalogue, "staff": staff,
         "questions": memory.get("questions") or {s["id"]: s["question"] for s in config.STAFF},
@@ -183,26 +200,29 @@ def payload(memory: dict, site: Path, now: datetime) -> dict:
                   "scene": config.AGENCY["scene"], "market": config.MARKET_NAME, "country": config.COUNTRY,
                   "currency": config.CURRENCY, "radar_sections": __import__("agency.desks", fromlist=["SECTIONS"]).SECTIONS},
         "brief_html": md_to_html((config.ROOT / "standing_brief.md").read_text(encoding="utf-8") if (config.ROOT / "standing_brief.md").exists() else config.STANDING_BRIEF),
-        "trial": {"locked": config.LOCKED_ROOMS, "full": FULL, "url": config.FULL_URL,
+        "trial": {"locked": config.LOCKED_ROOMS, "full": FULL, "url": config.FULL_URL, "cloud": cloud,
                   "locked_plays": memory.get("locked_plays", []), "plays_written": config.TRIAL_PLAYS},
     }
 
 
-def build(memory: dict, *, site: Path | None = None, now: datetime | None = None) -> Path:
+def build(memory: dict, *, passphrase: str = "", site: Path | None = None, now: datetime | None = None) -> Path:
+    """With a passphrase: the encrypted page GitHub Pages serves. Without one: a plain page for this computer."""
     now = now or datetime.now(timezone.utc)
     site = site or config.SITE
     site.mkdir(parents=True, exist_ok=True)
-    data = payload(memory, site, now)
+    data = payload(memory, site, now, cloud=bool(passphrase))
     tpl = (config.ROOT / "web" / "office.html").read_text(encoding="utf-8")
     for k, v in (("__AGENCY__", config.AGENCY["name"]), ("__TAGLINE__", config.AGENCY["tagline"]),
                  ("__CITY__", config.AGENCY["city"])):
         tpl = tpl.replace(k, html.escape(v))
-    # "</" inside the JSON would close the script tag early
-    blob = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
-    page = tpl.replace("/*__DATA__*/null", blob)
+    if passphrase:
+        page = tpl.replace("/*__VAULT__*/", encrypt(data, passphrase))
+        (site / ".nojekyll").write_text("", encoding="utf-8")
+    else:  # "</" inside the JSON would close the script tag early
+        page = tpl.replace("/*__DATA__*/null", json.dumps(data, ensure_ascii=False).replace("</", "<\\/"))
     (site / "index.html").write_text(page, encoding="utf-8")
-    log.info("built %s (%d KB, %d plays, %d trends)", site / "index.html", len(page) // 1024,
-             len(data["plays"]), len(data["trends"]))
+    log.info("built %s (%d KB, %d plays, %d trends, %s)", site / "index.html", len(page) // 1024,
+             len(data["plays"]), len(data["trends"]), "encrypted" if passphrase else "plain")
     return site / "index.html"
 
 

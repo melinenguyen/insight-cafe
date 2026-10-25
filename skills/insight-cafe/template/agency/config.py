@@ -135,12 +135,21 @@ STAFF = [{**d, **{k: v for k, v in _crew.get(d["id"], {}).items() if v}} for d i
 STAFF_IDS = [s["id"] for s in STAFF]
 
 # ---------------------------------------------------------------------------
-# Time: the trial runs when you run it; the team's clock is shown beside the office's.
+# Schedule: open 24/7. On GitHub the workflow ticks every hour and schedule.py runs whatever report is due
+# (one or two a day at schedule.reports, the team's time). On your computer, `python -m agency.run` runs one now.
 # ---------------------------------------------------------------------------
-REPORTS = ("report",)       # one kind of run: a full report, whenever you start one
 TZ = _get("schedule.team_tz", "UTC")
 TEAM_CITY = _get("schedule.team_city") or TZ.split("/")[-1].replace("_", " ")
+_times = [t for t in _get("schedule.reports", ["07:00"]) if re.fullmatch(r"\d{1,2}:\d{2}", t)][:2]
+REPORTS = {name: tuple(int(x) for x in t.split(":")) for name, t in zip(("morning", "evening"), _times)}
+REPORT_SLOTS = ("report", "morning", "evening")  # "report" = one you start by hand
+REPORT_RETRIES = 2
 WINDOW_HOURS = 48
+
+# Where the office lives when it runs on GitHub: a private repo for the brain, a public one for the (encrypted) page
+BRAIN_REPO = _get("delivery.brain_repo", "")
+SITE_REPO = _get("delivery.site_repo", "")
+SITE_URL = _get("delivery.site_url") or (f"https://{SITE_REPO.split('/')[0]}.github.io/{SITE_REPO.split('/')[1]}/" if "/" in SITE_REPO else "")
 
 # ---------------------------------------------------------------------------
 # Content vocabulary — what an opportunity can be about, where it lives, how we make it

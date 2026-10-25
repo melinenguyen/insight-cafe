@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
-Turn a brand profile into your trial office, ready to run on your computer.
+Turn a brand profile into your café, ready to run on your computer, or on GitHub around the clock.
 
     python3 scaffold.py --profile profile.json --out ~/Desktop/acme-cafe [--force]
 
-It validates the profile, copies the office (agency code and page), writes the profile and the standing brief
-into it, leaves an .env file for your Anthropic API key, and prints the three steps to the first report.
+It validates the profile, copies the office (agency code, page and the GitHub workflow), writes the profile and
+the standing brief into it, leaves an .env file for your Anthropic API key, and prints the next steps: three to
+run a report on your computer, and, when the profile names its GitHub repos, the four to open 24/7.
 """
 
 from __future__ import annotations
@@ -26,6 +27,7 @@ GITIGNORE = """__pycache__/
 site/
 agency/.env
 agency/.cache/
+# the café's memory IS agency/data/*.json: keep it committed
 """
 ENV = """# Your Anthropic API key (https://console.anthropic.com/settings/keys). This file never leaves your computer.
 ANTHROPIC_API_KEY=
@@ -63,12 +65,31 @@ def main() -> int:
         env.write_text(ENV, encoding="utf-8")
     (out / ".gitignore").write_text(GITIGNORE)
     shutil.copy(SKILL / "references" / "agency-guide.md", out / "agency" / "CLAUDE.md")
+    d = p.get("delivery") or {}
+    brain, site_repo = d.get("brain_repo", ""), d.get("site_repo", "")
+    wf = out / ".github" / "workflows" / "agency.yml"
+    if site_repo:
+        site_url = d.get("site_url") or f"https://{site_repo.split('/')[0]}.github.io/{site_repo.split('/')[1]}/"
+        name = p["agency"]["name"].replace("'", "’").replace('"', "”")  # lands inside YAML
+        wf.write_text(wf.read_text(encoding="utf-8").replace("__SITE_REPO__", site_repo).replace("__AGENCY__", name),
+                      encoding="utf-8")
+    else:
+        shutil.rmtree(out / ".github", ignore_errors=True)
 
     print(f"\n✓ {p['agency']['name']} for {p['brand']['name']} is ready in {out}\n")
     print("Three steps to your first report:")
     print(f"  1. Paste your Anthropic API key into {out / 'agency' / '.env'}")
     print(f"  2. cd {out} && python3 -m pip install -r agency/requirements.txt")
     print("  3. python3 -m agency.run      (a few minutes; the office opens in your browser)")
+    if site_repo:
+        print("\nOpen 24/7 on GitHub (free; see references/setup.md):")
+        print(f"  1. Create a PRIVATE repo {brain or 'you/your-cafe-brain'} and push this folder to it.")
+        print(f"  2. Create a PUBLIC repo {site_repo}; Settings → Pages → deploy from main, root.")
+        print("  3. In the private repo → Settings → Secrets and variables → Actions, add ANTHROPIC_API_KEY,")
+        print("     AGENCY_PASSPHRASE (the office's lock) and PUBLISH_TOKEN (a token that can push to the public repo).")
+        print(f"  4. Actions → Run workflow (slot: morning). Your office opens at {site_url}")
+    else:
+        print("\nWant it open 24/7? Add your two GitHub repos in the dashboard (Schedule & delivery), export, and scaffold again.")
     return 0
 
 

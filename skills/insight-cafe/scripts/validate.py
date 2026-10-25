@@ -46,6 +46,16 @@ def check(p: dict) -> tuple[list[str], list[str]]:
                 ZoneInfo(tz)
             except (ZoneInfoNotFoundError, ValueError):
                 errors.append(f"{path} is not a time zone: {tz!r} (use names like Asia/Ho_Chi_Minh)")
+    d = get(p, "delivery") or {}
+    for path in ("delivery.brain_repo", "delivery.site_repo"):
+        v = get(p, path)
+        if v and not re.fullmatch(r"[\w.-]+/[\w.-]+", v):
+            errors.append(f"{path} must look like owner/repo, got {v!r}")
+    if bool(d.get("brain_repo")) != bool(d.get("site_repo")):
+        errors.append("to open 24/7 on GitHub, give both repos: delivery.brain_repo (private) and delivery.site_repo (public)")
+    for t in get(p, "schedule.reports") or []:
+        if not re.fullmatch(r"\d{1,2}:\d{2}", t):
+            errors.append(f"report time {t!r} must be HH:MM")
     members = get(p, "team.members") or []
     if not members:
         errors.append("add at least one team member (team.members) — plays need someone to go to")

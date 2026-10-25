@@ -198,8 +198,7 @@
   "team_tz": "Asia/Ho_Chi_Minh",
   "team_city": "Sài Gòn",
   "reports": [
-   "07:00",
-   "19:00"
+   "07:00"
   ],
   "adspy_every_min": 110,
   "quiet_hours": [

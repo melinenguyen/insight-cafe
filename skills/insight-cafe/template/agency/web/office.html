@@ -468,6 +468,17 @@ details.tl[open]>summary{border-bottom:1px solid var(--line)}
 </head>
 <body>
 
+<div class="gate" id="gate" hidden>
+  <div class="card">
+    <div id="gateFace"></div>
+    <h1 style="font-family:var(--display);font-size:26px;margin:0">__AGENCY__</h1>
+    <p class="muted" style="margin:6px 0 0">__TAGLINE__ · __CITY__. Open 24/7. Say the passphrase and I'll buzz you in.</p>
+    <form id="gateForm"><input id="pass" type="password" autocomplete="current-password" placeholder="Passphrase" aria-label="Passphrase">
+    <button class="btn" style="width:100%;justify-content:center">Come on up</button></form>
+    <div class="err" id="gateErr"></div>
+  </div>
+</div>
+
 <div class="office" id="office" hidden>
   <header class="hud">
     <div class="plaque">__AGENCY__<small>__TAGLINE__ · __CITY__</small></div>
@@ -481,12 +492,13 @@ details.tl[open]>summary{border-bottom:1px solid var(--line)}
   </div>
   <nav class="dock" id="dock" aria-label="Rooms"></nav>
   <div class="hint" id="hint" hidden>Click anyone at their desk, or anything on the walls.<button id="hintX">Got it</button></div>
-  <button class="trialbar" id="trialbar" data-open="full" hidden><b>Trial office</b><span>4 of 7 specialists working</span><i>What the full office adds →</i></button>
+  <button class="trialbar" id="trialbar" data-open="full" hidden><b>Trial office</b><span id="trialsub">4 of 7 specialists working</span><i>What the full office adds →</i></button>
 </div>
 <div class="tip" id="tip" hidden></div>
 <div id="sheets"></div>
 
 <script>window.__DATA__=/*__DATA__*/null;</script>
+<script id="vault" type="application/json">/*__VAULT__*/</script>
 <script>
 "use strict";
 /* ============================= the crew (paper cut-outs) ============================= */
@@ -1011,8 +1023,8 @@ function startChatter(se){
 function hud(se){
   const sl=slack(),off=Object.values(D.scouts||{}).filter(v=>!v.ok).length;
   const spy=D.adspy||{};
-  $("#hud").innerHTML=`<span class="pill"><span class="dot"></span>${D.trial?"Trial":"Open 24/7"} · report ${ago(D.updated_at)}</span>${spy.checked_at?`<span class="pill opt" data-open="inspo" style="cursor:pointer">Ad spy ${ago(spy.checked_at)}${spy.new_24h?` · ${spy.new_24h} new`:""}</span>`:""}
-    <span class="pill">${NY===TEAMTZ?`${esc(CITY())} ${clock(NY)}`:`${esc(CITY())} ${clock(NY)} · ${esc(TCITY())} ${clock(TEAMTZ)}`}</span>${D.trial?"":`<span class="pill opt">Next report ${esc(D.next_sweep)}</span>`}${se.labels.slice(0,1).map(l=>`<span class="pill opt" data-open="calendar" style="cursor:pointer">${esc(l)}</span>`).join("")}${sl.down?`<span class="pill warn" data-open="dispatch" style="cursor:pointer">Slack offline</span>`:""}${off?`<span class="pill warn opt" data-open="desk" style="cursor:pointer">${off} scout${off>1?"s":""} offline</span>`:""}`;
+  $("#hud").innerHTML=`<span class="pill"><span class="dot"></span>${D.trial&&!D.trial.cloud?"Trial":"Open 24/7"} · report ${ago(D.updated_at)}</span>${spy.checked_at?`<span class="pill opt" data-open="inspo" style="cursor:pointer">Ad spy ${ago(spy.checked_at)}${spy.new_24h?` · ${spy.new_24h} new`:""}</span>`:""}
+    <span class="pill">${NY===TEAMTZ?`${esc(CITY())} ${clock(NY)}`:`${esc(CITY())} ${clock(NY)} · ${esc(TCITY())} ${clock(TEAMTZ)}`}</span>${D.trial&&!D.trial.cloud?"":`<span class="pill opt">Next report ${esc(D.next_sweep)}</span>`}${se.labels.slice(0,1).map(l=>`<span class="pill opt" data-open="calendar" style="cursor:pointer">${esc(l)}</span>`).join("")}${sl.down?`<span class="pill warn" data-open="dispatch" style="cursor:pointer">Slack offline</span>`:""}${off?`<span class="pill warn opt" data-open="desk" style="cursor:pointer">${off} scout${off>1?"s":""} offline</span>`:""}`;
 }
 
 /* ============================= what opens ============================= */
@@ -1346,24 +1358,38 @@ function enter(data){
   // memory written before the visual dossier (24 Oct 2026) lacks some fields until the next sweep replaces it
   (data.trends||[]).forEach(t=>{t.scores=t.scores||{};t.fit=t.fit||{};["platforms","evidence","looks","formats","search_terms"].forEach(k=>t[k]=t[k]||[]);t.relevance=t.relevance||0;});
   (data.plays||[]).forEach(p=>{["hooks","approach","tactics","references","hashtags"].forEach(k=>p[k]=p[k]||[]);p.due=p.due||"";p.funnel=p.funnel||"Awareness";});
-  D=data;$("#office").hidden=false;
+  D=data;$("#gate").hidden=true;$("#office").hidden=false;
   // the office's and the team's clocks, the radar's areas and the tab title come from the profile
   NY=D.office_tz||NY;TEAMTZ=(D.brand||{}).team_tz||TEAMTZ;SECTIONS=(D.brand||{}).radar_sections||SECTIONS;
   document.title=`${BR().agency||"The office"} · ${CITY()}`;
   const se=drawOffice();lockBadges();hud(se);startChatter(se);
   $("#dock").innerHTML=ROOMS
     .map(([r,id,l])=>`<button data-open="${r}" class="${isLocked(r)?"locked":""}">${roomIcon(r,id)}${l}${isLocked(r)?`<span class="lk" aria-label="full version">🔒</span>`:""}</button>`).join("");
-  if(D.trial)$("#trialbar").hidden=false;
+  if(D.trial){$("#trialbar").hidden=false;if(D.trial.cloud)$("#trialsub").textContent="4 of 7 specialists working · open 24/7";}
   const st=$("#viewport");st.scrollLeft=(st.scrollWidth-st.clientWidth)/2;  // phones pan the office
   if(!store.get("agency-hint")){$("#hint").hidden=false;$("#hintX").onclick=()=>{$("#hint").hidden=true;store.set("agency-hint","1");};}
   setInterval(()=>{const se2=drawOffice();lockBadges();hud(se2);},60000);   // the sky, the clocks and the decor keep the office's time
   setInterval(()=>document.querySelectorAll("[data-clock]").forEach(el=>el.textContent=clock(el.dataset.clock)),15000);
   const h=(location.hash||"").slice(1);if(SHEETS[h]||isLocked(h))openRoom(h);
 }
-(()=>{
-  if(window.__DATA__){enter(window.__DATA__);return;}
-  document.body.insertAdjacentHTML("beforeend",`<div class="gate"><div class="card"><h1 style="font-family:var(--display);font-size:26px;margin:0">__AGENCY__</h1>
-    <p class="muted" style="margin:8px 0 0">The office opens after the first report. In this folder, run <span class="mono">python -m agency.run</span>.</p></div></div>`);
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function unlock(pass){
+  const v=JSON.parse($("#vault").textContent);
+  const km=await crypto.subtle.importKey("raw",new TextEncoder().encode(pass),"PBKDF2",false,["deriveKey"]);
+  const key=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b64(v.salt),iterations:v.iter,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["decrypt"]);
+  return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:b64(v.iv)},key,b64(v.ct))));
+}
+(async()=>{
+  if(window.__DATA__){enter(window.__DATA__);return;}   // on your computer: the plain page
+  let sealed=false;try{sealed=!!JSON.parse($("#vault").textContent).ct;}catch(e){}
+  if(!sealed){document.body.insertAdjacentHTML("beforeend",`<div class="gate"><div class="card"><h1 style="font-family:var(--display);font-size:26px;margin:0">__AGENCY__</h1>
+    <p class="muted" style="margin:8px 0 0">The office opens after the first report. In this folder, run <span class="mono">python -m agency.run</span>.</p></div></div>`);return;}
+  $("#gateFace").innerHTML=`<svg viewBox="40 0 160 300" style="width:120px;height:170px;display:block;margin:-6px auto 6px" aria-hidden="true"><defs>${CUT}</defs><g filter="url(#cut)">${torso({hair:"bun",top:"#A8443A",skin:"#EDB892"})}${head({hair:"bun",top:"#A8443A",skin:"#EDB892",acc:"clip"},"wink")}</g></svg>`;
+  const saved=store.get("agency-pass");
+  if(saved){try{enter(await unlock(saved));return;}catch(e){store.del("agency-pass");}}
+  $("#gate").hidden=false;$("#pass").focus();
+  $("#gateForm").onsubmit=async ev=>{ev.preventDefault();$("#gateErr").textContent="";const p=$("#pass").value;
+    try{const d=await unlock(p);store.set("agency-pass",p);enter(d);}catch(e){$("#gateErr").textContent="That's not it. Ask the office's lead for the passphrase.";}};
 })();
 </script>
 </body>

@@ -20,8 +20,8 @@ should we make next?* By 11:48 I had 47 tabs open, zero answers and a very cold 
 So I opened a café. ☕
 
 **The Insight Café** is a tiny AI research agency, drawn as an office, with seven specialists who are (obviously)
-all named after drinks. They do the digging and serve you **one page**: the answer first, the proof right beside
-it, and who should do what next. This is the **free trial**, so four of them are on shift.
+all named after drinks. They do the digging around the clock and serve you **one page**: the answer first, the
+proof right beside it, and who should do what next. This is the **free trial**, so four of them are on shift.
 
 <p align="center">
   <img src="docs/preview.gif" width="100%" alt="A peek inside The Insight Café">
@@ -47,6 +47,17 @@ Proof and pictures, never vibes:
 
 Works for any brand, shop or service: skincare, bakeries, gyms, bookshops… If you have competitors and customers, you have a café.
 
+## 🌙 Open 24/7, live with your calendar
+
+<img src="docs/live.png" width="100%" alt="The office at 2 am with the crew at work, and dressed up for Halloween">
+
+Put your café on GitHub (free) and it never closes. The crew brews your report at the times you pick, your office
+stays online behind a passphrase, and the whole place runs on real time: day turns to night outside the windows,
+the clocks tick in your city, and the décor follows your calendar. Pumpkins for Halloween, lights for the holidays,
+a countdown to every occasion that matters to your brand. Nobody's laptop needs to be on.
+
+Rather keep it on your laptop? That works too. Run a report whenever you like.
+
 ## 🧾 Order in two lines
 
 Got [Claude Code](https://claude.com/claude-code)? Paste these:
@@ -58,7 +69,8 @@ Got [Claude Code](https://claude.com/claude-code)? Paste these:
 
 Then just say: **"Set up my Insight Café."**
 
-Claude hands you a little form about your brand, sets up your café and pours your first report. It takes about fifteen
+Claude hands you a little form about your brand, sets up your café and pours your first report. Love it? Say
+**"Open my café 24/7"** and Claude walks you through putting it on GitHub. It takes about fifteen
 minutes to set up (a little longer if you love filling forms), and each report costs about $1 of Claude on your own
 [Anthropic API key](https://console.anthropic.com/settings/keys).
 
@@ -89,6 +101,18 @@ You'll need Python 3.10+ and an [Anthropic API key](https://console.anthropic.co
 Your office opens in the browser. Run it again whenever you want a fresh pot. (`--scouts` peeks at what the crew
 found without spending anything; `--rebuild` redraws the office.)
 
+**Open it 24/7 on GitHub (free):**
+
+1. In the setup form, fill in **Schedule & delivery**: your report time(s) and two repo names, one private (the
+   café's brain) and one public (the office page). Export and set up your café again.
+2. Push the café folder to the **private** repo. Create the **public** one and switch on GitHub Pages
+   (Settings → Pages → deploy from `main`, root).
+3. In the private repo → Settings → Secrets and variables → Actions, add `ANTHROPIC_API_KEY`, `AGENCY_PASSPHRASE`
+   (the office's lock, for your team) and `PUBLISH_TOKEN` (a fine-grained token with *Contents: read and write* on
+   the public repo).
+4. Actions → Run workflow → slot `morning`. A few minutes later your office is live, and it reports on its own
+   every day after that.
+
 </details>
 
 ## 🔒 The full café (coming soon)
@@ -103,7 +127,8 @@ Three rooms are already furnished. They're just waiting for opening day.
 | **Ideas written up** | The best one | All of them, and **Tonic** slides each one into your team's Slack |
 | **Learns your taste** | Not yet | A morning huddle: the crew asks you one question each and remembers your answers |
 | **Where it looks** | News, search trends, the calendar, Pinterest | Plus Instagram, TikTok, YouTube, Reddit and a 24/7 ad spy |
-| **When it works** | Whenever you press go | Around the clock, two reports a day, one private office for your whole team |
+| **When it works** | 24/7 on GitHub, live with your calendar, one or two reports a day (or whenever you press go) | Plus a 24/7 ad spy that checks your competitors' new ads every two hours |
+| **Report archive** | The latest report | Every report kept, so you can see what changed |
 
 Want a seat on opening day? Follow me on TikTok [@himeline](https://www.tiktok.com/@himeline). ☕
 
@@ -113,11 +138,17 @@ Want a seat on opening day? Follow me on TikTok [@himeline](https://www.tiktok.c
 Nope. If you can copy and paste two lines, you can run a café.
 
 **What does it cost?**
-The café is free. Claude charges about $1 per report, billed to your own Anthropic account. No subscription, no
-surprise bill from me.
+The café is free. Claude charges about $1 per report, billed to your own Anthropic account, so one report a day is
+about $30 a month. No subscription, no surprise bill from me.
+
+**Does it really work while I sleep?**
+Yep. On GitHub the café checks the clock every hour and brews your report at your time. That fits inside GitHub's
+free plan, and nobody's computer needs to be on.
 
 **Is my brand info safe?**
-Everything stays on your computer: your brand profile, your office and your API key.
+On your laptop, everything stays on your computer. On GitHub, your brand profile and the café's memory live in your
+**private** repo, your API key sits in its encrypted secrets, and the office page is encrypted: only people with
+your passphrase can open it.
 
 **Will it post or DM anyone for me?**
 Never. The crew only reads public stuff. It doesn't post, like, follow or slide into anyone's DMs.
@@ -130,7 +161,8 @@ speaks.
 
 The Insight Café là một agency nghiên cứu AI tí hon, được vẽ thành văn phòng với 7 "nhân viên" tên đồ uống. Mỗi
 sáng chỉ cần một trang: đang trend gì, đối thủ làm gì, nên làm gì trước, ai làm. Bản dùng thử miễn phí có 4 bạn
-đi làm (Espresso, Chai, Matcha, Coca), chạy ngay trên máy các bác. Form thiết lập có tiếng Việt: chọn **VI** là xong.
+đi làm (Espresso, Chai, Matcha, Coca), mở cửa 24/7 trên GitHub (miễn phí) và sống theo lịch thật: ngày đêm, giờ
+giấc, Halloween hay Tết là văn phòng tự đổi đồ. Hoặc chạy ngay trên máy các bác cũng được. Form thiết lập có tiếng Việt: chọn **VI** là xong.
 Chúc các bác ít tab hơn, nhiều cà phê hơn ☕
 
 <br>
