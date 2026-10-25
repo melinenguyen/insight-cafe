@@ -1,13 +1,20 @@
 {
   "name": "insight-cafe",
   "displayName": "The Insight Café (trial)",
-  "description": "Your AI research agency, drawn as an illustrated office. Four AI specialists read culture, the calendar and your competitors in the news, score the opportunities for your brand and write up the strongest one as a play. Runs on your computer with your own Anthropic API key.",
-  "version": "0.1.0",
+  "description": "Your AI research agency, drawn as an office. Seven specialists named after drinks (four on shift in this free trial) find what's trending, what your competitors did and what's worth doing, then serve it as one page. Runs on your computer with your own Anthropic API key.",
+  "version": "0.1.1",
   "author": {
     "name": "Méline Nguyen",
     "url": "https://www.tiktok.com/@himeline"
   },
   "homepage": "https://github.com/melinenguyen/insight-cafe",
   "repository": "https://github.com/melinenguyen/insight-cafe",
-  "keywords": ["marketing", "research", "trends", "competitors", "brand", "agency"]
+  "keywords": [
+    "marketing",
+    "research",
+    "trends",
+    "competitors",
+    "brand",
+    "agency"
+  ]
 }
